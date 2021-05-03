@@ -35,7 +35,7 @@ output * bg `sway_wallpaper` fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 output eDP-1 scale 1
-output DP-1 scale 0.7
+output DP-1 scale 0.65 mode 1920x1080@59.939999HZ
 
 # Idle configuration
 exec swayidle -w timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
@@ -236,8 +236,8 @@ bar {
 font pango, FontAwesome, 14
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioRaiseVolume exec pactl set-sink-mute @DEFAULT_SINK@ false; exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-mute @DEFAULT_SINK@ false; exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec "amixer -q -D pulse set Master toggle && amixer -c 0 -q set Speaker toggle"
 
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-

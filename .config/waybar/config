@@ -5,7 +5,7 @@
 
     "modules-left": ["sway/workspaces", "sway/mode", "cpu", "memory", "temperature", "custom/storage", "pulseaudio"],
     "modules-center": ["sway/window"],
-    "modules-right": ["custom/spotify", "custom/weather", "backlight", "network", "battery", "clock", "tray","idle_inhibitor"],
+    "modules-right": ["custom/spotify", "custom/weather", "backlight", "network", "battery", "clock#BS", "clock", "tray","idle_inhibitor"],
     "sway/mode": {
         "format": " {}"
     },
@@ -20,6 +20,12 @@
     "clock": {
         "format": "{:%a %d %b %H:%M:%S}",
         "tooltip": false,
+	"interval": 1
+    },
+    "clock#BS": {
+        "format": "{:Arg %H:%M}",
+        "tooltip": false,
+        "timezone": "America/Argentina/Buenos_Aires",
 	"interval": 1
     },
     "temperature": {
