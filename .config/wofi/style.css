@@ -13,15 +13,15 @@ font-weight: bold;
 }
  
 #window {
-margin: 5px;
-background-color: #404552;
-border: 2px solid #5e81ac;
-border-radius: 9px;
+margin: 3px;
+background-color: transparent; /*#404552;*/
+border: 1px solid #5e81ac;
+border-radius: 5px;
 }
 
 #input {
 /* margin: 5px; */
-margin: 10 10 5 10;
+margin: 5 10 5 10;
 background-color: none;
 border: 2px solid #4c566a;
 border-radius: 0;
@@ -29,12 +29,12 @@ border-radius: 0;
 
 #inner-box {
 color: #e4b86e;
-margin: 5px;
+margin: 2px;
 background-color: transparent;
 }
 
 #outer-box {
-margin: 15px;
+margin: 8px;
 background-color: transparent;
 }
 
@@ -51,9 +51,8 @@ border: none;
 }
 
 #text {
-margin: 5 15 5 15;
+margin: 3 8 3 8;
 background-color: transparent;
-font-family: Ubuntu;
 border: none;
 } 
 

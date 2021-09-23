@@ -26,11 +26,9 @@ export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* --help:* -h:pony:pony add *:pon
 export LANG="en_US.UTF-8";
 export LC_ALL="en_US.UTF-8";
 
-export MOZ_ENABLE_WAYLAND=1
-export XDG_SESSION_TYPE=wayland
-
 # If running from tty1 start Sway
 if [ "$(tty)" = "/dev/tty1" ]; then
+  export WLR_DRM_NO_MODIFIERS=1
   dbus-launch sway -d 2> ~/.sway.log
 fi
 

@@ -1,10 +1,10 @@
 * {
-    border:        none;
-    border-radius: 0;
-    font-family: "Noto Font", Roboto, Helvetica, Arial, sans-serif;
-    font-size:     22px;
-    box-shadow:    none;
-    text-shadow:   none;
+    border:         none;
+    border-radius:  0;
+    font-family:    "RobotoMono Nerd Font", "Roboto Mono", sans-serif;
+    font-size:      22px;
+    box-shadow:     none;
+    text-shadow:    none;
 }
 
 window {
@@ -74,5 +74,9 @@ window {
 }
 
 #custom-storage.critical {
+    color:      rgba(238, 46, 36, 1);
+}
+
+#memory.critical {
     color:      rgba(238, 46, 36, 1);
 }
