@@ -14,19 +14,19 @@
     set $term kitty
 
     # Your preferred application launcher
-    set $menu wofi -c $HOME/.config/wofi/config -s $HOME/.config/wofi/style.css 
+    set $menu wofi -c $HOME/.config/wofi/config -s $HOME/.config/wofi/style.css
 #
 # Output configuration
 #
-    output * bg `sway_wallpaper` fill
+    output eDP-1 bg `sway_wallpaper` fill
+    output DP-1 bg `sway_wallpaper` fill
 
     output eDP-1 scale 1
-    output DP-1 scale 1 mode 3840x2160@30.000Hz
 
 #
 # Idle configuration
 #
-    exec swayidle -w timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+###    exec swayidle -w timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
 #
 # Input configuration
 #
@@ -35,13 +35,20 @@
         natural_scroll enabled
     }
 
-    input "5426:562:Razer_Razer_Blade_Stealth_Keyboard" {
+    input "3141:20484:SONiX_USB_DEVICE_Keyboard" {
         xkb_layout us
-        # enable latin characters
         xkb_variant altgr-intl
         xkb_options compose:menu
-        #repeat_delay 500
-        #repeat_rate 5
+    }
+    input "3141:20484:SONiX_USB_DEVICE" {
+        xkb_layout us
+        xkb_variant altgr-intl
+        xkb_options compose:menu
+    }
+    input "5426:562:Razer_Razer_Blade_Stealth_Keyboard" {
+        xkb_layout us
+        xkb_variant altgr-intl
+        xkb_options compose:menu
     }
 
     input "1267:9081:ELAN_Touchscreen" map_to_output eDP-1
@@ -184,14 +191,19 @@
     #font pango, FontAwesome, 14
     font Roboto 15
 
+    # Set WOB as the overlay bar for volume, backlight, etc
+    exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+    set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+    exec mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
     # Brightness
-    bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-    bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+    bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+    bindsym XF86MonBrightnessUp exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
 
     # Pulse Audio controls
-    bindsym XF86AudioRaiseVolume exec pactl set-sink-mute @DEFAULT_SINK@ false; exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-    bindsym XF86AudioLowerVolume exec pactl set-sink-mute @DEFAULT_SINK@ false; exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-    bindsym XF86AudioMute exec "amixer -q -D pulse set Master toggle && amixer -c 0 -q set Speaker toggle"
+    bindsym XF86AudioRaiseVolume exec pamixer -u && pamixer -i 5 && pamixer --get-volume > $WOBSOCK
+    bindsym XF86AudioLowerVolume exec pamixer -u && pamixer -d 5 && pamixer --get-volume > $WOBSOCK
+    bindsym XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
 
     # Media player controls
     bindsym XF86AudioPlay exec playerctl -p spotify play
@@ -199,8 +211,8 @@
     bindsym XF86AudioNext exec playerctl -p spotify next
     bindsym XF86AudioPrev exec playerctl -p spotify previous
 
-    # play / pause is not working... using key instead
-    bindsym $mod+p exec playerctl -p spotify play-pause 
+    # use play / pause from shortcut
+    bindsym $mod+p exec playerctl -p spotify play-pause
 
     # lock screen
     bindsym $mod+l exec swaylock -c 000000
@@ -208,7 +220,10 @@
     # suspend
     bindsym $mod+Control+l exec swaylock -c 000000 -f && systemctl suspend
 
-    # move to monitor - buscar alternativa para las teclas
+    # change wallpaper
+    bindsym $mod+Shift+w exec swaymsg output "*" bg `sway_wallpaper` fill
+
+    # move to monitor
     bindsym $mod+Control+Left move workspace to output left
     bindsym $mod+Control+Right move workspace to output right
 
@@ -224,6 +239,7 @@
     for_window [app_id="zoom" title="Zoom Meeting"] floating disable
     for_window [app_id="zoom" title="Zoom - Free Account"] floating disable
 
+    # Resize floating windows
     for_window [floating] resize set 900 500
     bindsym $mod+y [floating] resize set 900 500
 
@@ -239,7 +255,7 @@
     bindsym $mod+Print exec /usr/bin/grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
     bindsym $mod+o exec /usr/bin/grim -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
 
-    exec xrdb -merge $HOME/.Xresources
+    # Use mako for notifications
     exec mako --anchor upper-right --font pango:FontAwesome 14
 
     include /etc/sway/config.d/*
