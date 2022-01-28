@@ -1,23 +1,14 @@
-clock
-indicator
-# no-unlock-indicator
+#clock
+indicator-caps-lock
 daemonize
 indicator-caps-lock
-timestr=%k:%M
-datestr=%a %e %m %Y
-image=~/wallpapers/minimal.jpg
 scaling=fill
-effect-scale=0.4
-effect-vignette=0.2:0.5
-effect-blur=4x2
-font=SanFranciscoText
 
 # Ring
 indicator-radius=90
 # line-uses-ring
 line-color=#5e81ac
 text-color=#eceff4
-# inside-color=#3d7f8d
 inside-ver-color=#b48ead
 line-ver-color=#a3be8c
 ring-color=#81a1c1
