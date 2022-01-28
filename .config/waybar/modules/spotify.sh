@@ -4,7 +4,7 @@ class=$(playerctl metadata --player=spotify --format '{{lc(status)}}')
 icon=""
 
 if [[ $class == "playing" ]]; then
-  info=$(playerctl metadata --player=spotify --format '{{artist}} - {{title}}')
+  info=$(playerctl metadata --player=spotify --format '{{artist}} - {{title}}'|sed 's/"//g')
   if [[ ${#info} > 50 ]]; then
     info=$(echo $info | cut -c1-50)"..."
   fi
