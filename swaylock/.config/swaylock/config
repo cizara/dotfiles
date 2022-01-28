@@ -1,0 +1,18 @@
+#clock
+indicator-caps-lock
+daemonize
+indicator-caps-lock
+scaling=fill
+
+# Ring
+indicator-radius=90
+# line-uses-ring
+line-color=#5e81ac
+text-color=#eceff4
+inside-ver-color=#b48ead
+line-ver-color=#a3be8c
+ring-color=#81a1c1
+key-hl-color=#5e81ac
+separator-color=#5e81ac
+layout-text-color=#eceff4
+line-wrong-color=#bf616a
