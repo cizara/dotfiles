@@ -19,7 +19,7 @@
 # Output configuration
 #
     output eDP-1 bg `sway_wallpaper` fill
-    output DP-1 bg `sway_wallpaper` fill
+    output DP-1 bg `sway_wallpaper` fill position 0 0
 
     output eDP-1 scale 1
 
