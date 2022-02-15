@@ -1,10 +1,11 @@
 * {
     border:         none;
     border-radius:  0;
-    font-family:    "RobotoMono Nerd Font", "Roboto Mono", sans-serif;
-    font-size:      22px;
+    font-family:    "Roboto Mono", sans-serif;
+    font-size:      17px;
     box-shadow:     none;
     text-shadow:    none;
+    transition-duration: 0s;
 }
 
 window {
