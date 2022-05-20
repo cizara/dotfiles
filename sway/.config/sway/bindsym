@@ -163,6 +163,7 @@ bindsym $mod+Shift+s sticky toggle
 # Screenshots
 bindsym $mod+Print exec /usr/bin/grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
 bindsym $mod+o exec /usr/bin/grim -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
+bindsym $mod+Shift+i exec flameshot gui
 
 #
 # Resizing containers:
