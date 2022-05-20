@@ -1,0 +1,23 @@
+exec_always echo "sway config trace: for_window at $(date)"
+
+# floating windows config
+for_window [class="XTerm"] floating enable
+for_window [class="cssh"] floating enable
+for_window [title="Save File"] floating enable
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable
+for_window [title="Firefox — Sharing Indicator"] floating enable
+for_window [app_id="" title=".* is sharing your screen."] floating enable
+for_window [app_id="zoom"] floating enable
+for_window [app_id="zoom" title="Choose ONE of the audio conference options"] floating enable
+for_window [app_id="zoom" title="zoom"] floating enable
+for_window [app_id="zoom" title="Zoom Meeting"] floating disable
+for_window [app_id="zoom" title="Zoom - Free Account"] floating disable
+for_window [app_id="^launcher$"] floating enable, border none, opacity 0.8
+
+# Resize floating windows
+for_window [floating] resize set 900 500
+
+# prevent idle
+for_window [class="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible  # in case of using XWayland version
+for_window [app_id="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible # for Wayland native
+for_window [app_id="zoom"] inhibit_idle fullscreen

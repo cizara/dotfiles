@@ -1,0 +1,12 @@
+exec_always echo "sway config trace: exec at $(date)"
+
+# Idle configuration
+exec swayidle -w timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+
+# Set WOB as the overlay bar for volume, backlight, etc
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+exec mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
+# Use mako for notifications
+exec mako --anchor upper-right --font pango:FontAwesome 14
