@@ -3,10 +3,11 @@
 
 ip r | while read Def _ IP _; do
 	case $Def in
-		default)
-			ping -q -w 1 -c 1 "$IP" >/dev/null || exit
+	default)
+		ping -q -w 1 -c 1 "$IP" >/dev/null || exit
 
-			break ;;
+		break
+		;;
 	esac
 done
 
