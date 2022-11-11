@@ -161,8 +161,8 @@ bindsym $mod+y [floating] resize set 900 500
 bindsym $mod+Shift+s sticky toggle
 
 # Screenshots
-bindsym $mod+Print exec /usr/bin/grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
-bindsym $mod+o exec /usr/bin/grim -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png')
+bindsym $mod+Print exec /usr/bin/grim -t jpeg -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jgp')
+bindsym $mod+o exec /usr/bin/grim -t jpeg -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jpg')
 bindsym $mod+Shift+i exec flameshot gui
 
 #
