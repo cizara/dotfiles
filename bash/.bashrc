@@ -14,8 +14,12 @@ git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
-# command line with full path and github branch
-PS1="[\u@\h \w]\[\033[00;32m\]\$(git_branch)\[\033[00m\]\$ "
+# k8s command line tools
+source '/opt/kube-ps1/kube-ps1.sh'
+source '/usr/bin/switch.sh'
+alias kubectl=kubecolor
+# command line with full path, github branch and kube-ps1 info
+PS1="[\u@\h \w \$(kube_ps1)]\[\033[00;32m\]\$(git_branch)\[\033[00m\]\$ "
 
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=50000000;
@@ -28,12 +32,13 @@ export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* --help:* -h";
 export LANG="en_US.UTF-8";
 export LC_ALL="en_US.UTF-8";
 
-[ "$(tty)" = "/dev/tty1" ] && exec sway -V 2> ~/.sway.log
+[ "$(tty)" = "/dev/tty1" ] && exec sway -V 2> ~/.sway-$(date +'%Y-%m-%d_%H-%M-%S').log
 
-export PATH=$PATH:~/bin:~/.local/bin:/var/lib/flatpak/exports/bin/
+export PATH=$PATH:~/bin:~/.local/bin
 export HELM_EXPERIMENTAL_OCI=1
 
 
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
+
