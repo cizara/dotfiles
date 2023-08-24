@@ -4,8 +4,12 @@ bar {
   swaybar_command waybar
 }
 
-#font pango, FontAwesome, 14
 font Roboto 15
+#gaps inner 2
+default_border pixel 2
+default_floating_border pixel 3
+titlebar_padding 1
+titlebar_border_thickness 0
 
 include $HOME/.config/sway/bindsym
 include $HOME/.config/sway/for_window
@@ -15,7 +19,7 @@ include $HOME/.config/sway/exec
 output eDP-1 scale 1
 
 output eDP-1 bg `sway_wallpaper` fill
-output DP-1 bg `sway_wallpaper` fill position 0 0
+output DP-1 bg `sway_wallpaper` fill position 0 0 res 3840x2160@30Hz
 
 # Input configuration
 input "1739:33571:1A586757:00_06CB:8323_Touchpad" {

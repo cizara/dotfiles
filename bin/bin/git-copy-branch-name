@@ -1,0 +1,3 @@
+#!/bin/bash
+branch=$(git rev-parse --abbrev-ref HEAD) 
+echo $branch | tr -d '[:space:]' | wl-copy -p
