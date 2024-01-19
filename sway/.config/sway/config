@@ -4,45 +4,61 @@ bar {
   swaybar_command waybar
 }
 
-font Roboto 15
+## Original
+#font Roboto 15
+font Roboto 18
 #gaps inner 2
 default_border pixel 2
 default_floating_border pixel 3
 titlebar_padding 1
 titlebar_border_thickness 0
 
-include $HOME/.config/sway/bindsym
-include $HOME/.config/sway/for_window
-include $HOME/.config/sway/exec
-
+#
+# Variables
+#
+set {
+    # Logo key. Use Mod1 for Alt.
+    $mod Mod4
+    # Terminal
+    $term kitty
+    # App launcher
+    $menu wofi -c $HOME/.config/wofi/config -s $HOME/.config/wofi/style.css
+    # eDP-1 is the current laptop screen
+    $laptop eDP-1
+}
+# Drag floating windows by holding down $mod and left mouse button.
+floating_modifier $mod normal
+include {
+    $HOME/.config/sway/binds
+    $HOME/.config/sway/for_window
+    $HOME/.config/sway/exec
+}
 # Output configuration
-output eDP-1 scale 1
-
-output eDP-1 bg `sway_wallpaper` fill
-output DP-1 bg `sway_wallpaper` fill position 0 0 res 3840x2160@30Hz
-
+output {
+    eDP-1 scale 1 bg `~/bin/sway_wallpaper` fill
+    DP-1 bg `~/bin/sway_wallpaper` fill position 0 0 res 3840x2160@60Hz
+}
 # Input configuration
-input "1739:33571:1A586757:00_06CB:8323_Touchpad" {
-  tap enabled
-  natural_scroll enabled
+input {
+    "1739:33571:1A586757:00_06CB:8323_Touchpad" {
+        tap enabled
+        natural_scroll enabled
+    }
+    "3141:20484:SONiX_USB_DEVICE_Keyboard" {
+        xkb_layout us
+        xkb_variant altgr-intl
+        xkb_options compose:menu
+    }
+    "3141:20484:SONiX_USB_DEVICE" {
+        xkb_layout us
+        xkb_variant altgr-intl
+        xkb_options compose:menu
+    }
+    "5426:562:Razer_Razer_Blade_Stealth_Keyboard" {
+        xkb_layout us
+        xkb_variant altgr-intl
+        xkb_options compose:menu
+    }
+    "1267:9081:ELAN_Touchscreen" map_to_output eDP-1
 }
-
-input "3141:20484:SONiX_USB_DEVICE_Keyboard" {
-  xkb_layout us
-  xkb_variant altgr-intl
-  xkb_options compose:menu
-}
-input "3141:20484:SONiX_USB_DEVICE" {
-  xkb_layout us
-  xkb_variant altgr-intl
-  xkb_options compose:menu
-}
-input "5426:562:Razer_Razer_Blade_Stealth_Keyboard" {
-  xkb_layout us
-  xkb_variant altgr-intl
-  xkb_options compose:menu
-}
-
-input "1267:9081:ELAN_Touchscreen" map_to_output eDP-1
-
 include /etc/sway/config.d/*

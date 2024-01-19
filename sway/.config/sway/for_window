@@ -1,26 +1,26 @@
 exec_always echo "sway config trace: for_window at $(date)"
 
 # floating windows config
-for_window [class="XTerm"] floating enable
-for_window [app_id="galculator"] floating enable
-for_window [class="cssh"] floating enable
-for_window [title="Save File"] floating enable
-for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable
-for_window [title="Firefox — Sharing Indicator"] floating enable
-for_window [app_id="" title=".* is sharing your screen."] floating enable
-for_window [app_id="zoom"] floating enable
-for_window [app_id="zoom" title="Choose ONE of the audio conference options"] floating enable
-for_window [app_id="zoom" title="zoom"] floating enable
-for_window [app_id="zoom" title="Zoom Meeting"] floating disable
-for_window [app_id="zoom" title="Zoom - Free Account"] floating disable
-for_window [app_id="^launcher$"] floating enable, border none, opacity 0.8
-for_window [class="obsidian"] floating enable
-
-# Resize floating windows
-for_window [class="XTerm"] resize set 900 500
-for_window [class="obsidian"] resize 1500 1200
-
-# prevent idle
-for_window [class="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible  # in case of using XWayland version
-for_window [app_id="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible # for Wayland native
-for_window [app_id="zoom"] inhibit_idle fullscreen
+for_window {
+    [class="XTerm"] floating enable
+    [app_id="galculator"] floating enable
+    [class="cssh"] floating enable
+    [title="Save File"] floating enable
+    [title="(?:Open|Save) (?:File|Folder|As)"] floating enable
+    [title="Firefox — Sharing Indicator"] floating enable
+    [app_id="" title=".* is sharing your screen."] floating enable
+    [app_id="zoom"] floating enable
+    [app_id="zoom" title="Choose ONE of the audio conference options"] floating enable
+    [app_id="zoom" title="zoom"] floating enable
+    [app_id="zoom" title="Zoom Meeting"] floating disable
+    [app_id="zoom" title="Zoom - Free Account"] floating disable
+    [app_id="^launcher$"] floating enable, border none, opacity 0.8
+    [class="obsidian"] floating enable
+    # Resize floating windows
+    [class="XTerm"] resize set 900 500
+    [class="obsidian"] resize 1500 1200
+    # prevent idle
+    [class="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible  # in case of using XWayland version
+    [app_id="Firefox" title="Meet - .*-.*-.*"] inhibit_idle visible # for Wayland native
+    [app_id="zoom"] inhibit_idle fullscreen
+}
