@@ -1,0 +1,28 @@
+[user]
+	email = cizara@gmail.com
+	name = Lucho
+	signingkey = BA399C7C5DAD5BACFF3330658B40C03FBF290CCF
+[pull]
+	rebase = true
+[merge]
+	tool = vscode
+	conflictstyle = zdiff3
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[init]
+	defaultBranch = master
+[credential]
+	helper = store
+[push]
+	autoSetupRemote = true
+[core]
+	excludesfile = /home/lucho/.gitignore_global
+[rebase]
+	autosquash = true
+	autostash = true
+[commit]
+	gpgsign = true
