@@ -54,7 +54,7 @@
         "interval": 1
     },
     "clock#BS": {
-        "format": "{:Arg %H:%M}",
+        "format": "Arg {:%H:%M}",
         "tooltip": false,
         "timezone": "America/Argentina/Buenos_Aires",
         "interval": 1
