@@ -2,7 +2,6 @@
   all: unset;
   border: none;
   border-radius: 0;
-  font-family: "Roboto Mono", sans-serif;
   font-size: 17px;
   transition-duration: 0s;
 }
