@@ -1,169 +1,163 @@
 {
-    // -------------------------------------------------------------------------
-    // Global configuration
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Global configuration
+  // -------------------------------------------------------------------------
 
-    "layer": "bottom",
-    "position": "top",
+  "layer": "bottom",
+  "position": "top",
 
-    "height": 30,
+  "height": 30,
 
-    "modules-left": [
-        "sway/workspaces",
-        "sway/mode",
-        "cpu",
-        "memory",
-        "temperature",
-        "custom/storage",
-        "pulseaudio"
-    ],
-    "modules-center": [
-        "sway/window"
-    ],
-    "modules-right": [
-        "custom/spotify",
-        "custom/weather",
-        "backlight",
-        "network",
-        "battery",
-        "clock#BS",
-        "clock",
-        "tray",
-        "idle_inhibitor"
-    ],
+  "modules-left": [
+    "sway/workspaces",
+    "sway/mode",
+    "cpu",
+    "memory",
+    "temperature",
+    "custom/storage",
+    "pulseaudio"
+  ],
+  "modules-center": [
+    "sway/window"
+  ],
+  "modules-right": [
+    "custom/spotify",
+    "custom/weather",
+    "network",
+    "battery",
+    "clock#BS",
+    "clock",
+    "tray",
+    "idle_inhibitor"
+  ],
 
-    // -------------------------------------------------------------------------
-    // Modules
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Modules
+  // -------------------------------------------------------------------------
 
-    "sway/mode": {
-        "format": " {}"
-    },
-    "sway/workspaces": {
-        "format": "{name}",
-        "disable-scroll": true
-    },
-    "sway/window": {
-        "max-length": 80,
-        "tooltip": false
-    },
-    "clock": {
-        "format": "{:%a %d %b %H:%M:%OS}",
-        "tooltip": true,
-        "tooltip-format": "<big>{:%B %Y}</big>\n<tt>{calendar}</tt>",
-        "interval": 1
-    },
-    "clock#BS": {
-        "format": "Arg {:%H:%M}",
-        "tooltip": false,
-        "timezone": "America/Argentina/Buenos_Aires",
-        "interval": 1
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input",
-        "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C ",
-        "format": "{temperatureC}°C ",
-        "interval": 5,
-        "tooltip": true,
-        "on-click": "swaymsg exec \"\\$term_float 'watch sensors'\""
-    },
-    "cpu": {
-        "format": "{usage}% ",
-        "interval": 5,
-        "states": {
-            "warning": 70,
-            "critical": 90
-        }
-    },
-    "memory": {
-        "format": "{}% ",
-        "interval": 5,
-        "states": {
-            "warning": 70,
-            "critical": 90
-        }
-    },
-    "battery": {
-        "interval": 30,
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "on-click": "termite -e nmtui",
-        "tooltip": false
-    },
-    "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
-        "on-click": "pavucontrol"
-    },
-    "custom/spotify": {
-        "interval": 1,
-        "return-type": "json",
-        "exec": "~/.config/waybar/modules/spotify.sh",
-        "exec-if": "pgrep spotify",
-        "escape": true
-    },
-    "custom/storage": {
-        "format": "{} ",
-        "format-alt": "{percentage}% ",
-        "format-alt-click": "click-right",
-        "return-type": "json",
-        "interval": 60,
-        "exec": "~/.config/waybar/modules/storage.sh"
-    },
-    "custom/weather": {
-	"interval": 1800,
-	"exec": "curl 'https://wttr.in/Alboraia?format=1'",
-	"max-length": 10
-    },
-    "backlight": {
-        "device": "intel_backlight",
-        "format": "{percent}% {icon}",
-        "format-icons": ["🌕", "🌔", "🌓", "🌒", "🌑"],
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "deactivated": "",
-            "activated": ""
-        },
-        "tooltip": false
-    },
-    "tray": {
-	//"icon-size": 21,
-	"spacing": 10
+  "sway/mode": {
+    "format": " {}"
+  },
+  "sway/workspaces": {
+    "format": "{name}",
+    "disable-scroll": true
+  },
+  "sway/window": {
+    "max-length": 80,
+    "tooltip": false
+  },
+  "clock": {
+    "format": "{:%a %d %b %H:%M:%OS}",
+    "tooltip": true,
+    "tooltip-format": "<big>{:%B %Y}</big>\n<tt>{calendar}</tt>",
+    "interval": 1
+  },
+  "clock#BS": {
+    "format": "Arg {:%H:%M}",
+    "tooltip": false,
+    "timezone": "America/Argentina/Buenos_Aires",
+    "interval": 1
+  },
+  "temperature": {
+    // "thermal-zone": 2,
+    "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input",
+    "critical-threshold": 80,
+    "format-critical": "{temperatureC}°C ",
+    "format": "{temperatureC}°C ",
+    "interval": 5,
+    "tooltip": true,
+    "on-click": "swaymsg exec \"\\$term_float 'watch sensors'\""
+  },
+  "cpu": {
+    "format": "{usage}% ",
+    "interval": 5,
+    "states": {
+      "warning": 70,
+      "critical": 90
     }
+  },
+  "memory": {
+    "format": "{}% ",
+    "interval": 5,
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
+  },
+  "battery": {
+    "interval": 30,
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% ",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "{time} {icon}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "network": {
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "termite -e nmtui",
+    "tooltip": false
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{volume}% {icon}     {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+  "custom/spotify": {
+    "interval": 1,
+    "return-type": "json",
+    "exec": "~/.config/waybar/modules/spotify.sh",
+    "exec-if": "pgrep spotify",
+    "escape": true
+  },
+  "custom/storage": {
+    "format": "{} ",
+    "format-alt": "{percentage}% ",
+    "format-alt-click": "click-right",
+    "return-type": "json",
+    "interval": 60,
+    "exec": "~/.config/waybar/modules/storage.sh"
+  },
+  "custom/weather": {
+    "interval": 1800,
+    "exec": "curl 'https://wttr.in/Alboraia?format=1'",
+    "max-length": 10
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "deactivated": "",
+      "activated": ""
+    },
+    "tooltip": false
+  },
+  "tray": {
+    //"icon-size": 21,
+    "spacing": 10
+  }
 }
 
 
