@@ -2,7 +2,6 @@
   all: unset;
   border: none;
   border-radius: 0;
-  font-family: "Roboto Mono", sans-serif;
   font-size: 17px;
   transition-duration: 0s;
 }
@@ -12,8 +11,18 @@ window {
   background: rgba(35, 31, 32, 0.85);
 }
 
-#workspaces {
-  margin: 0 5px;
+
+window#waybar {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-radius: 0px;
+}
+
+.modules-left > * > *,
+.modules-center > * > *,
+.modules-right > * > * {
+  padding: 5px 5px;
+  margin: 5px 2px;
 }
 
 #workspaces button {
@@ -55,7 +64,6 @@ tooltip {
 #network,
 #pulseaudio,
 #idle_inhibitor,
-#backlight,
 #custom-storage,
 #custom-spotify,
 #custom-weather,
@@ -74,8 +82,7 @@ tooltip {
 }
 
 #clock {
-  margin: 0px 16px 0px 10px;
-  min-width: 140px;
+  margin: 0px 10px 0px 10px;
 }
 
 #battery.warning {

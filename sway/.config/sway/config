@@ -5,8 +5,8 @@ bar {
 }
 
 ## Original
-#font Roboto 15
-font Roboto 18
+#font Roboto 16
+font JetBrains Mono 16
 #gaps inner 2
 default_border pixel 2
 default_floating_border pixel 3
