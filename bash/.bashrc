@@ -32,9 +32,9 @@ export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* --help:* -h";
 export LANG="en_US.UTF-8";
 export LC_ALL="en_US.UTF-8";
 
-export PATH=$PATH:~/bin:~/.local/bin
+export PATH=~/bin:~/.local/bin:$PATH
 
-[ "$(tty)" = "/dev/tty1" ] && exec env WLR_DRM_NO_ATOMIC=1 sway -V --debug> ~/.sway-$(date +'%Y-%m-%d_%H-%M-%S').log
+[ "$(tty)" = "/dev/tty1" ] && exec env WLR_DRM_NO_ATOMIC=1 sway -V --debug > ~/.sway-$(date +'%Y-%m-%d_%H-%M-%S').log
 
 export HELM_EXPERIMENTAL_OCI=1
 
