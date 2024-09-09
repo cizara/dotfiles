@@ -1,0 +1,2 @@
+#!/bin/bash
+/var/lib/flatpak/exports/bin/com.spotify.Client --enable-features=UseOzonePlatform --ozone-platform=wayland
