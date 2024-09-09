@@ -3,25 +3,17 @@ exec_always echo "sway config trace: binds at $(date)"
 # Basic bindings
 #
 bindsym {
-    # start a terminal
     $mod+Return exec $term
-    # kill focused window
     $mod+Shift+q kill
-    # start your launcher
     $mod+d exec $menu
-    # another launcher
-    $mod+x exec termite --name=launcher -e "bash -c 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'"
-    # use wofi to change from active windows
-    $mod+c exec $HOME/.config/wofi/windows.py
-    # reload the configuration file
     $mod+Shift+c reload
-    # exit sway (logs you out of your Wayland session)
     $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+    $mod+x exec termite --name=launcher -e "bash -c 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'"   # another launcher
+    $mod+c exec $HOME/.config/wofi/windows.py     # use wofi to change from active windows
 }
 #
 # Moving around:
 #
-# Move your focus around
 bindsym {
     $mod+Left focus left
     $mod+Down focus down
@@ -35,9 +27,8 @@ bindsym {
     $mod+Shift+Right move right
 }
 #
-# Workspaces:
+# Workspaces: switch to workspace
 #
-# switch to workspace
 bindsym {
     $mod+1 workspace ⚽
     $mod+2 workspace ☢️
@@ -65,32 +56,21 @@ bindsym {
 # Layout stuff:
 #
 bindsym {
-    # You can "split" the current object of your focus with
-    # $mod+b or $mod+v, for horizontal and vertical splits
-    # respectively.
-    $mod+b splith
-    $mod+v splitv
-    # Switch the current container between different layout styles
+    $mod+b splith                     # horizontal split
+    $mod+v splitv                     # vertical split
     $mod+s layout stacking
     $mod+w layout tabbed
     $mod+e layout toggle split
-    # Make the current focus fullscreen
     $mod+f fullscreen
-    # Toggle the current focus between tiling and floating mode
     $mod+Shift+space floating toggle
-    # Swap focus between the tiling area and the floating area
-    $mod+space focus mode_toggle
-    # move focus to the parent container
-    $mod+a focus parent
+    $mod+space focus mode_toggle      # Swap focus between the tiling area and the floating area
+    $mod+a focus parent               # move focus to the parent container
 }
 #
 # Scratchpad:
 #
 bindsym {
-    # Move the currently focused window to the scratchpad
     $mod+Shift+minus move scratchpad
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
     $mod+minus scratchpad show
 }
 #
@@ -113,42 +93,51 @@ bindsym $mod+r mode "resize"
 #
 bindsym {
     # Brightness
-    --locked XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
-    --locked XF86MonBrightnessUp exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+    --locked XF86MonBrightnessDown  exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+    --locked XF86MonBrightnessUp    exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+    
     # Pulse Audio controls
-    --locked XF86AudioRaiseVolume exec pamixer -u && pamixer -i 5 && pamixer --get-volume > $WOBSOCK
-    --locked XF86AudioLowerVolume exec pamixer -u && pamixer -d 5 && pamixer --get-volume > $WOBSOCK
-    --locked XF86AudioMute exec pamixer --toggle-mute && (pamixer --get-mute && echo 0 > $WOBSOCK) || pamixer --get-volume > $WOBSOCK
+    --locked XF86AudioRaiseVolume   exec pamixer -u && pamixer -i 5 && pamixer --get-volume > $WOBSOCK
+    --locked XF86AudioLowerVolume   exec pamixer -u && pamixer -d 5 && pamixer --get-volume > $WOBSOCK
+    --locked XF86AudioMute          exec pamixer --toggle-mute && (pamixer --get-mute && echo 0 > $WOBSOCK) || pamixer --get-volume > $WOBSOCK
+    
     # Media player controls
-    --locked XF86AudioPlay exec playerctl -p spotify play
-    --locked XF86AudioPause exec playerctl -p spotify pause
-    --locked XF86AudioNext exec playerctl -p spotify next
-    --locked XF86AudioPrev exec playerctl -p spotify previous
-    # use play / pause from shortcut
-    --locked $mod+p exec playerctl -p spotify play-pause
-    # lock screen
-    $mod+l exec swaylock -c 000000
-    # suspend
-    $mod+Control+l exec swaylock -c 000000 -f && systemctl suspend
-    # change wallpaper
-    $mod+Shift+w exec swaymsg output "*" bg $(sway_wallpaper) fill
-    # move to monitor
-    $mod+Control+Left move workspace to output left
-    $mod+Control+Right move workspace to output right
-    $mod+y [floating] resize set 900 500
-    # sticky window - show it on all desktopC
-    $mod+Shift+s sticky toggle
+    --locked XF86AudioPlay          exec playerctl -p spotify play
+    --locked XF86AudioPause         exec playerctl -p spotify pause
+    --locked XF86AudioNext          exec playerctl -p spotify next
+    --locked XF86AudioPrev          exec playerctl -p spotify previous
+    --locked $mod+p                 exec playerctl -p spotify play-pause # use play / pause from shortcut
+
     # Screenshots
-    $mod+Print exec /usr/bin/grim -t jpeg -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jgp')
-    $mod+o exec /usr/bin/grim -t jpeg -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jpg')
-    $mod+Shift+i exec flameshot gui
+    $mod+Print                      exec /usr/bin/grim -t jpeg -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jgp')
+    $mod+o                          exec /usr/bin/grim -t jpeg -g "$(/usr/bin/slurp)" $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.jpg')
+    $mod+Shift+i                    exec flameshot gui
+
+    $mod+l                          exec swaylock -c 000000                           # lock screen
+    $mod+Control+l                  exec swaylock -c 000000 -f && systemctl suspend   # suspend
+    $mod+Shift+w                    exec swaymsg output "*" bg $(sway_wallpaper) fill # change wallpaper
+    # move to monitor
+    $mod+Control+Left   move workspace to output left
+    $mod+Control+Right  move workspace to output right
+    $mod+y [floating] resize set 900 500
+    
+    $mod+Shift+s sticky toggle  # sticky window - show it on all desktops
 }
+#
 # enable clamshell mode (notebook lid closed)
+#
 bindswitch {
     --reload --locked lid:on output $laptop disable
     --reload --locked lid:off output $laptop enable
 }
+#
+# touchpad config
+#
 bindgesture {
-    swipe:right workspace prev 
-    swipe:left workspace next
+    --exact swipe:4:right workspace prev
+    --exact swipe:4:left  workspace next
+    --exact swipe:3:left  exec wtype -M alt -P right -p right   # Browser go back
+    --exact swipe:3:right exec wtype -M alt -P left -p left     # Browser go forward
+    --exact swipe:3:up    exec wtype -M ctrl -P w -p w          # Close tab
+    --exact swipe:3:down  exec wtype -M ctrl -M shift -P t -p t # Open last closed tab
 }
