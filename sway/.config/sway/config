@@ -4,9 +4,8 @@ bar {
   swaybar_command waybar
 }
 
-## Original
 #font Roboto 16
-font JetBrains Mono 16
+font JetBrains Mono 14
 #gaps inner 2
 default_border pixel 2
 default_floating_border pixel 3
@@ -28,17 +27,23 @@ set {
 }
 # Drag floating windows by holding down $mod and left mouse button.
 floating_modifier $mod normal
-include {
-    $HOME/.config/sway/binds
-    $HOME/.config/sway/for_window
-    $HOME/.config/sway/exec
-}
+#
 # Output configuration
-output {
-    eDP-1 scale 1 bg `~/bin/sway_wallpaper` fill
-    DP-1 bg `~/bin/sway_wallpaper` fill position 0 0 res 3840x2160@60Hz
+#
+output DP-1 {
+    bg `~/bin/sway_wallpaper` fill
+    pos 0 0 
+    res 3840x2160@60Hz
 }
+
+output $laptop {
+    bg `~/bin/sway_wallpaper` fill
+    pos 3840 0
+    scale 1
+}
+#
 # Input configuration
+#
 input {
     "1739:33571:1A586757:00_06CB:8323_Touchpad" {
         tap enabled
@@ -59,6 +64,38 @@ input {
         xkb_variant altgr-intl
         xkb_options compose:menu
     }
-    "1267:9081:ELAN_Touchscreen" map_to_output eDP-1
+    "1267:9081:ELAN_Touchscreen" map_to_output $laptop
 }
-include /etc/sway/config.d/*
+#
+# Color setup (from https://www.reddit.com/r/swaywm/comments/13qqp6o/swaywm_and_general_colour_scheme/)
+#
+set {
+    $bg #282828
+    $bg_2 #504945
+    $fg #ebdbb2
+    $fg_1 #FBF1C7
+    $fg_2 #D5C4A1
+    $red #cc241d
+    $green #98971a
+    $yellow #d79921
+    $blue #458588
+    $blue_faded #076678
+    $purple #b16286
+    $aqua #689d68
+    $gray #a89984
+    $darkgray #1d2021
+}
+# class                 border  bground text    indicator child_border
+client.focused          $yellow $yellow $fg     $yellow   $yellow
+client.focused_inactive $bg_2   #5F676A $fg     #484E50   #5F676A
+client.unfocused        $bg_2   #282828 #888888 #292D2E   #222222
+client.urgent           #2F343A #CC241D $fg_1   #CC241D   #CC241D
+client.placeholder      #1D2021 #0C0C0C $fg     #000000   #0C0C0C
+
+include {
+    $HOME/.config/sway/binds
+    $HOME/.config/sway/for_window
+    $HOME/.config/sway/exec
+    /etc/sway/config.d/*
+}
+
