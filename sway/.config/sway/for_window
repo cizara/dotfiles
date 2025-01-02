@@ -15,7 +15,7 @@ for_window {
     [app_id="zoom" title="Zoom Meeting"] floating disable
     [app_id="zoom" title="Zoom - Free Account"] floating disable
     [app_id="^launcher$"] floating enable, border none, opacity 0.8
-    [class="obsidian"] floating enable
+    [app_id="obsidian"] floating enable
     # Resize floating windows
     [class="XTerm"] resize set 900 500
     [class="obsidian"] resize 1500 1200

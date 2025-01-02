@@ -9,7 +9,8 @@ bindsym {
     $mod+Shift+c reload
     $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
     $mod+x exec termite --name=launcher -e "bash -c 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'"   # another launcher
-    $mod+c exec $HOME/.config/wofi/windows.py     # use wofi to change from active windows
+    # use wofi to change from active windows
+    $mod+c exec $HOME/.config/wofi/windows.py
 }
 #
 # Moving around:
@@ -56,15 +57,19 @@ bindsym {
 # Layout stuff:
 #
 bindsym {
-    $mod+b splith                     # horizontal split
-    $mod+v splitv                     # vertical split
+    # horizontal split
+    $mod+b splith
+    # vertical split
+    $mod+v splitv
     $mod+s layout stacking
     $mod+w layout tabbed
     $mod+e layout toggle split
     $mod+f fullscreen
     $mod+Shift+space floating toggle
-    $mod+space focus mode_toggle      # Swap focus between the tiling area and the floating area
-    $mod+a focus parent               # move focus to the parent container
+    # Swap focus between the tiling area and the floating area
+    $mod+space focus mode_toggle
+    # move focus to the parent container
+    $mod+a focus parent
 }
 #
 # Scratchpad:
