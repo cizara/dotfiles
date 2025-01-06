@@ -12,6 +12,8 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
+xnoremap("<leader>p", "\"_dP")
+
 set mouse=a
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.

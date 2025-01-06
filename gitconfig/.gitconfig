@@ -1,28 +1,49 @@
 [user]
-	email = cizara@gmail.com
-	name = Lucho
-	signingkey = BA399C7C5DAD5BACFF3330658B40C03FBF290CCF
-[pull]
-	rebase = true
-[merge]
-	tool = vscode
-	conflictstyle = zdiff3
-[mergetool "vscode"]
-	cmd = code --wait $MERGED
-[diff]
-	tool = vscode
-[difftool "vscode"]
-	cmd = code --wait --diff $LOCAL $REMOTE
-[init]
-	defaultBranch = master
-[credential]
-	helper = store
-[push]
-	autoSetupRemote = true
+  	email = cizara@gmail.com
+	  name = Lucho
+  	signingkey = BA399C7C5DAD5BACFF3330658B40C03FBF290CCF
+
 [core]
-	excludesfile = /home/lucho/.gitignore_global
+	  excludesfile = /home/lucho/.gitignore_global
+
+[init]
+  	defaultBranch = master
+
+[pull]
+	  rebase = true
+
+[push]
+  	autoSetupRemote = true
+
+[merge]
+  	tool = vscode
+  	conflictstyle = zdiff3
+
+[mergetool "vscode"]
+  	cmd = code --wait $MERGED
+
+[diff]
+    tool = vscode
+
+[difftool "vscode"]
+	  cmd = code --wait --diff $LOCAL $REMOTE
+
+[credential]
+  	helper = store
+
 [rebase]
-	autosquash = true
-	autostash = true
+  	autosquash = true
+	  autostash = true
+
 [commit]
-	gpgsign = true
+	  gpgsign = true
+
+[color]
+    ui = auto
+
+[alias]
+    st = status
+    co = checkout
+    ci = commit
+    br = branch
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative

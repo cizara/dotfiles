@@ -85,11 +85,19 @@ tooltip {
   margin: 0px 10px 0px 10px;
 }
 
-#battery.warning {
+#temperature.warning,
+#battery.warning,
+#memory.warning,
+#custom-storage.warning,
+#cpu.warning {
   color: rgba(255, 210, 4, 1);
 }
 
-#battery.critical {
+#temperature.critical,
+#battery.critical,
+#memory.critical,
+#custom-storage.critical,
+#cpu.critical {
   color: rgba(238, 46, 36, 1);
 }
 
@@ -97,14 +105,3 @@ tooltip {
   color: rgba(217, 216, 216, 1);
 }
 
-#custom-storage.warning {
-  color: rgba(255, 210, 4, 1);
-}
-
-#custom-storage.critical {
-  color: rgba(238, 46, 36, 1);
-}
-
-#memory.critical {
-  color: rgba(238, 46, 36, 1);
-}
