@@ -14,6 +14,7 @@ $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
+$python\
 $custom\
 $sudo\
 $cmd_duration\
@@ -31,3 +32,6 @@ disabled = false
 [directory]
 truncate_to_repo = false
 
+[python]
+format = '[(\(${symbol}$virtualenv\) )]($style)'
+style = "bold green"
