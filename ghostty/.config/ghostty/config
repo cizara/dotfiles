@@ -52,3 +52,6 @@ background-opacity = 0.93
 theme = arcoiris
 foreground = #cecece
 background = #0e1415
+
+clipboard-paste-protection = false
+confirm-close-surface = false
