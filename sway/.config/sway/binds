@@ -120,7 +120,7 @@ bindsym {
 
     $mod+l                          exec swaylock -c 000000                           # lock screen
     $mod+Control+l                  exec swaylock -c 000000 -f && systemctl suspend   # suspend
-    $mod+Shift+w                    exec swaymsg output "*" bg $(sway_wallpaper) fill # change wallpaper
+    $mod+Shift+w                    exec swaymsg output "*" bgbr $(sway_wallpaper) fill # change wallpaper
     # move to monitor
     $mod+Control+Left   move workspace to output left
     $mod+Control+Right  move workspace to output right

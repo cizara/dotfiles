@@ -12,3 +12,6 @@ exec rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
 
 # Use mako for notifications
 exec mako --anchor bottom-right --font pango:FontAwesome 14
+
+# Import uwsm variables
+exec uwsm finalize SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
