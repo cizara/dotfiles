@@ -1,10 +1,10 @@
 #!/bin/sh
 
-class=$(playerctl metadata --player=spotify --format '{{lc(status)}}')
+class=$(playerctl metadata --player='spotify,YoutubeMusic,chromium.instance2' --format '{{lc(status)}}')
 icon=""
 
 if [[ $class == "playing" ]]; then
-  info=$(playerctl metadata --player=spotify --format '{{artist}} - {{title}}' | sed 's/"//g')
+  info=$(playerctl metadata --player='spotify,YoutubeMusic,chromium.instance2' --format '{{artist}} - {{title}}' | sed 's/"//g')
   if [[ ${#info} > 50 ]]; then
     info=$(echo $info | cut -c1-50)"..."
   fi

@@ -130,7 +130,7 @@
     "interval": 1,
     "return-type": "json",
     "exec": "~/.config/waybar/modules/spotify.sh",
-    "exec-if": "pgrep spotify",
+    "exec-if": "pgrep 'spotify|youtube-music|freetube'",
     "escape": true
   },
   "custom/storage": {
