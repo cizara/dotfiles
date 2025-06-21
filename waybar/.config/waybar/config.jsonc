@@ -2,15 +2,14 @@
   // -------------------------------------------------------------------------
   // Global configuration
   // -------------------------------------------------------------------------
-
   "layer": "bottom",
   "position": "top",
-
   "height": 30,
-
   "modules-left": [
     "sway/workspaces",
+    "hyprland/workspaces",
     "sway/mode",
+    "hyprland/mode",
     "cpu",
     "memory",
     "temperature",
@@ -18,7 +17,8 @@
     "pulseaudio"
   ],
   "modules-center": [
-    "sway/window"
+    "sway/window",
+    "hyprland/window"
   ],
   "modules-right": [
     "custom/spotify",
@@ -30,19 +30,28 @@
     "tray",
     "idle_inhibitor"
   ],
-
   // -------------------------------------------------------------------------
   // Modules
   // -------------------------------------------------------------------------
-
   "sway/mode": {
+    "format": " {}"
+  },
+  "hyprland/mode": {
     "format": " {}"
   },
   "sway/workspaces": {
     "format": "{name}",
     "disable-scroll": true
   },
+  "hyprland/workspaces": {
+    "format": "{name}",
+    "disable-scroll": true
+  },
   "sway/window": {
+    "max-length": 80,
+    "tooltip": false
+  },
+  "hyprland/window": {
     "max-length": 80,
     "tooltip": false
   },
@@ -96,7 +105,13 @@
     "format-alt": "{time} {icon}",
     // "format-good": "", // An empty format will hide the module
     // "format-full": "",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
   },
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
@@ -122,7 +137,11 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": ["", "", ""]
+      "default": [
+        "",
+        "",
+        ""
+      ]
     },
     "on-click": "pavucontrol"
   },
@@ -159,5 +178,3 @@
     "spacing": 10
   }
 }
-
-
