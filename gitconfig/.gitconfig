@@ -1,16 +1,16 @@
 [user]
   	email = cizara@gmail.com
-	  name = Lucho
+	name = Lucho
   	signingkey = BA399C7C5DAD5BACFF3330658B40C03FBF290CCF
 
 [core]
-	  excludesfile = /home/lucho/.gitignore_global
+	excludesfile = /home/lucho/.gitignore_global
 
 [init]
   	defaultBranch = master
 
 [pull]
-	  rebase = true
+	rebase = true
 
 [push]
   	autoSetupRemote = true
@@ -26,17 +26,17 @@
     tool = vscode
 
 [difftool "vscode"]
-	  cmd = code --wait --diff $LOCAL $REMOTE
+	cmd = code --wait --diff $LOCAL $REMOTE
 
 [credential]
   	helper = store
 
 [rebase]
   	autosquash = true
-	  autostash = true
+	autostash = true
 
 [commit]
-	  gpgsign = true
+	gpgsign = true
 
 [color]
     ui = auto
