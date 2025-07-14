@@ -60,3 +60,5 @@ confirm-close-surface = false
 # in bytes - default is 10000000 = 10MB
 scrollback-limit = 50000000
 # adjust-cell-height = -10%
+
+link-url = false
