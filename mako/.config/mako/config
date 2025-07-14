@@ -1,7 +1,7 @@
 # General Settings
 markup=1
 actions=1
-anchor=bottom-right
+anchor=top-right
 group-by=summary
 ignore-timeout=1
 default-timeout=10000
@@ -16,7 +16,7 @@ border-size=2
 border-radius=5
 
 # Colors
-background-color=#4e4c63
+background-color=#343245
 text-color=#c0caf5
 border-color=#414868
 
