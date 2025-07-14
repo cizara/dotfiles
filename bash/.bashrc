@@ -30,9 +30,8 @@ export LC_ALL="en_US.UTF-8";
 
 export PATH=~/bin:~/.local/bin:$PATH
 
-# BEGIN_KITTY_SHELL_INTEGRATION
-if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
-# END_KITTY_SHELL_INTEGRATION
+# Setup fzf shell integration
+eval "$(fzf --bash)"
 
 # Starts Univeral Wayland Session Manager
 if uwsm check may-start && uwsm select; then
