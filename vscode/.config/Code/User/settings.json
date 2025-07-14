@@ -1,0 +1,141 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.tabSize": 2
+    },
+    "ansible.ansible.path": "",
+    "ansible.validation.lint.arguments": "-x \"yaml[line-length]\"",
+    "ansible.validation.lint.path": "/usr/bin/ansible-lint",
+    "autopep8.args": [
+        "--max-line-length=200"
+    ],
+    "chat.detectParticipant.enabled": true,
+    "chat.editing.alwaysSaveWithGeneratedChanges": true,
+    "chat.renderRelatedFiles": true,
+    "database-client.autoSync": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.renderSideBySide": false,
+    "editor.codeActionsOnSave": {},
+    "editor.detectIndentation": false,
+    "editor.experimentalEditContextEnabled": true,
+    "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontLigatures": true,
+    "editor.formatOnSaveMode": "modifications",
+    "editor.inlineSuggest.enabled": true,
+    "editor.stickyScroll.enabled": true,
+    "evenBetterToml.formatter.alignComments": false,
+    "evenBetterToml.formatter.alignEntries": true,
+    "evenBetterToml.formatter.allowedBlankLines": 1,
+    "evenBetterToml.formatter.arrayAutoCollapse": true,
+    "evenBetterToml.formatter.arrayAutoExpand": true,
+    "evenBetterToml.formatter.indentEntries": true,
+    "extensions.ignoreRecommendations": true,
+    "files.associations": {
+        "*.gotmpl": "yaml",
+        "**/keys/**/*sops.yaml": "plaintext",
+        "**/roles/**/*.j2": "ansible-jinja",
+        "**/roles/**/*.yaml": "ansible",
+        "**/roles/**/*.yml": "ansible"
+    },
+    "git.autofetch": true,
+    "git.blame.editorDecoration.enabled": true,
+    "git.blame.statusBarItem.enabled": true,
+    "git.confirmSync": false,
+    "git.enableCommitSigning": true,
+    "git.enableSmartCommit": true,
+    "git.replaceTagsWhenPull": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.editor.temporalContext.enabled": true,
+    "github.copilot.chat.edits.temporalContext.enabled": true,
+    "github.copilot.chat.generateTests.codeLens": true,
+    "github.copilot.chat.inlineChatCompletionTrigger.enabled": true,
+    "github.copilot.chat.inlineChatHint.enabled": true,
+    "github.copilot.chat.scopeSelection": true,
+    "github.copilot.chat.search.semanticTextResults": true,
+    "github.copilot.chat.startDebugging.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "markdown": true,
+        "plaintext": true
+    },
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "githubPullRequests.createOnPublishBranch": "never",
+    "githubPullRequests.experimental.chat": true,
+    "githubPullRequests.experimental.notificationsView": true,
+    "githubPullRequests.fileListLayout": "tree",
+    "githubPullRequests.pullBranch": "never",
+    "githubPullRequests.pushBranch": "always",
+    "gitlens.advanced.messages": {
+        "suppressIntegrationRequestTimedOutWarning": true
+    },
+    "gitlens.defaultDateShortFormat": "YYYY-MM-DD",
+    "gitlens.defaultTimeFormat": "HH:mm",
+    "go.formatTool": "goimports",
+    "go.lintFlags": [
+        "--fast-only"
+    ],
+    "go.lintTool": "golangci-lint",
+    "go.testTimeout": "300s",
+    "go.toolsManagement.autoUpdate": true,
+    "inlineChat.accessibleDiffView": "on",
+    "Prettier-SQL.denseOperators": true,
+    "Prettier-SQL.keywordCase": "upper",
+    "prettier.bracketSpacing": false,
+    "prettier.ignorePath": "/home/lucho/.prettierignore",
+    "prettier.tabWidth": 4,
+    "pylint.args": [
+        "--max-line-length=200",
+        "--rcfile=.pylintrc"
+    ],
+    "python.analysis.supportAllPythonDocuments": true,
+    "python.createEnvironment.trigger": "off",
+    "python.terminal.shellIntegration.enabled": true,
+    "redhat.telemetry.enabled": false,
+    "search.searchView.keywordSuggestions": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "shellformat.effectLanguages": [
+        "shellscript",
+        // "dockerfile",
+        "dotenv",
+        "hosts",
+        "jvmoptions",
+        "ignore",
+        "gitignore",
+        "properties",
+        "spring-boot-properties",
+        "azcli",
+        "bats"
+    ],
+    "sonarlint.disableTelemetry": true,
+    "telemetry.feedback.enabled": false,
+    "telemetry.telemetryLevel": "off",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "window.menuBarVisibility": "toggle",
+    "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${activeRepositoryBranchName}",
+    "window.titleBarStyle": "native",
+    "workbench.colorTheme": "One Dark Pro Monokai Darker",
+    "workbench.settings.showAISearchToggle": true,
+    "workbench.sideBar.location": "right",
+    "workbench.startupEditor": "none",
+    "workbench.tree.enableStickyScroll": true,
+    "yaml.format.printWidth": 160,
+    "yaml.schemaStore.enable": false,
+    "yaml.validate": false
+}
