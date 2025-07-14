@@ -14,6 +14,13 @@
 source '/usr/bin/switch.sh'
 alias kubectl=kubecolor
 
+# Some useful aliases
+alias ls='eza -g'
+alias cat='bat -p'
+alias vi=vim
+alias v=nvim
+alias grep='grep --color'
+
 # Custom prompt
 eval "$(starship init bash)"
 
@@ -37,3 +44,7 @@ eval "$(fzf --bash)"
 if uwsm check may-start && uwsm select; then
   exec uwsm start default
 fi
+
+# Load K8s aliases
+[[ -f ~/.kubernetes_aliases ]] && . ~/.kubernetes_aliases
+
