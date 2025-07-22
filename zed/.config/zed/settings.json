@@ -1,0 +1,111 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette
+{
+  "edit_predictions": {
+    "mode": "subtle",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null,
+      "enterprise_uri": null
+    },
+    "enabled_in_text_threads": false
+  },
+  "git_panel": {
+    "dock": "right"
+  },
+  "tabs": {
+    "git_status": false
+  },
+  "agent": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    }
+  },
+  "icon_theme": {
+    "mode": "system",
+    "light": "Modern Icons (Light)",
+    "dark": "Modern Icons (Dark)"
+  },
+  "ui_font_features": {
+    "calt": 1
+  },
+  "base_keymap": "VSCode",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "notification_panel": {
+    "dock": "right"
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "outline_panel": {
+    "indent_size": 25
+  },
+  "project_panel": {
+    "auto_fold_dirs": true,
+    "dock": "right"
+  },
+  "format_on_save": "off",
+  "scrollbar": {
+    "show": "auto",
+    "cursors": true,
+    "git_diff": true,
+    "search_results": true,
+    "selected_symbol": true,
+    "diagnostics": "warning"
+  },
+  // font
+  "ui_font_size": 14.0,
+  "buffer_font_weight": 400,
+  "ui_font_family": "JetBrains Mono",
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_line_height": "comfortable",
+  "buffer_font_size": 13.0,
+  "theme": {
+    "mode": "light",
+    "light": "Modest Dark",
+    "dark": "Ayu Mirage"
+  },
+  "vim_mode": false,
+  "terminal": {
+    "font_family": "JetBrains Mono",
+    "font_size": 14
+  },
+  "languages": {
+    "Python": {
+      "debuggers": ["Debugpy"],
+      "language_servers": ["pyright", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    },
+    "SQL": {
+      "formatter": {
+        "external": {
+          "command": "sql-formatter",
+          // https://github.com/sql-formatter-org/sql-formatter/tree/master?tab=readme-ov-file#configuration-options
+          "arguments": ["--language", "mysql", "--config", "{\"tabWidth\": 2,\"keywordCase\": \"upper\", \"linesBetweenQueries\": 2}"]
+        }
+      }
+    }
+  }
+}
