@@ -137,5 +137,6 @@
     "workbench.tree.enableStickyScroll": true,
     "yaml.format.printWidth": 160,
     "yaml.schemaStore.enable": false,
-    "yaml.validate": false
+    "yaml.validate": false,
+    "githubPullRequests.terminalLinksHandler": "github"
 }
