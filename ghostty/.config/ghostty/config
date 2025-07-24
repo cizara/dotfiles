@@ -44,15 +44,21 @@
 
 window-decoration = false
 
-font-size = 8
+font-size = 7.5
 font-family = Liberation Mono
 
 background-opacity = 0.93
 
-theme = arcoiris
+#theme = arcoiris
+theme = carbonfox
 foreground = #cecece
 background = #0e1415
 
 clipboard-paste-protection = false
 confirm-close-surface = false
 
+# in bytes - default is 10000000 = 10MB
+scrollback-limit = 50000000
+# adjust-cell-height = -10%
+
+link-url = false

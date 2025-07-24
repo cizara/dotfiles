@@ -1,4 +1,4 @@
-dotenv
+dotfiles
 =====
 Install with GNU stow
 

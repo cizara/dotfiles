@@ -1,45 +1,52 @@
+# General Settings
 markup=1
 actions=1
 anchor=bottom-right
+group-by=summary
+ignore-timeout=1
+default-timeout=10000
 
-# Format
-font=pango:FontAwesome 14
-border-color=#002028
-border-size=2
-background-color=#24283b
-border-color=#414868
-text-color=#c0caf5
+# Appearance
+font=JetBrains Mono:Regular 14
+width=600
+height=150
 margin=0,20,20
 padding=10
 border-size=2
 border-radius=5
-max-icon-size=128
-format=<b>%s</b> <span color="#93a1a1">(%a)</span>\n%b
-width=600
-height=150
-ignore-timeout=1
-default-timeout=10000
-group-by=summary
 
-# Hidden format
+# Colors
+background-color=#343245
+text-color=#c0caf5
+border-color=#414868
+
+# Format
+format=<b>%s</b> <span color="#93a1a1">(%a)</span>\n%b
+max-icon-size=128
+
+# Hidden Notifications
 [hidden]
 format=Hidden: %h [%t]
 
+# Urgency: Low
 [urgency=low]
 text-color=#93a1a1
 
 [urgency=low actionable]
 border-color=#93a1a1
 
+# Urgency: Normal
 [urgency=normal actionable]
 border-color=#268bd2
 
+# Urgency: High
 [urgency=high]
 border-color=#9c2220
 
 [urgency=high actionable]
 border-color=#6c71c4
 
+# App-Specific: Spotify
 [app-name=Spotify]
 max-icon-size=192
 default-timeout=3000

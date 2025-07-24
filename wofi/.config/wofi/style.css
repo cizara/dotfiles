@@ -1,17 +1,17 @@
 * {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 19px;
 }
-
 #entry {
   background-color: transparent;
   border: none;
 }
 #entry:selected {
-  background-color: #3c3c3c;
-  border: none;
+  background-color: #434c5e;
 }
 
 #text:selected {
-  color: #5e81ac;
+  color: #88c0d0;
   font-weight: bold;
 }
 
@@ -64,9 +64,9 @@
 }
 
 #entry:nth-child(even) {
-  background-color: #575757;
+  background-color:rgb(84, 83, 83);
 }
 
-#entry:selected {
-  background-color: #b5babd;
+#entry:nth-child(odd) {
+  background-color: #2f2f2f;
 }

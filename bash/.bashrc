@@ -14,6 +14,13 @@
 source '/usr/bin/switch.sh'
 alias kubectl=kubecolor
 
+# Some useful aliases
+alias ls='eza -g'
+alias cat='bat -p'
+alias vi=vim
+alias v=nvim
+alias grep='grep --color'
+
 # Custom prompt
 eval "$(starship init bash)"
 
@@ -30,11 +37,14 @@ export LC_ALL="en_US.UTF-8";
 
 export PATH=~/bin:~/.local/bin:$PATH
 
-# BEGIN_KITTY_SHELL_INTEGRATION
-if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
-# END_KITTY_SHELL_INTEGRATION
+# Setup fzf shell integration
+eval "$(fzf --bash)"
 
 # Starts Univeral Wayland Session Manager
 if uwsm check may-start && uwsm select; then
   exec uwsm start default
 fi
+
+# Load K8s aliases
+[[ -f ~/.kubernetes_aliases ]] && . ~/.kubernetes_aliases
+
