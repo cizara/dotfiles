@@ -1,11 +1,26 @@
+-- ========================================
+-- Vim Options Configuration
+-- ========================================
+
+-- Leader key (must be set before lazy.nvim)
+vim.g.mapleader = " "
+
+-- ========================================
+-- Indentation
+-- ========================================
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 
-vim.opt.number=true           -- print line number
-vim.opt.relativenumber=true   -- relative ln to cursor
-vim.opt.splitbelow=true       -- new windows below
-vim.opt.splitright=true       -- new windows rigth
-vim.g.mapleader = " "
+-- ========================================
+-- Line Numbers
+-- ========================================
+vim.opt.number = true          -- Print line number
+vim.opt.relativenumber = false -- Relative line numbers to cursor
 
+-- ========================================
+-- Window Management
+-- ========================================
+vim.opt.splitbelow = true -- Put new windows below current
+vim.opt.splitright = true -- Put new windows right of current
