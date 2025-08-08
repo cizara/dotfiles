@@ -1,7 +1,7 @@
 style=~/.config/wofi/style.css
 show=drun
 width=18%
-lines=10
+height=400
 gtk_dark=true
 term=ghostty
 allow_markup=true
