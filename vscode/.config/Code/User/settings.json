@@ -138,5 +138,11 @@
     "yaml.format.printWidth": 160,
     "yaml.schemaStore.enable": false,
     "yaml.validate": false,
-    "githubPullRequests.terminalLinksHandler": "github"
+    "githubPullRequests.terminalLinksHandler": "github",
+    "[lua]": {
+        "editor.defaultFormatter": "yinfei.luahelper"
+    },
+    "[terraform]": {
+        "editor.defaultFormatter": "hashicorp.terraform"
+    }
 }

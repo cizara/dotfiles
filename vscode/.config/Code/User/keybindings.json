@@ -1,0 +1,28 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+  {
+    "key": "ctrl+k ctrl+u",
+    "command": "editor.action.transformToUppercase"
+  },
+  {
+    "key": "ctrl+k ctrl+l",
+    "command": "editor.action.transformToLowercase"
+},
+{
+    "key": "ctrl+shift+alt+right",
+    "command": "workbench.action.positionPanelRight"
+},
+{
+    "key": "ctrl+'",
+    "command": "inlineChat.startWithCurrentLine",
+    "when": "inlineChatHasProvider && !editorReadonly && !inlineChatVisible"
+},
+{
+    "key": "ctrl+alt+k",
+    "command": "workbench.action.openQuickChat"
+},
+{
+    "key": "ctrl+shift+alt+left",
+    "command": "workbench.files.action.collapseExplorerFolders"
+}
+]
