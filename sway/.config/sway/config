@@ -1,9 +1,5 @@
 exec_always echo "sway config trace: starting sway at $(date)"
 
-bar {
-  swaybar_command waybar
-}
-
 #font Roboto 16
 font JetBrains Mono 14
 #gaps inner 2
@@ -39,7 +35,7 @@ output DP-1 {
 output $laptop {
     bg `~/bin/sway_wallpaper` fill
     pos 3840 0
-    scale 1
+    scale 1.6
 }
 #
 # Input configuration

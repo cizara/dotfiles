@@ -1,0 +1,11 @@
+$include /etc/inputrc
+
+# dont need double tab for completion if there are multiple matches
+set show-all-if-ambiguous on
+# if more than 200 matches, ask before showing them
+set completion-query-items 200
+# dont pause ith more - show them all together
+set page-completions off
+# do not show hidden files in completion unless start with dot
+set match-hidden-files off
+set colored-stats on

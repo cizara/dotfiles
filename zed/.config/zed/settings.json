@@ -23,9 +23,11 @@
     "git_status": false
   },
   "agent": {
+    "always_allow_tool_actions": true,
+    "single_file_review": true,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4.1"
+      "model": "claude-sonnet-4"
     }
   },
   "icon_theme": {
@@ -80,6 +82,27 @@
     "font_family": "JetBrains Mono",
     "font_size": 14
   },
+  "lsp": {
+    "helm_ls": {
+      "settings": {
+        "helm-ls": {
+          "logLevel": "info",
+          "yamlls": {
+            "enabled": true
+          }
+        }
+      }
+    },
+    "pyright": {
+      "settings": {
+        "python": {
+          "exclude": [ ".venv" ],
+          "venvPath": ".",
+          "venv": ".venv"
+        }
+      }
+    }
+  },
   "file_types": {
     "Helm": [
       "**/templates/**/*.tpl",
@@ -89,6 +112,30 @@
       "**/helmfile/**/*.yaml",
       "**/helmfile/**/*.yml",
       "**/values*.yaml"
+    ],
+    "Ansible": [
+      "**.ansible.yml",
+      "**.ansible.yaml",
+      "**/defaults/*.yml",
+      "**/defaults/*.yaml",
+      "**/meta/*.yml",
+      "**/meta/*.yaml",
+      "**/tasks/*.yml",
+      "**/tasks/*.yaml",
+      "**/handlers/*.yml",
+      "**/handlers/*.yaml",
+      "**/group_vars/*.yml",
+      "**/group_vars/*.yaml",
+      "**/host_vars/*.yml",
+      "**/host_vars/*.yaml",
+      "**/playbooks/*.yml",
+      "**/playbooks/*.yaml",
+      "**playbook*.yml",
+      "**playbook*.yaml"
+    ],
+    "Python": [
+      "**/Tiltfile",
+      "**/*.tilt"
     ]
   },
   "languages": {
@@ -114,7 +161,12 @@
         "external": {
           "command": "sql-formatter",
           // https://github.com/sql-formatter-org/sql-formatter/tree/master?tab=readme-ov-file#configuration-options
-          "arguments": ["--language", "mysql", "--config", "{\"tabWidth\": 2,\"keywordCase\": \"upper\", \"linesBetweenQueries\": 2}"]
+          "arguments": [
+            "--language",
+            "mysql",
+            "--config",
+            "{\"tabWidth\": 2,\"keywordCase\": \"upper\", \"linesBetweenQueries\": 2}"
+          ]
         }
       }
     }
