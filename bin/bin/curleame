@@ -1,24 +1,50 @@
 #!/bin/bash
-#
-# curl wrapper returning timing information.
-#
-# curl format adapted from
-#  http://josephscott.org/archives/2011/10/timing-details-with-curl/
-#
-# Example usage:
-#   $ curlt http://www.apple.com
-#   $ time curlt http://www.apple.com -v
-
 set -e
 
-curl_format='{
- "time_namelookup": %{time_namelookup},
- "time_connect": %{time_connect},
- "time_appconnect": %{time_appconnect},
- "time_pretransfer": %{time_pretransfer},
- "time_redirect": %{time_redirect},
- "time_starttransfer": %{time_starttransfer},
- "time_total": %{time_total}
-}'
+url="$1"
+runs="${2:-5}"
+extra_opts="${3:-}"
 
-exec curl -w "$curl_format" -o /dev/null -s "$@"
+# dns  = DNS lookup
+# conn = TCP connect
+# ssl  = TLS handshake (HTTPS)
+# pre  = Ready to send request
+# ttfb = Time to first byte
+# total= Full transfer complete
+# rdr  = Time spent following redirects (use -L to see)
+
+fmt='%{time_namelookup} %{time_connect} %{time_appconnect} %{time_pretransfer} %{time_starttransfer} %{time_total} %{time_redirect}\n'
+
+# Store output in a buffer
+output=$(printf "run\tdns\tconn\tssl\tpre\tttfb\ttotal\trdr\n")
+output+=$'\n'
+
+tot_dns=0; tot_conn=0; tot_ssl=0; tot_pre=0; tot_ttfb=0; tot_total=0; tot_rdr=0
+
+for ((i=1; i<=runs; i++)); do
+  read dns conn ssl pre ttfb total rdr <<<"$(curl $extra_opts -w "$fmt" -o /dev/null -s "$url")"
+  output+=$(printf "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n" "$i" "$dns" "$conn" "$ssl" "$pre" "$ttfb" "$total" "$rdr")
+  output+=$'\n'
+
+  tot_dns=$(awk -v a="$tot_dns" -v b="$dns" 'BEGIN{printf "%.9f", a+b}')
+  tot_conn=$(awk -v a="$tot_conn" -v b="$conn" 'BEGIN{printf "%.9f", a+b}')
+  tot_ssl=$(awk -v a="$tot_ssl" -v b="$ssl" 'BEGIN{printf "%.9f", a+b}')
+  tot_pre=$(awk -v a="$tot_pre" -v b="$pre" 'BEGIN{printf "%.9f", a+b}')
+  tot_ttfb=$(awk -v a="$tot_ttfb" -v b="$ttfb" 'BEGIN{printf "%.9f", a+b}')
+  tot_total=$(awk -v a="$tot_total" -v b="$total" 'BEGIN{printf "%.9f", a+b}')
+  tot_rdr=$(awk -v a="$tot_rdr" -v b="$rdr" 'BEGIN{printf "%.9f", a+b}')
+done
+
+avg_dns=$(awk -v s="$tot_dns" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_conn=$(awk -v s="$tot_conn" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_ssl=$(awk -v s="$tot_ssl" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_pre=$(awk -v s="$tot_pre" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_ttfb=$(awk -v s="$tot_ttfb" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_total=$(awk -v s="$tot_total" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+avg_rdr=$(awk -v s="$tot_rdr" -v n="$runs" 'BEGIN{printf "%.3f", s/n}')
+
+output+=$(printf "AVG\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n" "$avg_dns" "$avg_conn" "$avg_ssl" "$avg_pre" "$avg_ttfb" "$avg_total" "$avg_rdr")
+
+# Print neatly formatted output
+echo "$output" | column -t
+
