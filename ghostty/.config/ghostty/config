@@ -49,8 +49,9 @@ font-family = Liberation Mono
 
 background-opacity = 0.93
 
-#theme = arcoiris
-theme = carbonfox
+#theme = Arcoiris
+theme = Monokai Pro Machine
+
 foreground = #cecece
 background = #0e1415
 
