@@ -47,7 +47,7 @@ local function setup_global_keymaps()
     vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
     vim.keymap.set('n', '<leader>y', '"+yy', { desc = 'Yank line to system clipboard' })
     vim.keymap.set('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
-    vim.keymap.set({ 'n', 'v' }, '<leader>x', '"_d', { desc = 'Delete without yanking' })
+    --vim.keymap.set({ 'n', 'v' }, '<leader>x', '"_d', { desc = 'Delete without yanking' })
 
     -- Replace word under cursor
     vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
@@ -60,6 +60,11 @@ local function setup_global_keymaps()
     -- Neo-tree keymaps
     vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', { desc = 'Show Neotree' })
     vim.keymap.set('n', '<leader>bf', ':Neotree buffers reveal float<CR>', { desc = 'Show Neotree buffers' })
+
+    -- Which file am i editing
+    vim.keymap.set("n", "<leader>fp", function()
+      print(vim.fn.expand("%:p"))
+    end, { desc = "Print full path of current file" })
 
     -- ========================================
     -- Telescope keymaps
@@ -134,10 +139,6 @@ local function setup_global_keymaps()
     vim.keymap.set('n', '<leader>tn', ':set number!<CR>', { desc = 'Toggle line numbers' })
     vim.keymap.set('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative numbers' })
     vim.keymap.set('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
-
-    -- Diagnostic keymaps (moved to avoid 'd' conflict)
-    vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diagnostic list' })
-    vim.keymap.set('n', '<leader>dw', vim.diagnostic.setqflist, { desc = 'Open workspace diagnostics' })
 end
 
 -- ========================================
@@ -187,6 +188,15 @@ local function setup_lsp_keymaps(bufnr)
     vim.keymap.set("n", "gl", vim.diagnostic.open_float, lsp_opts("Show diagnostic"))
     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, lsp_opts("Previous diagnostic"))
     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, lsp_opts("Next diagnostic"))
+    vim.keymap.set("n", "<leader>xx", require("telescope.builtin").diagnostics, {
+        desc = "Show all workspace diagnostics"
+    })
+    vim.keymap.set("n", "<leader>xf", function()
+        vim.diagnostic.setqflist()
+        vim.cmd("copen")
+    end, { desc = "Open quickfix with all diagnostics" })
+    vim.keymap.set('n', '<leader>xl', vim.diagnostic.setloclist, { desc = 'Open diagnostic list' })
+    vim.keymap.set('n', '<leader>xw', vim.diagnostic.setqflist, { desc = 'Open workspace diagnostics' })
 end
 
 -- ========================================

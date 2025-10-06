@@ -17,6 +17,7 @@ function M.setup()
             "jsonc",
             "lua",
             "ninja",
+            "php",
             "python",
             "query",
             "regex",
