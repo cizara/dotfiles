@@ -23,6 +23,8 @@
     "git_status": false
   },
   "agent": {
+    "always_allow_tool_actions": true,
+    "single_file_review": true,
     "default_model": {
       "provider": "copilot_chat",
       "model": "claude-sonnet-4"
@@ -90,6 +92,15 @@
           }
         }
       }
+    },
+    "pyright": {
+      "settings": {
+        "python": {
+          "exclude": [ ".venv" ],
+          "venvPath": ".",
+          "venv": ".venv"
+        }
+      }
     }
   },
   "file_types": {
@@ -121,6 +132,10 @@
       "**/playbooks/*.yaml",
       "**playbook*.yml",
       "**playbook*.yaml"
+    ],
+    "Python": [
+      "**/Tiltfile",
+      "**/*.tilt"
     ]
   },
   "languages": {
