@@ -3,6 +3,8 @@
   border: none;
   border-radius: 0;
   font-size: 17px;
+  font-family: "JetBrainsMono Nerd Font Mono", "JetBrainsMono Nerd Font", "JetBrainsMonoNF";
+
   transition-duration: 0s;
 }
 
@@ -104,4 +106,3 @@ tooltip {
 #battery.charging {
   color: rgba(217, 216, 216, 1);
 }
-

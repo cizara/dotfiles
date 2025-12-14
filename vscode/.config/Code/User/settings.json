@@ -1,13 +1,30 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[dockercompose]": {
+        "editor.autoIndent": "advanced",
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[go]": {
+        "editor.defaultFormatter": "golang.go"
+    },
     "[javascript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "[lua]": {
+        "editor.defaultFormatter": "yinfei.luahelper"
+    },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "[terraform]": {
+        "editor.defaultFormatter": "hashicorp.terraform"
     },
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
@@ -19,21 +36,23 @@
         "editor.defaultFormatter": "redhat.vscode-yaml",
         "editor.tabSize": 2
     },
-    "ansible.ansible.path": "",
-    "ansible.validation.lint.arguments": "-x \"yaml[line-length]\"",
-    "ansible.validation.lint.path": "/usr/bin/ansible-lint",
     "autopep8.args": [
         "--max-line-length=200"
     ],
     "chat.detectParticipant.enabled": true,
-    "chat.editing.alwaysSaveWithGeneratedChanges": true,
     "chat.renderRelatedFiles": true,
-    "database-client.autoSync": true,
+    "chat.tools.terminal.autoApprove": {
+        "go": true,
+        "golangci-lint": true,
+        "gofmt": true,
+        "KONG_VERSION=3.4.2": true,
+        "make": true
+    },
     "diffEditor.ignoreTrimWhitespace": false,
-    "diffEditor.renderSideBySide": false,
+    "diffEditor.renderSideBySide": true,
     "editor.codeActionsOnSave": {},
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.detectIndentation": false,
-    "editor.experimentalEditContextEnabled": true,
     "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', monospace",
     "editor.fontLigatures": true,
     "editor.formatOnSaveMode": "modifications",
@@ -53,22 +72,23 @@
         "**/roles/**/*.yaml": "ansible",
         "**/roles/**/*.yml": "ansible"
     },
+    "files.watcherExclude": {
+        " \"**/node_modules/**\"": true
+    },
     "git.autofetch": true,
     "git.blame.editorDecoration.enabled": true,
-    "git.blame.statusBarItem.enabled": true,
     "git.confirmSync": false,
     "git.enableCommitSigning": true,
     "git.enableSmartCommit": true,
+    "git.fetchOnPull": true,
+    "git.openRepositoryInParentFolders": "always",
     "git.replaceTagsWhenPull": true,
     "github.copilot.chat.agent.thinkingTool": true,
     "github.copilot.chat.codesearch.enabled": true,
     "github.copilot.chat.editor.temporalContext.enabled": true,
     "github.copilot.chat.edits.temporalContext.enabled": true,
     "github.copilot.chat.generateTests.codeLens": true,
-    "github.copilot.chat.inlineChatCompletionTrigger.enabled": true,
-    "github.copilot.chat.inlineChatHint.enabled": true,
     "github.copilot.chat.scopeSelection": true,
-    "github.copilot.chat.search.semanticTextResults": true,
     "github.copilot.chat.startDebugging.enabled": true,
     "github.copilot.enable": {
         "*": true,
@@ -78,15 +98,10 @@
     "github.copilot.nextEditSuggestions.enabled": false,
     "githubPullRequests.createOnPublishBranch": "never",
     "githubPullRequests.experimental.chat": true,
-    "githubPullRequests.experimental.notificationsView": true,
     "githubPullRequests.fileListLayout": "tree",
     "githubPullRequests.pullBranch": "never",
     "githubPullRequests.pushBranch": "always",
-    "gitlens.advanced.messages": {
-        "suppressIntegrationRequestTimedOutWarning": true
-    },
-    "gitlens.defaultDateShortFormat": "YYYY-MM-DD",
-    "gitlens.defaultTimeFormat": "HH:mm",
+    "githubPullRequests.terminalLinksHandler": "github",
     "go.formatTool": "goimports",
     "go.lintFlags": [
         "--fast-only"
@@ -130,35 +145,13 @@
     "window.menuBarVisibility": "toggle",
     "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${activeRepositoryBranchName}",
     "window.titleBarStyle": "native",
-    "workbench.colorTheme": "One Dark Pro Monokai Darker",
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Alabaster Dark",
     "workbench.settings.showAISearchToggle": true,
     "workbench.sideBar.location": "right",
     "workbench.startupEditor": "none",
     "workbench.tree.enableStickyScroll": true,
     "yaml.format.printWidth": 160,
     "yaml.schemaStore.enable": false,
-    "yaml.validate": false,
-    "githubPullRequests.terminalLinksHandler": "github",
-    "[lua]": {
-        "editor.defaultFormatter": "yinfei.luahelper"
-    },
-    "[terraform]": {
-        "editor.defaultFormatter": "hashicorp.terraform"
-    },
-    "[go]": {
-        "editor.defaultFormatter": "golang.go"
-    },
-    "window.zoomLevel": 0,
-    "[dockercompose]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 2,
-        "editor.autoIndent": "advanced",
-        "editor.defaultFormatter": "redhat.vscode-yaml"
-    },
-    "[github-actions-workflow]": {
-        "editor.defaultFormatter": "redhat.vscode-yaml"
-    },
-    "chat.tools.terminal.autoApprove": {
-        "go": true
-    }
+    "yaml.validate": false
 }

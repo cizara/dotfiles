@@ -23,6 +23,8 @@ $container\
 $shell\
 $character"""
 
+scan_timeout = 150
+
 # Disable the blank line at the start of the prompt
 add_newline = false
 

@@ -85,7 +85,7 @@
       "warning": 70,
       "critical": 90
     },
-    "on-click": "ghostty --title=tty-floating -e btop",
+    "on-click": "ghostty --title=tty-floating -e btop"
   },
   "memory": {
     "format": "{}% ",
@@ -105,11 +105,8 @@
     "format-charging": "{capacity}% ",
     "format-plugged": "{capacity}% ",
     "format-alt": "{time} {icon}",
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
-    "format-icons": [
-      "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"
-    ]
+    "format-icons": [ "󰁺","󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" ]
+
   },
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
@@ -165,7 +162,7 @@
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "deactivated": "",
+      "deactivated": "",
       "activated": ""
     },
     "tooltip": false
