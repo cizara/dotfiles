@@ -27,16 +27,6 @@ PanelWindow {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    console.log("You fucking clicked me.")
-
-                }
-                onEntered: {
-                    console.log("Hi Cami!")
-                }
-                onExited: {
-                    console.log("Bye Cami!")
-                }
             }
         }
     }

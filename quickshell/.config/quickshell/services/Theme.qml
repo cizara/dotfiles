@@ -3,8 +3,8 @@ import QtQuick
 
 QtObject {
     // Typography
-    readonly property string fontFamily: "JetBrainsMono Nerd Font Mono"
-    readonly property string fontFamilyMono: "JetBrainsMono Nerd Font Mono"
+    readonly property string fontFamily: "Hack Nerd Font"
+    readonly property string fontFamilyMono: "Hack Nerd Font"
     // readonly property string fontFamily: "Adwaita Sans"
     // readonly property string fontFamilyMono: "Hack Nerd Font"
     

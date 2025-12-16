@@ -15,10 +15,10 @@ Scope {
             required property var modelData
             screen: modelData
             color: "transparent"
-            exclusiveZone: 30
+            exclusiveZone: 50
 
             anchors { top: true; left: true; right: true }
-            implicitHeight: 30
+            implicitHeight: 50
 
             // LEFT
             Row {
@@ -55,9 +55,9 @@ Scope {
                 padding: 6
 
                 Mediaplayer { id: media }
-        //      Pfppanel {}
                 Battery {}
                 DateTime {}
+                Pfpanel {}
             }
         }
     }
