@@ -55,6 +55,7 @@ Scope {
                 padding: 6
 
                 Mediaplayer { id: media }
+                SystemTray {}
                 Battery {}
                 DateTime {}
                 Pfpanel {}

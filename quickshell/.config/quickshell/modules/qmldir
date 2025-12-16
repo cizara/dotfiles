@@ -11,6 +11,7 @@ NotificationPopup 1.0 NotificationPopup.qml
 NotificationsPanel 1.0 NotificationsPanel.qml
 singleton Panel 1.0 Panel.qml
 Pfpanel 1.0 Pfpanel.qml
+SystemTray 1.0 SystemTray.qml
 Temperature 1.0 Temperature.qml
 WidgetPanel 1.0 WidgetPanel.qml
 Workspaces 1.0 Workspaces.qml
