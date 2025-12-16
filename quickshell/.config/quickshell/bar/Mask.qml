@@ -13,7 +13,7 @@ PanelWindow {
     color: "transparent"
     visible: true
     exclusiveZone: -1
-    WlrLayershell.layer: WlrLayer.Background
+    WlrLayershell.layer: WlrLayer.Bottom
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
     focusable: false
 

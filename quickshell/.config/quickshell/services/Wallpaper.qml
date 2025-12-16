@@ -1,11 +1,12 @@
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Io
 pragma Singleton
 
+// Wallpaper service using swaybg for better Hyprland compatibility
 Item {
     property string imagePath: ""
+    property var swaybgProcess: null
     
     Component.onCompleted: {
         loadRandomWallpaper()
@@ -63,33 +64,35 @@ Item {
                 const path = text.trim()
                 if (path.length > 0) {
                     imagePath = path
+                    setWallpaper()
                 }
             }
         }
     }
     
-    Variants {
-        model: Quickshell.screens
-        
-        PanelWindow {
-            required property var modelData
-            
-            screen: modelData
-            visible: true
-            color: "black"
-            exclusiveZone: 0
-            WlrLayershell.layer: WlrLayer.Background
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-            focusable: false
-            anchors { top: true; bottom: true; left: true; right: true }
-
-            Image {
-                anchors.fill: parent
-                source: "file://" + imagePath
-                fillMode: Image.PreserveAspectCrop
-                smooth: true
-                asynchronous: true
-            }
+    function setWallpaper() {
+        // Kill existing swaybg process
+        killProc.running = true
+    }
+    
+    // Kill existing swaybg
+    Process {
+        id: killProc
+        command: ["bash", "-c", "pkill swaybg"]
+        onExited: {
+            // Start new swaybg with the new wallpaper
+            startSwaybg()
         }
+    }
+    
+    function startSwaybg() {
+        swaybgProc.running = true
+    }
+    
+    // Start swaybg with wallpaper
+    Process {
+        id: swaybgProc
+        running: false
+        command: ["swaybg", "-i", imagePath, "-m", "fill"]
     }
 }

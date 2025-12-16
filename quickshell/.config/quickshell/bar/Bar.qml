@@ -15,10 +15,10 @@ Scope {
             required property var modelData
             screen: modelData
             color: "transparent"
-            exclusiveZone: 50
+            exclusiveZone: 40
 
             anchors { top: true; left: true; right: true }
-            implicitHeight: 50
+            implicitHeight: 40
 
             // LEFT
             Row {
