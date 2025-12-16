@@ -1,32 +1,27 @@
 import QtQuick
 import Quickshell
+import qs.services as Services
 
 Rectangle {
     id: root
-    height: 28
+    readonly property var dateTimeService: Services.DateTime
+    height: Services.Theme.moduleHeight
     radius: height / 2
-    color: "#313244"
+    color: Services.Theme.colorSurface0
     border.width: 1
-    border.color: "#313244"
+    border.color: Services.Theme.colorSurface0
     antialiasing: true
 
-    implicitWidth: timeText.implicitWidth + 12
+    implicitWidth: timeRow.implicitWidth + Services.Theme.paddingModule
 
     property bool hovered: false
     property bool pressed: false
-    property string currentTime: ""
 
     property var panelWin: null
 
-    // your animation formula
-    scale: pressed ? 0.985 : (hovered ? 1.03 : 1.0)
+    scale: pressed ? Services.Theme.scalePressSmall : (hovered ? Services.Theme.scaleHover : 1.0)
     Behavior on scale {
-        NumberAnimation { duration: 90; easing.type: Easing.OutQuad }
-    }
-
-    function updateDateTime() {
-        const d = new Date()
-        currentTime = Qt.formatDateTime(d, "HH:mm • ddd, MM/dd")
+        NumberAnimation { duration: Services.Theme.animDurationFast; easing.type: Easing.OutQuad }
     }
 
     function ensurePanel() {
@@ -52,21 +47,28 @@ Rectangle {
         panelWin.visible = !panelWin.visible
     }
 
-    Text {
-        id: timeText
+    Row {
+        id: timeRow
         anchors.centerIn: parent
-        color: "#f1f5ff"
-        font.pixelSize: 12
-        text: root.currentTime
+        spacing: Services.Theme.spacingLarge
+        
+        Text {
+            anchors.verticalCenter: parent.verticalCenter
+            color: Services.Theme.colorBlue
+            font.pixelSize: Services.Theme.fontSizeNormal
+            font.family: Services.Theme.fontFamily
+            text: "Arg " + root.dateTimeService.argTime
+        }
+        
+        Text {
+            id: timeText
+            anchors.verticalCenter: parent.verticalCenter
+            color: Services.Theme.colorTextBright
+            font.pixelSize: Services.Theme.fontSizeNormal
+            font.family: Services.Theme.fontFamily
+            text: root.dateTimeService.currentTime
+        }
     }
-
-    Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: root.updateDateTime()
-    }
-    Component.onCompleted: root.updateDateTime()
 
     MouseArea {
         anchors.fill: parent
