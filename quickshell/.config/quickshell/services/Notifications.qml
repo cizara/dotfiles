@@ -17,6 +17,8 @@ Singleton {
     property list<Notif> history: data
     property bool doNotDisturb: false
     
+    Process { id: soundProcess }
+    
     function clearAll() {
         for (var i = data.length - 1; i >= 0; i--) {
             if (data[i] && data[i].notification) {
@@ -44,6 +46,26 @@ Singleton {
                 notification: notif,
                 shown: false
             }));
+
+            // Play notification sound if not in DND mode
+            if (!root.doNotDisturb) {
+                const soundName = notif.hints["sound-name"] || notif.hints["sound-file"];
+                const suppressSound = notif.hints["suppress-sound"];
+                
+                // Don't play sound if explicitly suppressed or if it's a low urgency notification
+                if (suppressSound === true || suppressSound === 1) {
+                    // Sound suppressed
+                } else if (soundName) {
+                    soundProcess.command = ["canberra-gtk-play", "-i", soundName];
+                    soundProcess.startDetached();
+                } else {
+                    // Play default notification sound based on urgency
+                    // const defaultSound = notif.urgency === 2 ? "dialog-warning" : "message-new-instant";
+                    // soundProcess.command = ["canberra-gtk-play", "-i", defaultSound];
+                    // soundProcess.startDetached();
+                    console.log("No sound specified for notification.");
+                }
+            }
         }
     }
     function removeById(id) {
@@ -84,10 +106,21 @@ Singleton {
 
         readonly property Timer timer: Timer {
             running: notif.actions.length >= 0
-            interval: notif.notification.expireTimeout > 0 ? notif.notification.expireTimeout : 5000
+            interval: notif.notification.expireTimeout > 0 ? notif.notification.expireTimeout : 3000
             onTriggered: {
                 if (true)
                     notif.popup = false;
+            }
+        }
+
+        property Timer removalTimer: Timer {
+            interval: 300000  // Keep in history for 60 seconds
+            repeat: false
+            onTriggered: {
+                const idx = root.data.indexOf(notif);
+                if (idx >= 0) {
+                    root.data.splice(idx, 1);
+                }
             }
         }
 
@@ -95,7 +128,7 @@ Singleton {
             target: notif.notification.Retainable
 
             function onDropped(): void {
-                root.data.splice(root.data.indexOf(notif), 1);
+                notif.removalTimer.start();
             }
 
             function onAboutToDestroy(): void {
