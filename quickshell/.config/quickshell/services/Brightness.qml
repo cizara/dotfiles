@@ -35,29 +35,6 @@ Singleton {
 
     reloadableId: "brightness"
 
-    onMonitorsChanged: {
-        ddcMonitors = []
-        ddcProc.running = true
-    }
-
-    Process {
-        id: ddcProc
-        command: ["ddcutil", "detect", "--brief"]
-        stdout: SplitParser {
-            splitMarker: "\n\n"
-            onRead: data => {
-                if (data.startsWith("Display ")) {
-                    const lines = data.split("\n").map(l => l.trim())
-                    root.ddcMonitors.push({
-                        model: lines.find(l => l.startsWith("Monitor:")).split(":")[2],
-                        busNum: lines.find(l => l.startsWith("I2C bus:")).split("/dev/i2c-")[1]
-                    })
-                }
-            }
-        }
-        onExited: root.ddcMonitorsChanged()
-    }
-
     Process { id: setProc }
 
     component BrightnessMonitor: QtObject {
@@ -65,40 +42,17 @@ Singleton {
 
         required property ShellScreen screen
 
-        readonly property bool isDdc: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model &&
-                !root.monitors.slice(0, root.monitors.indexOf(this))
-                    .some(mon => mon.busNum === m.busNum))
-            return !!match
-        }
-
-        readonly property string busNum: {
-            const match = root.ddcMonitors.find(m => m.model === screen.model &&
-                !root.monitors.slice(0, root.monitors.indexOf(this))
-                    .some(mon => mon.busNum === m.busNum))
-            return match?.busNum ?? ""
-        }
-
         property int rawMaxBrightness: 100
         property real brightness
         property real brightnessMultiplier: 1.0
         property real multipliedBrightness: Math.max(0, Math.min(1, brightness * brightnessMultiplier))
         property bool ready: false
-        property bool animateChanges: !monitor.isDdc
+        property bool animateChanges: true
 
         onBrightnessChanged: {
             if (!monitor.ready) return
             root.brightnessChanged()
-            if (monitor.animateChanges)
-                syncBrightness()
-            else
-                setTimer.restart()
-        }
-
-        property var setTimer: Timer {
-            id: setTimer
-            interval: monitor.isDdc ? 300 : 0
-            onTriggered: syncBrightness()
+            syncBrightness()
         }
 
         function initialize() {
@@ -131,7 +85,6 @@ Singleton {
         }
 
         Component.onCompleted: initialize()
-        onBusNumChanged: initialize()
     }
 
     Component { id: monitorComp; BrightnessMonitor {} }
