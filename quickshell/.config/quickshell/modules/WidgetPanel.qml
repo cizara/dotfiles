@@ -67,8 +67,8 @@ PanelWindow {
     implicitWidth: contentW + shadowPad * 2
     implicitHeight: contentH + shadowPad * 2
 
-    anchors { top: true; left: true }
-    margins { top: 6 - shadowPad; left: 6 - shadowPad }
+    anchors { top: true; right: true }
+    margins { top: 6 - shadowPad; right: 6 - shadowPad }
 
     Item {
         id: wrap
@@ -83,7 +83,7 @@ PanelWindow {
 
             layer.enabled: true
             layer.effect: MultiEffect {
-                shadowEnabled: true
+                shadowEnabled: false
                 shadowOpacity: panel.shadowOpacity
                 shadowVerticalOffset: panel.shadowOffsetY
                 shadowBlur: panel.shadowBlur

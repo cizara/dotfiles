@@ -73,8 +73,8 @@ Rectangle {
     // property real lat: NaN
     // property real lon: NaN
     // property string cityLine: "Locating…"
-    property real lat: 39.4990
-    property real lon: 0.3510
+    property real lat: 39.4697
+    property real lon: -0.3763
     property string cityLine: "Alboraya, Valencia"
 
     // Daily forecast
@@ -136,7 +136,7 @@ Rectangle {
         return new Date(
             parseInt(d[0], 10), parseInt(d[1], 10) - 1, parseInt(d[2], 10),
             parseInt(t[0], 10), parseInt(t[1], 10),
-            (t.length >= 3) ? parseInt(t[2], 10) : 0
+            (t.length >= 3 && t[2]) ? parseInt(t[2], 10) : 0
         ).getTime()
     }
 
@@ -195,7 +195,7 @@ Rectangle {
             "?latitude=" + lat + "&longitude=" + lon +
             "&current=temperature_2m,weather_code" +
             "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset" +
-            "&forecast_days=10&temperature_unit=celsius&timezone=auto'"]
+            "&forecast_days=10&temperature_unit=celsius&timezone=Europe/Madrid'"]
         meteoProc.running = true
     }
 
@@ -308,7 +308,7 @@ Rectangle {
                 }
 
                 Text {
-                    text: isNaN(root.tempC) ? "--°F" : (Math.round(root.tempC) + "°F")
+                    text: isNaN(root.tempC) ? "--°C" : (Math.round(root.tempC) + "°C")
                     color: "#cdd6f4"
                     font.pixelSize: 20
                     font.weight: 600
@@ -536,13 +536,18 @@ Rectangle {
                     root.dailyHiF.length, root.dailyLoF.length, 10
                 )
 
-                const sunriseStr = (daily.sunrise && daily.sunrise[0]) ? daily.sunrise[0] : ""
-                const sunsetStr  = (daily.sunset  && daily.sunset[0])  ? daily.sunset[0]  : ""
-                const sRise = root.parseLocalIso(sunriseStr)
-                const sSet  = root.parseLocalIso(sunsetStr)
-                if (!isNaN(sRise)) root.sunriseMs = sRise
-                if (!isNaN(sSet))  root.sunsetMs  = sSet
-                root.updateNightFlag()
+                const sunriseArr = daily.sunrise || []
+                const sunsetArr  = daily.sunset || []
+                
+                if (sunriseArr.length > 0 && sunsetArr.length > 0) {
+                    const sunriseStr = String(sunriseArr[0])
+                    const sunsetStr  = String(sunsetArr[0])
+                    const sRise = root.parseLocalIso(sunriseStr)
+                    const sSet  = root.parseLocalIso(sunsetStr)
+                    if (!isNaN(sRise)) root.sunriseMs = sRise
+                    if (!isNaN(sSet))  root.sunsetMs  = sSet
+                    root.updateNightFlag()
+                }
             } catch (e) {
                 root.condition = "Weather failed"
             }
