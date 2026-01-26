@@ -4,6 +4,12 @@ function M.setup()
     require("neo-tree").setup({
         close_if_last_window = true,
         filesystem = {
+            follow_current_file = {
+                enabled = true,
+            },
+
+            hijack_netrw_behaviour = "open_current",
+
             filtered_items = {
                 visible = true,
                 hide_dotfiles = false,

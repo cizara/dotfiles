@@ -16,7 +16,7 @@ function M.setup()
         },
         pickers = {
             find_files = {
-                find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+                find_command = { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!**/.git/*" },
             }
         }
     })

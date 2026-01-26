@@ -60,6 +60,7 @@ local function setup_global_keymaps()
     -- Neo-tree keymaps
     vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', { desc = 'Show Neotree' })
     vim.keymap.set('n', '<leader>bf', ':Neotree buffers reveal float<CR>', { desc = 'Show Neotree buffers' })
+    vim.keymap.set("n", "<leader>e", ":Neotree focus<CR>", { desc = "Focus Neo-tree" })
 
     -- Which file am i editing
     vim.keymap.set("n", "<leader>fp", function()
