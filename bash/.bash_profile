@@ -10,6 +10,9 @@ export PATH=~/bin:~/.local/bin:$PATH
 
 # Starts Univeral Wayland Session Manager
 if uwsm check may-start && uwsm select; then
+  # finalize and clean if restarting from a crash
+  uwsm finalize WAYLAND_DISPLAY DISPLAY XCURSOR_SIZE XCURSOR_THEME
+  systemctl --user reset-failed >/dev/null 2>&1 || true
   exec uwsm start default
 fi
 
