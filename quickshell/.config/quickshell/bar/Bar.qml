@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Io
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
@@ -6,6 +7,12 @@ import qs.modules
 
 Scope {
     id: root
+
+    Process {
+        id: btopProcess
+        running: false
+        command: ["ghostty", "--title=btop", "-e", "btop"]
+    }
 
     Variants {
         model: Quickshell.screens
@@ -31,7 +38,12 @@ Scope {
                     Layout.alignment: Qt.AlignVCenter
                     screen: topBar.screen
                 }
-                Cpu {}
+                Cpu {
+                    onActivate: () => {
+                        btopProcess.running = false
+                        btopProcess.running = true
+                    }
+                }
                 Memory {}
                 Disk {}
                 Temperature {}
