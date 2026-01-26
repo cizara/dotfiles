@@ -36,3 +36,5 @@ source '/usr/bin/switch.sh'
 eval "$(starship init bash)"
 # Setup fzf shell integration
 eval "$(fzf --bash)"
+# Try integration
+eval "$(try init ~/try-tmp/)"
