@@ -9,12 +9,15 @@ import qs.modules
 Scope {
     id: root
 
+    readonly property int notificationWidth: 420
+    readonly property int windowPadding: 6
+
     LazyLoader {
         active: (Services.Notifications?.popups.length ?? 0) > 0
 
         PanelWindow {
             id: popupTray
-            implicitWidth: 350
+            implicitWidth: root.notificationWidth + (root.windowPadding * 2)
             color: "transparent"
             focusable: false
 
@@ -26,7 +29,7 @@ Scope {
             anchors.right: true
             anchors.bottom: true
             margins.top: 6
-            margins.right: 6
+            margins.right: root.windowPadding
             margins.bottom: 6
 
             Column {

@@ -20,7 +20,7 @@ Rectangle {
     x: width
     opacity: 0
 
-    width: 350
+    width: parent?.parent?.parent?.notificationWidth ?? 420
     color: Services.Theme.colorBase
     radius: Services.Theme.moduleRadius
     border.color: {
@@ -171,8 +171,8 @@ Rectangle {
         Rectangle {
             id: iconBackground
             anchors.verticalCenter: parent.verticalCenter
-            implicitHeight: 36
-            implicitWidth: 36
+            implicitHeight: 48
+            implicitWidth: 48
             radius: Services.Theme.spacingSmall
             color: Services.Theme.colorSurface0
             clip: true
@@ -218,7 +218,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: "󰂚"
                 font.family: Services.Theme.fontFamilyMono
-                font.pixelSize: 24
+                font.pixelSize: 32
                 color: Services.Theme.colorText
                 opacity: Services.Theme.opacityMuted
                 visible: !notifImage.visible && !appIconImage.visible
@@ -232,30 +232,42 @@ Rectangle {
             spacing: Services.Theme.spacingSmall
 
             property bool collapsed: true
-            property int maxLength: 50
+            property int maxLength: 150
 
             Text {
                 width: parent.width
                 text: root.modelData?.summary ?? "Notification"
                 font.family: Services.Theme.fontFamilyMono
-                font.pixelSize: Services.Theme.fontSizeNormal
+                font.pixelSize: Services.Theme.fontSizeLarge
                 font.weight: Font.Medium
                 color: Services.Theme.colorText
                 elide: Text.ElideRight
                 wrapMode: Text.Wrap
-                maximumLineCount: 2
+                maximumLineCount: 3
             }
 
             Text {
                 width: parent.width
                 text: {
-                    const body = root.modelData?.body ?? ""
+                    let body = root.modelData?.body ?? ""
+                    
+                    // For Brave notifications: remove anchor tags but keep everything after them
+                    if (root.modelData?.appName === "Brave") {
+                        body = body.replace(/<a[^>]*>.*?<\/a>\s*/gi, "")
+                        body = body.replace(/<[^>]+>/g, "")
+                        body = body.trim()
+                    } else {
+                        // For other notifications, just strip HTML tags normally
+                        body = body.replace(/<a[^>]*>(.*?)<\/a>/gi, "$1")
+                        body = body.replace(/<[^>]+>/g, "")
+                    }
+                    
                     if (!textColumn.collapsed || body.length <= textColumn.maxLength)
                         return body
                     return body.substring(0, textColumn.maxLength) + "..."
                 }
                 font.family: Services.Theme.fontFamilyMono
-                font.pixelSize: Services.Theme.fontSizeSmall
+                font.pixelSize: Services.Theme.fontSizeNormal
                 color: Services.Theme.colorSubtext0
                 wrapMode: Text.Wrap
                 maximumLineCount: textColumn.collapsed ? 3 : 10
