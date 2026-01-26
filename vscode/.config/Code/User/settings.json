@@ -46,7 +46,8 @@
         "golangci-lint": true,
         "gofmt": true,
         "KONG_VERSION=3.4.2": true,
-        "make": true
+        "make": true,
+        "nmcli": true
     },
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.renderSideBySide": true,
@@ -95,7 +96,7 @@
         "markdown": true,
         "plaintext": true
     },
-    "github.copilot.nextEditSuggestions.enabled": false,
+    // "github.copilot.nextEditSuggestions.enabled": false,
     "githubPullRequests.createOnPublishBranch": "never",
     "githubPullRequests.experimental.chat": true,
     "githubPullRequests.fileListLayout": "tree",
@@ -147,11 +148,29 @@
     "window.titleBarStyle": "native",
     "window.zoomLevel": 0,
     "workbench.colorTheme": "Alabaster Dark",
+    "workbench.colorCustomizations": {
+        "[Alabaster Dark]": {
+            "list.activeSelectionBackground": "#7abbecd5",
+            "list.activeSelectionForeground": "#ffffff",
+            "list.inactiveSelectionBackground": "#7abbec44",
+            "list.highlightForeground": "#7abbec"
+        }
+    },
     "workbench.settings.showAISearchToggle": true,
     "workbench.sideBar.location": "right",
     "workbench.startupEditor": "none",
     "workbench.tree.enableStickyScroll": true,
     "yaml.format.printWidth": 160,
     "yaml.schemaStore.enable": false,
-    "yaml.validate": false
+    "yaml.validate": false,
+    "qt-core.additionalQtPaths": [
+        {
+            "name": "Qt-5.15.18-linux-g++_from_PATH",
+            "path": "/usr/bin/qtpaths"
+        }
+    ],
+    "[qml]": {
+        "editor.defaultFormatter": "AndreOneti.qml-formatter"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always"
 }
