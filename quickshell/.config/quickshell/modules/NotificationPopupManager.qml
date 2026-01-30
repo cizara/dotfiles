@@ -17,7 +17,8 @@ Scope {
 
         PanelWindow {
             id: popupTray
-            implicitWidth: root.notificationWidth + (root.windowPadding * 2)
+            width: root.notificationWidth + (root.windowPadding * 2)
+            height: notificationColumn.height + 12
             color: "transparent"
             focusable: false
 
@@ -27,10 +28,8 @@ Scope {
 
             anchors.top: true
             anchors.right: true
-            anchors.bottom: true
             margins.top: 6
             margins.right: root.windowPadding
-            margins.bottom: 6
 
             Column {
                 id: notificationColumn
