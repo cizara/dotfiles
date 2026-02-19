@@ -172,5 +172,10 @@
     "[qml]": {
         "editor.defaultFormatter": "AndreOneti.qml-formatter"
     },
-    "typescript.updateImportsOnFileMove.enabled": "always"
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "chat.mcp.gallery.enabled": true,
+    "chat.customAgentInSubagent.enabled": true,
+    "chat.viewSessions.orientation": "stacked",
+    "python.analysis.diagnosticsSource": "Pyright"
 }
