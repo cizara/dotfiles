@@ -13,7 +13,7 @@ Singleton {
     id: root
 
     property list<Notif> data: []
-    property list<Notif> popups: data.filter(n => n.popup && !n.tracked)
+    property list<Notif> popups: data.filter(n => n.popup && !n.tracked && !root.doNotDisturb)
     property list<Notif> history: data
     property bool doNotDisturb: false
     

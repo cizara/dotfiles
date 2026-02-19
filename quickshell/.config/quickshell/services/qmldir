@@ -6,6 +6,7 @@ singleton Cpu 1.0 Cpu.qml
 singleton DateTime 1.0 DateTime.qml
 singleton Disk 1.0 Disk.qml
 singleton HyprlandWindow 1.0 HyprlandWindow.qml
+singleton Inhibitor 1.0 Inhibitor.qml
 singleton Memory 1.0 Memory.qml
 singleton Mpris 1.0 Mpris.qml
 singleton Network 1.0 Network.qml

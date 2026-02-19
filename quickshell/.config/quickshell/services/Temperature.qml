@@ -1,8 +1,10 @@
-import QtQuick
-import Quickshell.Io
 pragma Singleton
 
-Item {
+import QtQuick
+import Quickshell
+import Quickshell.Io
+
+Singleton {
     id: root
     
     property real tempC: 0.0
@@ -12,7 +14,7 @@ Item {
 
     Process {
         id: tempProc
-        command: ["bash", "-lc",
+        command: ["bash", "-c",
             // 1) Try hwmon Package id 0
             "for h in /sys/class/hwmon/hwmon*; do " +
             "  for l in \"$h\"/temp*_label; do " +

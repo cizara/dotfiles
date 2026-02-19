@@ -1,8 +1,10 @@
-import QtQuick
-import Quickshell.Io
 pragma Singleton
 
-Item {
+import QtQuick
+import Quickshell
+import Quickshell.Io
+
+Singleton {
     id: root
     
     property real usedFrac: 0.0
@@ -12,7 +14,7 @@ Item {
 
     Process {
         id: memProc
-        command: ["bash", "-lc", "awk '/MemTotal:/ {t=$2} /MemAvailable:/ {a=$2} END{print t\" \"a}' /proc/meminfo"]
+        command: ["bash", "-c", "awk '/MemTotal:/ {t=$2} /MemAvailable:/ {a=$2} END{print t\" \"a}' /proc/meminfo"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const parts = text.trim().split(/\s+/)

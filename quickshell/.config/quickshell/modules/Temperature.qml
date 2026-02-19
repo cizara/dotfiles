@@ -117,7 +117,7 @@ Item {
         Text {
             id: iconText
             anchors.centerIn: parent
-            text: ""
+            text: "󰔐"
             font.family: Services.Theme.fontFamilyMono
             font.pixelSize: Services.Theme.iconSizeSmall
             color: root.iconColor

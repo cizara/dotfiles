@@ -1,8 +1,10 @@
-import QtQuick
-import Quickshell.Io
 pragma Singleton
 
-Item {
+import QtQuick
+import Quickshell
+import Quickshell.Io
+
+Singleton {
     id: root
     
     property real usedFrac: 0.0
@@ -16,7 +18,7 @@ Item {
 
     Process {
         id: diskProc
-        command: ["bash", "-lc", "df -B1 " + root.mountPoint + " | awk 'NR==2 {print $2\" \"$3\" \"$4}'"]
+        command: ["bash", "-c", "df -B1 " + root.mountPoint + " | awk 'NR==2 {print $2\" \"$3\" \"$4}'"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const parts = text.trim().split(/\s+/)

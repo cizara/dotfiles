@@ -1,8 +1,10 @@
-import QtQuick
-import Quickshell.Io
 pragma Singleton
 
-Item {
+import QtQuick
+import Quickshell
+import Quickshell.Io
+
+Singleton {
     id: root
     
     property real usedFrac: 0.0
@@ -13,7 +15,7 @@ Item {
 
     Process {
         id: cpuProc
-        command: ["bash", "-lc", "head -n 1 /proc/stat | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11}'"]
+        command: ["bash", "-c", "head -n 1 /proc/stat | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11}'"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const parts = text.trim().split(/\s+/)
@@ -57,5 +59,9 @@ Item {
             cpuProc.running = false
             cpuProc.running = true
         }
+    }
+
+    Component.onCompleted: {
+        cpuProc.running = true
     }
 }
