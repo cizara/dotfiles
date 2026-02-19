@@ -46,6 +46,7 @@ window-decoration = false
 
 font-size = 7.5
 font-family = Liberation Mono
+font-family = JetBrainsMonoNerdFont     # as fallback
 
 background-opacity = 0.93
 
