@@ -167,23 +167,23 @@ autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
     command = "checktime",
 })
 
--- Turn off relative line numbers in insert mode
-local rel_num_group = augroup("RelativeLineNumbers", { clear = true })
-
-autocmd("InsertEnter", {
-    group = rel_num_group,
-    callback = function()
-        if vim.opt.number:get() then
-            vim.opt.relativenumber = false
-        end
-    end,
-})
-
-autocmd("InsertLeave", {
-    group = rel_num_group,
-    callback = function()
-        if vim.opt.number:get() then
-            vim.opt.relativenumber = true
-        end
-    end,
-})
+-- -- Turn off relative line numbers in insert mode
+-- local rel_num_group = augroup("RelativeLineNumbers", { clear = true })
+-- 
+-- autocmd("InsertEnter", {
+--     group = rel_num_group,
+--     callback = function()
+--         if vim.opt.number:get() then
+--             vim.opt.relativenumber = false
+--         end
+--     end,
+-- })
+-- 
+-- autocmd("InsertLeave", {
+--     group = rel_num_group,
+--     callback = function()
+--         if vim.opt.number:get() then
+--             vim.opt.relativenumber = true
+--         end
+--     end,
+-- })

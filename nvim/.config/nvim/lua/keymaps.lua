@@ -98,6 +98,9 @@ local function setup_global_keymaps()
         vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Find commands' })
         vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
         vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Resume last search' })
+
+        -- Projects plugin
+       vim.keymap.set('n', '<leader>r', "<cmd>Telescope projects<CR>", { desc = "Switch Projects" })
     end
 
     -- ========================================
