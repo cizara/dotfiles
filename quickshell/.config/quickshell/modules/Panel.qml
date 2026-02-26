@@ -2,6 +2,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 import Quickshell.Io
+import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -51,6 +52,9 @@ Singleton {
             visible: true
             color: "transparent"
             exclusiveZone: 0
+            
+            focusable: true
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
 
             implicitWidth: 360
             implicitHeight: 1020
@@ -93,116 +97,140 @@ Singleton {
                 radius: Services.Theme.moduleRadius
                 color: Services.Theme.colorMantle
 
-                ColumnLayout {
-                    id: mainLayout
+                StackLayout {
+                    id: contentStack
                     anchors.fill: parent
-                    anchors.margins: Services.Theme.paddingLarge
-                    spacing: Services.Theme.spacingXLarge
+                    currentIndex: 0
 
-                    // --- Top Section ---
-                    RowLayout {
+                    // --- Index 0: Main Dashboard ---
+                    Item {
                         Layout.fillWidth: true
-                        spacing: Services.Theme.spacingXLarge
+                        Layout.fillHeight: true
 
                         ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: Services.Theme.spacingTiny
-                            Layout.alignment: Qt.AlignVCenter
+                            id: mainLayout
+                            anchors.fill: parent
+                            anchors.margins: Services.Theme.paddingLarge
+                            spacing: Services.Theme.spacingXLarge
 
+                            // --- Top Section ---
                             RowLayout {
-                                spacing: Services.Theme.spacingMedium
+                                Layout.fillWidth: true
+                                spacing: Services.Theme.spacingXLarge
 
-                                Text {
-                                    text: Services.SystemDetails?.osIcon ?? ""
-                                    color: Services.Theme.colorText
-                                    font.pixelSize: Services.Theme.iconSizeHuge
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: Services.Theme.spacingTiny
+                                    Layout.alignment: Qt.AlignVCenter
+
+                                    RowLayout {
+                                        spacing: Services.Theme.spacingMedium
+
+                                        Text {
+                                            text: Services.SystemDetails?.osIcon ?? ""
+                                            color: Services.Theme.colorText
+                                            font.pixelSize: Services.Theme.iconSizeHuge
+                                        }
+
+                                        Text {
+                                            text: Services.SystemDetails?.uptime ?? "--"   // your service uses uptime -p already
+                                            color: Services.Theme.colorText
+                                            opacity: Services.Theme.opacitySubtle
+                                            font.pixelSize: Services.Theme.fontSizeLarge
+                                            elide: Text.ElideRight
+                                            Layout.fillWidth: true
+                                        }
+                                    }
                                 }
 
-                                Text {
-                                    text: Services.SystemDetails?.uptime ?? "--"   // your service uses uptime -p already
-                                    color: Services.Theme.colorText
-                                    opacity: Services.Theme.opacitySubtle
-                                    font.pixelSize: Services.Theme.fontSizeLarge
-                                    elide: Text.ElideRight
+                                Item { Layout.fillWidth: true }
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                radius: 1
+                                color: Services.Theme.colorSurface0
+                                opacity: Services.Theme.opacityNormal
+                            }
+
+                            // --- Your panel content goes here ---
+
+                            GridLayout {
+                                id: middleGrid
+                                Layout.fillWidth: true
+                                columns: 2
+                                columnSpacing: Services.Theme.spacingLarge
+                                rowSpacing: Services.Theme.spacingLarge
+
+                                // Make all items stretch equally
+                                Layout.preferredWidth: parent.width
+
+                                Network {
                                     Layout.fillWidth: true
+                                    Layout.preferredHeight: 60
+                                    onActivate: function() { contentStack.currentIndex = 1 }
+                                }
+                                Bluetooth {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 60
+                                    onActivate: function() { console.log("bluetooth clicked") }
+                                }
+
+                                Inhibitor {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 60
+                                }
+
+                                Dnd {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 60                         
                                 }
                             }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                radius: 1
+                                color: Services.Theme.colorSurface0
+                                opacity: Services.Theme.opacityNormal
+                            }
+
+                            Volume {
+                                Layout.fillWidth: true
+                            }
+
+                            Brightness {
+                                Layout.fillWidth: true
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                radius: 1
+                                color: Services.Theme.colorSurface0
+                                opacity: Services.Theme.opacityNormal
+                            }
+
+                            // --- System Notifications ---
+                            Modules.NotificationsPanel {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
                         }
-
-                        Item { Layout.fillWidth: true }
                     }
 
-                    Rectangle {
+                    // --- Index 1: Network List ---
+                    Item {
                         Layout.fillWidth: true
-                        height: 1
-                        radius: 1
-                        color: Services.Theme.colorSurface0
-                        opacity: Services.Theme.opacityNormal
+                        Layout.fillHeight: true
+                        
+                        Modules.NetworkPanel {
+                            anchors.fill: parent
+                            anchors.margins: Services.Theme.paddingLarge
+                            onBack: contentStack.currentIndex = 0
+                        }
                     }
-
-                    // --- Your panel content goes here ---
-
-                    GridLayout {
-                    id: middleGrid
-                    Layout.fillWidth: true
-                    columns: 2
-                    columnSpacing: Services.Theme.spacingLarge
-                    rowSpacing: Services.Theme.spacingLarge
-
-                    // Make all items stretch equally
-                    Layout.preferredWidth: parent.width
-
-                    Network {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 60
-                        onActivate: function() { console.log("network clicked") }
-                    }
-                    Bluetooth {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 60
-                        onActivate: function() { console.log("bluetooth clicked") }
-                    }
-
-                    Inhibitor {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 60
-                    }
-
-                    Dnd {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 60                         
-                    }
-                }
-
-                Rectangle {
-                        Layout.fillWidth: true
-                        height: 1
-                        radius: 1
-                        color: Services.Theme.colorSurface0
-                        opacity: Services.Theme.opacityNormal
-                }
-
-                Volume {
-                        Layout.fillWidth: true
-                }
-
-                Brightness {
-                        Layout.fillWidth: true
-                }
-
-                Rectangle {
-                        Layout.fillWidth: true
-                        height: 1
-                        radius: 1
-                        color: Services.Theme.colorSurface0
-                        opacity: Services.Theme.opacityNormal
-                }
-
-                // --- System Notifications ---
-                Modules.NotificationsPanel {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
                 }
             }
         }

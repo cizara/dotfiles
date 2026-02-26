@@ -14,7 +14,7 @@ Item {
 
     // ---- state ----
     readonly property bool isConnected: Services.Network?.connected ?? false
-    property bool wifiEnabled: true   // updated from nmcli
+    readonly property bool wifiEnabled: Services.Network?.wifiEnabled ?? true   // updated from Service
 
     // ---- palettes ----
     // ON palette (same vibe as your Bluetooth change)
@@ -51,36 +51,6 @@ Item {
     function subtitleText() {
         if (!wifiEnabled) return "Off"
         return isConnected ? "Connected" : "Disconnected"
-    }
-
-    // --- read current wifi radio state ---
-    Process {
-        id: wifiStateProc
-        command: ["bash", "-lc", "nmcli -t -f WIFI general 2>/dev/null || echo enabled"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const s = text.trim().toLowerCase()
-                // nmcli returns: enabled / disabled
-                root.wifiEnabled = (s === "enabled")
-            }
-        }
-    }
-
-    Timer {
-        interval: 1200
-        repeat: true
-        running: true
-        triggeredOnStart: true
-        onTriggered: {
-            wifiStateProc.running = false
-            wifiStateProc.running = true
-        }
-    }
-
-    // --- toggle wifi ---
-    Process {
-        id: wifiToggleProc
-        command: ["bash", "-lc", "nmcli radio wifi " + (root.wifiEnabled ? "off" : "on")]
     }
 
     Rectangle {
@@ -150,15 +120,7 @@ Item {
             onPressed: card.pressed = true
             onReleased: card.pressed = false
             onClicked: {
-                // toggle wifi
-                wifiToggleProc.running = false
-                wifiToggleProc.running = true
-
-                // refresh state quickly
-                wifiStateProc.running = false
-                wifiStateProc.running = true
-
-                // keep your hook (open menu, etc.)
+                // Open the detailed view
                 root.onActivate()
             }
         }
