@@ -90,6 +90,7 @@ local function setup_global_keymaps()
         end, { desc = "Outline: Functions & Methods" })
 
         -- Git integration
+        vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = 'LazyGit' })
         vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Git commits' })
         vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Git branches' })
         vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Git status' })

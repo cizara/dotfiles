@@ -10,6 +10,8 @@ M.window_picker = require("config.window-picker")
 M.neo_tree = require("config.neo-tree")
 M.telescope = require("config.telescope")
 M.notify = require("config.notify")
+M.lazygit = require("config.lazygit")
+
 
 -- Main setup function
 function M.setup()
