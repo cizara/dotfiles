@@ -4,6 +4,7 @@ function M.setup()
     local telescope = require("telescope")
 
     require("project").setup({
+        manual_mode = false,
         detection_methods = { "lsp", "pattern" },
         patterns = { ".git", ".prow" },
         silent_chdir = true,
