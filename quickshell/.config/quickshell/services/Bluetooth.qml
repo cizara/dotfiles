@@ -29,12 +29,14 @@ Item {
     // Powered: yes/no
     Process {
         id: poweredProc
-        command: ["bash", "-lc", "bluetoothctl show | awk -F': ' '/Powered/ {print $2; exit}'"]
+        // use busctl + jq for reliability (bluetoothctl show output can be empty/flaky)
+        command: ["bash", "-lc", "busctl call org.bluez / org.freedesktop.DBus.ObjectManager GetManagedObjects --json=pretty | jq -r '.data[0] | to_entries[] | select(.key | test(\"/org/bluez/hci[0-9]+$\")) | .value[\"org.bluez.Adapter1\"].Powered.data'"]
 
         stdout: StdioCollector {
             onStreamFinished: {
-                var v = text.trim().toLowerCase()
-                root.powered = (v === "yes" || v === "true" || v === "on")
+                var v = text.trim()
+                // v should be "true" or "false"
+                root.powered = (v === "true")
                 if (!root.powered) {
                     root.connected = false
                     root.deviceName = ""
@@ -43,36 +45,29 @@ Item {
         }
     }
 
-    // First connected device line:
-    // "Device AA:BB:CC:DD:EE:FF Some Device Name"
+    // First connected device name
     Process {
         id: connectedDevProc
-        command: ["bash", "-lc", "bluetoothctl devices Connected | head -n1"]
+        // use busctl + jq to find first connected device
+        command: ["bash", "-lc", "busctl call org.bluez / org.freedesktop.DBus.ObjectManager GetManagedObjects --json=pretty | jq -r '.data[0] | to_entries[] | select(.key | test(\"/org/bluez/hci[0-9]+/dev_\")) | select(.value[\"org.bluez.Device1\"].Connected.data == true) | .value[\"org.bluez.Device1\"].Name.data' | head -n1"]
 
         stdout: StdioCollector {
             onStreamFinished: {
-                var line = text.trim()
+                var name = text.trim()
 
-                if (!root.powered || line.length === 0) {
+                if (!root.powered) {
                     root.connected = false
                     root.deviceName = ""
                     return
                 }
 
-                if (line.indexOf("Device ") === 0) {
-                    var rest = line.slice(7) // after "Device "
-                    var firstSpace = rest.indexOf(" ")
-                    if (firstSpace > 0) {
-                        var name = rest.slice(firstSpace + 1).trim()
-                        root.deviceName = name
-                        root.connected = name.length > 0
-                        return
-                    }
+                if (name.length > 0) {
+                    root.deviceName = name
+                    root.connected = true
+                } else {
+                    root.connected = false
+                    root.deviceName = ""
                 }
-
-                // fallback
-                root.connected = false
-                root.deviceName = ""
             }
         }
     }
