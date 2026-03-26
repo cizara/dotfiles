@@ -19,17 +19,15 @@ function M.setup()
 
     vim.o.signcolumn = "yes"
 
-    local on_attach = function(_, bufnr)
-        require("keymaps").setup_lsp_keymaps(bufnr)
-    end
+    vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
+        callback = function(args)
+            require("keymaps").setup_lsp_keymaps(args.buf)
+        end,
+    })
 
-    -- New API (replaces require("lspconfig"))
-    vim.lsp.config["gopls"] = {
-        on_attach = on_attach,
-    }
-
-    -- Start the server
-    vim.lsp.start(vim.lsp.config["gopls"])
+    vim.lsp.config("gopls", {})
+    vim.lsp.enable("gopls")
 end
 
 return M
