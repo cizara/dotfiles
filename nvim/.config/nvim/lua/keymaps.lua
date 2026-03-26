@@ -144,6 +144,15 @@ local function setup_global_keymaps()
     vim.keymap.set('n', '<leader>tn', ':set number!<CR>', { desc = 'Toggle line numbers' })
     vim.keymap.set('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative numbers' })
     vim.keymap.set('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
+
+    -- ========================================
+    -- vim-illuminate keymaps
+    -- ========================================
+    local ok_illuminate, illuminate = pcall(require, "illuminate")
+    if ok_illuminate then
+        vim.keymap.set("n", "]]", illuminate.goto_next_reference, { desc = "Next reference" })
+        vim.keymap.set("n", "[[", illuminate.goto_prev_reference, { desc = "Previous reference" })
+    end
 end
 
 -- ========================================
