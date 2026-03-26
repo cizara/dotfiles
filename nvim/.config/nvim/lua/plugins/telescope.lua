@@ -1,15 +1,17 @@
 return {
     {
-        'DrKJeff16/project.nvim',
-        --tag = '0.1.8',
+        'nvim-telescope/telescope.nvim',
         dependencies = {
-            'nvim-telescope/telescope.nvim',
-            dependencies = {
-                'nvim-lua/plenary.nvim',
-            },
-            config = function()
-                require("config.telescope").setup()
-            end
+            'nvim-lua/plenary.nvim',
         },
-    }
+        config = function()
+            require("config.telescope").setup()
+        end,
+    },
+    {
+        'DrKJeff16/project.nvim',
+        config = function()
+            require("config.project").setup()
+        end,
+    },
 }

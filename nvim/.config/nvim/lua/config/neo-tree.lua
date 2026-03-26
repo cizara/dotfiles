@@ -12,15 +12,15 @@ function M.setup()
             {
                 event = "terminal_exit",
                 handler = function(args)
-                    -- Refresh neo-tree when a terminal closes (often after git commit)
+                    -- Refresh both the file list AND the git status indicators
                     require("neo-tree.sources.manager").refresh("filesystem")
+                    require("neo-tree.sources.manager").refresh("git_status")
                 end,
             },
             {
-                event = "buf_write_post",
-                handler = function(args)
-                    -- Refresh when saving a file
-                    require("neo-tree.sources.manager").refresh("filesystem")
+                event = "neo_tree_buffer_enter",
+                handler = function()
+                    require("neo-tree.sources.manager").refresh("git_status")
                 end,
             },
         },
