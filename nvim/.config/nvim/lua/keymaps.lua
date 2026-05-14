@@ -60,6 +60,7 @@ local function setup_global_keymaps()
     -- Neo-tree keymaps
     vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', { desc = 'Show Neotree' })
     vim.keymap.set('n', '<leader>bf', ':Neotree buffers reveal float<CR>', { desc = 'Show Neotree buffers' })
+    vim.keymap.set("n", "<leader>e", ":Neotree focus<CR>", { desc = "Focus Neo-tree" })
 
     -- Which file am i editing
     vim.keymap.set("n", "<leader>fp", function()
@@ -89,14 +90,19 @@ local function setup_global_keymaps()
         end, { desc = "Outline: Functions & Methods" })
 
         -- Git integration
+        vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = 'LazyGit' })
         vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Git commits' })
         vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Git branches' })
         vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Git status' })
+        vim.keymap.set('n', '<leader>gp', '<cmd>Git pull<CR>', { desc = 'Git pull' })
 
         -- Vim specific
         vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Find commands' })
         vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
         vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Resume last search' })
+
+        -- Projects plugin
+       vim.keymap.set('n', '<leader>r', "<cmd>Telescope projects<CR>", { desc = "Switch Projects" })
     end
 
     -- ========================================
@@ -139,6 +145,15 @@ local function setup_global_keymaps()
     vim.keymap.set('n', '<leader>tn', ':set number!<CR>', { desc = 'Toggle line numbers' })
     vim.keymap.set('n', '<leader>tr', ':set relativenumber!<CR>', { desc = 'Toggle relative numbers' })
     vim.keymap.set('n', '<leader>ts', ':set spell!<CR>', { desc = 'Toggle spell check' })
+
+    -- ========================================
+    -- vim-illuminate keymaps
+    -- ========================================
+    local ok_illuminate, illuminate = pcall(require, "illuminate")
+    if ok_illuminate then
+        vim.keymap.set("n", "]]", function() illuminate.goto_next_reference() end, { desc = "Next reference" })
+        vim.keymap.set("n", "[[", function() illuminate.goto_prev_reference() end, { desc = "Previous reference" })
+    end
 end
 
 -- ========================================

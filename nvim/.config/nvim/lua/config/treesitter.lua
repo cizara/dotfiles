@@ -6,9 +6,11 @@ function M.setup()
         auto_install = true,
         ensure_installed = {
             "bash",
+            "comment",
             "dockerfile",
             "go",
             "gotmpl",
+            "helm",
             "hcl",
             "html",
             "javascript",

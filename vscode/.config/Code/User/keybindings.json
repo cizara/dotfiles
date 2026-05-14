@@ -24,5 +24,13 @@
 {
     "key": "ctrl+shift+alt+left",
     "command": "workbench.files.action.collapseExplorerFolders"
+},
+{
+    "key": "ctrl+shift+alt+l",
+    "command": "composer.newAgentChat"
+},
+{
+    "key": "ctrl+shift+l",
+    "command": "-composer.newAgentChat"
 }
 ]
