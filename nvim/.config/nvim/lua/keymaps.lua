@@ -94,6 +94,7 @@ local function setup_global_keymaps()
         vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Git commits' })
         vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Git branches' })
         vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Git status' })
+        vim.keymap.set('n', '<leader>gp', '<cmd>Git pull<CR>', { desc = 'Git pull' })
 
         -- Vim specific
         vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Find commands' })
@@ -150,8 +151,8 @@ local function setup_global_keymaps()
     -- ========================================
     local ok_illuminate, illuminate = pcall(require, "illuminate")
     if ok_illuminate then
-        vim.keymap.set("n", "]]", illuminate.goto_next_reference, { desc = "Next reference" })
-        vim.keymap.set("n", "[[", illuminate.goto_prev_reference, { desc = "Previous reference" })
+        vim.keymap.set("n", "]]", function() illuminate.goto_next_reference() end, { desc = "Next reference" })
+        vim.keymap.set("n", "[[", function() illuminate.goto_prev_reference() end, { desc = "Previous reference" })
     end
 end
 

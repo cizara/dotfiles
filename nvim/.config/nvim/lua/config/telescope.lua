@@ -14,10 +14,13 @@ function M.setup()
     telescope.setup({
         defaults = {
             vimgrep_arguments = vimgrep_arguments,
+            preview = {
+                treesitter = false,
+            },
         },
         pickers = {
             find_files = {
-                find_command = { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!**/.git/*" },
+                find_command = { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!**/.git/*", "--glob", "!**/.venv/*", "--glob", "!**/node_modules/*" },
             }
         },
     })

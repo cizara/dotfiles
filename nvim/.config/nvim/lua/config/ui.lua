@@ -20,6 +20,13 @@ end
 
 function M.setup_noice()
     require("noice").setup({
+        routes = {
+            -- Suppress spurious "Pattern not found" errors from plugin-internal searches
+            {
+                filter = { event = "msg_show", kind = "emsg", find = "E486" },
+                opts = { skip = true },
+            },
+        },
         lsp = {
             -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
             override = {

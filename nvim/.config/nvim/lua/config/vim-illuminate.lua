@@ -1,8 +1,8 @@
 local M = {}
 
 function M.setup()
-    require("illuminate").setup({
-        providers = { "lsp", "treesitter", "regex" },
+    require("illuminate").configure({
+        providers = { "lsp", "regex" },
         delay = 200,
         under_cursor = true,
     })

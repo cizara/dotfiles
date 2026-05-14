@@ -28,6 +28,9 @@ function M.setup()
 
     vim.lsp.config("gopls", {})
     vim.lsp.enable("gopls")
+
+    vim.lsp.config("intelephense", {})
+    vim.lsp.enable("intelephense")
 end
 
 return M

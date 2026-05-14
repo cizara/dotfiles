@@ -3,12 +3,10 @@ local M = {}
 function M.setup()
     require("project").setup({
         manual_mode = false,
-        detection_methods = { "lsp", "pattern" },
+        lsp = { enabled = true },
         patterns = { ".git", ".prow" },
-        datapath = vim.fn.stdpath("data"),
+        history = { save_dir = vim.fn.stdpath("data") },
         silent_chdir = true,
-        respect_buf_cwd = true,
-        sync_root_with_cwd = false,
         telescope = {
             mappings = {
                 i = {

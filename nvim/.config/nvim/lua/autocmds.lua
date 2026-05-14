@@ -60,6 +60,28 @@ autocmd("BufWritePre", {
 -- File Type Specific Auto-commands
 -- ========================================
 
+-- Detect Tiltfiles: Starlark syntax (Python dialect), use Python parser
+autocmd({ "BufNewFile", "BufRead" }, {
+    group = augroup("TiltFiletype", { clear = true }),
+    pattern = { "*.tilt", "Tiltfile" },
+    callback = function(args)
+        vim.bo[args.buf].filetype = "python"
+    end,
+})
+
+-- yaml files inside chart/helmfile directories: yaml parser as base + gotmpl injection
+vim.treesitter.language.register("yaml", "gotmplyaml")
+autocmd({ "BufNewFile", "BufRead" }, {
+    group = augroup("GoTmplFiletype", { clear = true }),
+    pattern = { "*.yaml", "*.yaml.gotmpl" },
+    callback = function(args)
+        local path = vim.api.nvim_buf_get_name(args.buf)
+        if path:match("[/\\]chart[/\\]") or path:match("[/\\]helmfile[/\\]") then
+            vim.bo[args.buf].filetype = "gotmplyaml"
+        end
+    end,
+})
+
 -- Set indentation for specific file types
 autocmd("FileType", {
     group = augroup("FileTypeIndent", { clear = true }),
@@ -169,7 +191,7 @@ autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 
 -- -- Turn off relative line numbers in insert mode
 -- local rel_num_group = augroup("RelativeLineNumbers", { clear = true })
--- 
+--
 -- autocmd("InsertEnter", {
 --     group = rel_num_group,
 --     callback = function()
@@ -178,7 +200,7 @@ autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 --         end
 --     end,
 -- })
--- 
+--
 -- autocmd("InsertLeave", {
 --     group = rel_num_group,
 --     callback = function()
