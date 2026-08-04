@@ -94,8 +94,9 @@
     "github.copilot.chat.startDebugging.enabled": true,
     "github.copilot.enable": {
         "*": true,
+        "plaintext": false,
         "markdown": true,
-        "plaintext": true
+        "scminput": false
     },
     // "github.copilot.nextEditSuggestions.enabled": false,
     "githubPullRequests.createOnPublishBranch": "never",
@@ -112,7 +113,6 @@
     "go.testTimeout": "300s",
     "go.toolsManagement.autoUpdate": true,
     "inlineChat.accessibleDiffView": "on",
-    "Prettier-SQL.denseOperators": true,
     "Prettier-SQL.keywordCase": "upper",
     "prettier.bracketSpacing": false,
     "prettier.ignorePath": "/home/lucho/.prettierignore",
@@ -180,5 +180,11 @@
     "chat.viewSessions.orientation": "stacked",
     "python.analysis.diagnosticsSource": "Pyright",
     "workbench.browser.enableChatTools": true,
-    "window.restoreWindows": "none"
+    "window.restoreWindows": "none",
+    "Prettier-SQL.expressionWidth": 100,
+    "Prettier-SQL.ignoreTabSettings": true,
+    "Prettier-SQL.SQLFlavourOverride": "mysql",
+    "Prettier-SQL.tabSizeOverride": 4,
+    "Prettier-SQL.denseOperators": true,
+    "Prettier-SQL.tabulateAlias": true
 }
