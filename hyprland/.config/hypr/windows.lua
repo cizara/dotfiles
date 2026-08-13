@@ -33,7 +33,7 @@ hl.window_rule({
 -- Floating windows
 hl.window_rule({
     name  = "obsidian-float",
-    match = { class = "^(md\\.Obsidian)$" },
+    match = { class = "^(md\\.obsidian\\.Obsidian)$" },
     float = true,
     size  = "1200 1500",
 })
