@@ -15,8 +15,32 @@ hl.bind(mainMod      .. " + D",         hl.dsp.exec_cmd(menu))
 hl.bind(mainMod      .. " + K",         hl.dsp.window.pseudo())
 hl.bind(mainMod      .. " + J",         hl.dsp.layout("togglesplit"))
 hl.bind(mainMod      .. " + L",         hl.dsp.exec_cmd("swaylock -f -c 000000"))
-hl.bind(mainModCtrl  .. " + L",         hl.dsp.exec_cmd("swaylock -c 000000 -f && systemctl suspend"))
+-- suspend-then-hibernate, not plain suspend: S3 first (instant resume), then writes the
+-- image to /swapfile and powers off after HibernateDelaySec (90min, /etc/systemd/sleep.conf).
+-- Plain "systemctl suspend" can never fall through to hibernate, and with no idle daemon
+-- and the lid never closed, this bind is the only sleep trigger on the machine.
+hl.bind(mainModCtrl  .. " + L",         hl.dsp.exec_cmd("swaylock -c 000000 -f && systemctl suspend-then-hibernate"))
 hl.bind(mainModShift .. " + space",     hl.dsp.window.float({ action = "toggle" }))
+-- Toggle the internal panel. Only turns it OFF when an external monitor is present, so it
+-- can never leave the machine with no display. If the internal is already off it always
+-- turns it back on, which also makes this the recovery path. Mode/position/scale must match
+-- monitors.lua. (SUPER+SHIFT+E is "uwsm stop" — do not put this on SHIFT.)
+hl.bind(mainModCtrl  .. " + M",         function()
+    local function notify(args)
+        hl.exec_cmd("notify-send -a hyprland " .. args)
+    end
+    if hl.get_monitor("eDP-1") then
+        if hl.get_monitor("DP-1") then
+            hl.monitor({ output = "eDP-1", disabled = true })
+            notify("'Panel interno apagado' 'SUPER+CTRL+M para prenderlo'")
+        else
+            notify("-u critical 'No apago el interno' 'Es la unica pantalla conectada'")
+        end
+    else
+        hl.monitor({ output = "eDP-1", mode = "3200x1800@59.98", position = "3840x0", scale = 1.333 })
+        notify("'Panel interno prendido'")
+    end
+end)
 hl.bind(mainModShift .. " + W",         hl.dsp.exec_cmd("touch " .. home .. "/.cache/quickshell-reload-wallpaper"))
 
 -- Group (tabbed) window management
