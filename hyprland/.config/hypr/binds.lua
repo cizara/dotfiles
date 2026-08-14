@@ -37,7 +37,10 @@ hl.bind(mainModCtrl  .. " + M",         function()
             notify("-u critical 'No apago el interno' 'Es la unica pantalla conectada'")
         end
     else
-        hl.monitor({ output = "eDP-1", mode = "3200x1800@59.98", position = "3840x0", scale = 1.333 })
+        -- disabled = false explicito: sin eso la regla de eDP-1 se queda con el disabled
+        -- del toggle anterior y el monitor no vuelve. En un "hyprctl reload" no hace falta
+        -- porque las reglas se reconstruyen de cero, pero en runtime se mergean.
+        hl.monitor({ output = "eDP-1", disabled = false, mode = "3200x1800@59.98", position = "3840x0", scale = 1.333 })
         notify("'Panel interno prendido'")
     end
 end)
