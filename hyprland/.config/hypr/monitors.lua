@@ -5,11 +5,23 @@
 -- publicaba un EDID de HDMI 1.4 (300 MHz, sin HDMI Forum VSDB) => 4K@30 era el techo real.
 -- Con HDMI Mode = 2.0 aparece el bloque HDMI Forum (600 MHz) y con el VIC 97 = 4K@60.
 --
+-- 2026-08-18: de vuelta a 4K@30 (297 MHz). El repo especifico de este laptop
+-- (marcolaux/razer-stealth-late-2017-kblrefresh-linux) lista como problema SIN RESOLVER:
+--   "HDMI flickering and outages: Persists, especially under GPU load"
+--   "HDMI 4K@60Hz support: Not functional via HDMI port; DisplayPort over USB-C works"
+-- O sea, 4K@60 por el puerto HDMI no funciona en este modelo. Se habia puesto en @60 el
+-- 2026-08-12 y el flicker empeoro muchisimo los dias siguientes. 297 MHz es la tasa que
+-- anduvo (mal pero tolerable) durante años.
+--
+-- Para tener 4K@60 de verdad hay que salir por USB-C (DP-2, DP Alt Mode sobre el puerto
+-- Thunderbolt 3): otro DDI, otro PHY, sin LSPCon. Necesita un dongle con Power Delivery
+-- porque ese USB-C es tambien el cargador.
+--
 -- Apagar/prender el panel interno es MANUAL: SUPER + CTRL + M (ver binds.lua).
 -- Automatizarlo no funciono: al arrancar todavia no hay monitores enumerados
 -- (hl.get_monitor devuelve nil tanto al parsear el config como en hyprland.start) y el
 -- monitor.added de DP-1 pasa antes de que se registre el handler. Probado 2026-08-13.
 --
 -- Si cambias mode/position/scale del interno, actualizar tambien el bind en binds.lua.
-hl.monitor({ output = "DP-1",  mode = "3840x2160@60",    position = "0x0",    scale = 1     })
+hl.monitor({ output = "DP-1",  mode = "3840x2160@30",    position = "0x0",    scale = 1     })
 hl.monitor({ output = "eDP-1", mode = "3200x1800@59.98", position = "3840x0", scale = 1.333 })
