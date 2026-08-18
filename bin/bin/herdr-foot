@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+address="$(hyprctl clients -j | jq -r '.[] | select(.class == "herdr") | .address' | head -n 1)"
+
+if [[ -z "$address" ]]; then
+    while read -r candidate pid; do
+        if pgrep -P "$pid" -x herdr >/dev/null; then
+            address="$candidate"
+            break
+        fi
+    done < <(hyprctl clients -j | jq -r '.[] | "\(.address) \(.pid)"')
+fi
+
+if [[ -n "$address" ]]; then
+    hyprctl dispatch focuswindow "address:$address"
+else
+    exec foot --app-id=herdr --title=HerdR herdr
+fi

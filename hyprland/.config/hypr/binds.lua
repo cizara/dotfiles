@@ -7,6 +7,7 @@ local mainModAlt   = mainMod .. " + ALT"
 
 -- Core window actions
 hl.bind(mainMod      .. " + Return",    hl.dsp.exec_cmd(terminal))
+hl.bind(mainModShift .. " + H",         hl.dsp.exec_cmd(home .. "/bin/herdr-foot"))
 hl.bind(mainModShift .. " + Q",         hl.dsp.window.close())
 hl.bind(mainModShift .. " + E",         hl.dsp.exec_cmd("uwsm stop"))
 hl.bind(mainMod      .. " + E",         hl.dsp.exec_cmd(fileManager))
