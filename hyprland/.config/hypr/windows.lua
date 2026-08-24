@@ -105,6 +105,43 @@ hl.window_rule({
 })
 
 
+-- Picture-in-picture: pinned so it follows across workspaces, and positioned by
+-- arithmetic rather than fixed pixels so it lands in the top-right inset on both
+-- DP-1 (4K, scale 1) and eDP-1 (3200x1800, scale 1.333).
+hl.window_rule({
+    name              = "pip",
+    match             = { title = "(Picture.?in.?[Pp]icture)" },
+    float             = true,
+    pin               = true,
+    size              = { 600, 338 },
+    keep_aspect_ratio = true,
+    border_size       = 0,
+    move              = { "(monitor_w-window_w-40)", "(monitor_h*0.04)" },
+})
+
+
+-- Privacy: keep the password manager out of screen shares and recordings.
+hl.window_rule({
+    name             = "keepassxc-no-screen-share",
+    match            = { class = "^(org\\.keepassxc\\.KeePassXC)$" },
+    no_screen_share  = true,
+})
+
+
+-- Stop Slack yanking focus mid-typing every time a message arrives. The class is
+-- lowercase "slack" (the *title* is the capitalised one), so "^(Slack)$" matched
+-- nothing and the rule did nothing at all.
+--
+-- This also kills the tray icon as a way to reveal Slack: clicking it sends an
+-- activation request, which is exactly what this suppresses. Use Super+S (or
+-- Super+Ctrl+S for the overlay) to get it back out of the scratchpad.
+hl.window_rule({
+    name              = "slack-no-focus-steal",
+    match             = { class = "^(slack)$" },
+    focus_on_activate = false,
+})
+
+
 -- Idle inhibit
 hl.window_rule({
     name         = "firefox-meet-idle",
