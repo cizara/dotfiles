@@ -37,6 +37,10 @@ Scope {
 
     NotificationPopupManager {}
 
+    // Kept alive for the whole session rather than built on demand, so the very
+    // first volume keypress has a surface to draw into.
+    Osd {}
+
     Loader {
         active: true
         sourceComponent: Bar {}

@@ -1,0 +1,71 @@
+#!/bin/bash
+# Adjust volume and show the result on the OSD.
+#
+#   volume up [step]      raise (default step 5)
+#   volume down [step]    lower
+#   volume mute           toggle output mute
+#   volume mic-mute       toggle microphone mute
+#   volume set <0-150>    absolute level
+#
+# Replaces the previous inline pamixer-into-a-wob-FIFO binds: same pamixer calls,
+# but the level goes to the quickshell OSD instead of a named pipe, so there is no
+# FIFO to create at startup and the popup lands on the focused monitor.
+
+set -uo pipefail
+
+action=${1:-}
+step=${2:-5}
+
+icon_for() {
+  local level=$1 muted=$2
+  if [[ $muted == true ]]; then
+    echo volume-muted
+  elif ((level == 0)); then
+    echo volume-muted
+  elif ((level < 34)); then
+    echo volume-low
+  elif ((level < 67)); then
+    echo volume-medium
+  else
+    echo volume-high
+  fi
+}
+
+case $action in
+  up)
+    # Unmute on adjust: raising the volume on a muted sink otherwise looks broken.
+    pamixer -u >/dev/null 2>&1
+    pamixer -i "$step" >/dev/null 2>&1
+    ;;
+  down)
+    pamixer -u >/dev/null 2>&1
+    pamixer -d "$step" >/dev/null 2>&1
+    ;;
+  set)
+    pamixer -u >/dev/null 2>&1
+    pamixer --set-volume "${2:-50}" >/dev/null 2>&1
+    ;;
+  mute) pamixer --toggle-mute >/dev/null 2>&1 ;;
+  mic-mute)
+    pamixer --default-source --toggle-mute >/dev/null 2>&1
+    if [[ $(pamixer --default-source --get-mute 2>/dev/null) == true ]]; then
+      osd -i mic-muted -m "Microphone muted"
+    else
+      osd -i mic -m "Microphone on"
+    fi
+    exit 0
+    ;;
+  *)
+    echo "volume: usage: volume {up|down|mute|mic-mute|set} [amount]" >&2
+    exit 1
+    ;;
+esac
+
+level=$(pamixer --get-volume 2>/dev/null || echo 0)
+muted=$(pamixer --get-mute 2>/dev/null || echo false)
+
+if [[ $muted == true ]]; then
+  osd -i volume-muted -p 0
+else
+  osd -i "$(icon_for "$level" "$muted")" -p "$level"
+fi

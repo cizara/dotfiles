@@ -1,0 +1,49 @@
+#!/bin/bash
+# Show the quickshell on-screen display.
+#
+#   osd -i <icon> [-p <0-100>] [-m <message>] [-d <ms>]
+#
+#   -i, --icon      icon NAME, not a glyph: volume-high, volume-medium,
+#                   volume-low, volume-muted, mic, mic-muted,
+#                   brightness-high, brightness-medium, brightness-low
+#   -p, --progress  level to draw as a bar, 0-100
+#   -m, --message   text instead of a bar
+#   -d, --duration  visible time in ms (default 1500)
+#
+# Icon names rather than codepoints keep glyphs out of shell scripts entirely;
+# the name -> glyph table lives in modules/OsdModel.js.
+#
+# Always best-effort: never fail a keybind because the shell is restarting.
+
+set -uo pipefail
+
+icon=""
+message=""
+progress=""
+duration=""
+
+while (($#)); do
+  case $1 in
+    -i | --icon) icon=${2:-}; shift 2 ;;
+    -m | --message) message=${2:-}; shift 2 ;;
+    -p | --progress) progress=${2:-}; shift 2 ;;
+    -d | --duration) duration=${2:-}; shift 2 ;;
+    -h | --help)
+      sed -n '2,20p' "$0" | sed 's/^# \?//'
+      exit 0
+      ;;
+    *)
+      echo "osd: unknown option '$1'" >&2
+      exit 1
+      ;;
+  esac
+done
+
+payload=$(jq -cn \
+  --arg icon "$icon" \
+  --arg message "$message" \
+  --arg value "$progress" \
+  --arg duration "$duration" \
+  '{icon: $icon, message: $message, value: $value, duration: $duration}')
+
+exec qs-ipc -q osd show "$payload"

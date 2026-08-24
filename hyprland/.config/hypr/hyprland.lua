@@ -17,7 +17,6 @@ menu        = "wofi -c " .. home .. "/.config/wofi/config -s " .. home .. "/.con
 -----------------------------
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
-hl.env("WOBSOCK",         xdg_run .. "/wob.sock")
 hl.env("XCURSOR_SIZE",    "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 
@@ -29,7 +28,8 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
 hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true")
-    hl.exec_cmd("rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob")
+    -- wob is gone: volume/brightness feedback is drawn by the quickshell OSD, so
+    -- there is no FIFO to create and no tail -f to keep running.
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)

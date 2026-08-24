@@ -110,15 +110,17 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 
--- Volume (with wob feedback)
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pamixer -u && pamixer -i 5 && pamixer --get-volume > $WOBSOCK"),                                              { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pamixer -u && pamixer -d 5 && pamixer --get-volume > $WOBSOCK"),                                              { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("pamixer --toggle-mute && (pamixer --get-mute && echo 0 > $WOBSOCK) || pamixer --get-volume > $WOBSOCK"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("pamixer --toggle-mute && (pamixer --get-mute && echo 0 > $WOBSOCK) || pamixer --get-volume > $WOBSOCK"),      { locked = true, repeating = true })
+-- Volume and brightness. Feedback goes to the quickshell OSD (modules/Osd.qml)
+-- instead of wob, so there is no FIFO to set up at startup and the popup appears
+-- on the focused monitor. The scripts also fix the old "mic mute" bind, which was
+-- a copy of the output-mute command and so muted the speakers, not the mic.
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(home .. "/bin/volume up"),       { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(home .. "/bin/volume down"),     { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(home .. "/bin/volume mute"),     { locked = true })
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd(home .. "/bin/volume mic-mute"), { locked = true })
 
--- Brightness (with wob feedback)
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl set +5% | sed -En 's/.*\\(([0-9]+)%\\).*/\\1/p' > $WOBSOCK"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%- | sed -En 's/.*\\(([0-9]+)%\\).*/\\1/p' > $WOBSOCK"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(home .. "/bin/brightness up"),   { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(home .. "/bin/brightness down"), { locked = true, repeating = true })
 
 -- Media controls
 local players = "spotify,YoutubeMusic,chromium.instance2"
