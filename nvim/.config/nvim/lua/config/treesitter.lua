@@ -1,94 +1,94 @@
 local M = {}
 
+-- Parsers to install. The `main` branch has no auto_install, so the list is
+-- explicit. `jsonc` has no parser of its own (the plugin maps it to `json`).
+local languages = {
+    "bash",
+    "comment",
+    "css",
+    "csv",
+    "diff",
+    "dockerfile",
+    "editorconfig",
+    "gitcommit",
+    "git_config",
+    "gitignore",
+    "go",
+    "gomod",
+    "gosum",
+    "gotmpl",
+    "helm",
+    "hcl",
+    "html",
+    "hyprlang",
+    "ini",
+    "javascript",
+    "jsdoc",
+    "json",
+    "kdl",
+    "lua",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "nginx",
+    "ninja",
+    "php",
+    "python",
+    "qmljs",
+    "query",
+    "regex",
+    "requirements",
+    "terraform",
+    "toml",
+    "sql",
+    "tsx",
+    "typescript",
+    "vim",
+    "vimdoc",
+    "xml",
+    "yaml",
+}
+
 function M.setup()
-    local config = require("nvim-treesitter.configs")
-    config.setup({
-        auto_install = true,
-        ensure_installed = {
-            "bash",
-            "comment",
-            "dockerfile",
-            "go",
-            "gotmpl",
-            "helm",
-            "hcl",
-            "html",
-            "javascript",
-            "jsdoc",
-            "json",
-            "jsonc",
-            "lua",
-            "ninja",
-            "php",
-            "python",
-            "query",
-            "regex",
-            "toml",
-            "sql",
-            "vim",
-            "xml",
-            "yaml"
-        },
-        incremental_selection = {
-            enable = true,
-            keymaps = {
-                init_selection = "<C-space>",
-                node_incremental = "<C-space>",
-                scope_incremental = false,
-                node_decremental = "<bs>",
-            },
-        },
-        textobjects = {
-            move = {
-                enable = true,
-                goto_next_start = {
-                    ["]f"] = "@function.outer",
-                    ["]c"] = "@class.outer",
-                    ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-                    ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-                },
-                goto_next_end = {
-                    ["]F"] = "@function.outer",
-                    ["]C"] = "@class.outer",
-                    ["]S"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-                    ["]Z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-                },
-                goto_previous_start = {
-                    ["[f"] = "@function.outer",
-                    ["[c"] = "@class.outer",
-                    ["[s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-                    ["[z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-                },
-                goto_previous_end = {
-                    ["[F"] = "@function.outer",
-                    ["[C"] = "@class.outer",
-                    ["[S"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-                    ["[Z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-                },
-            },
-        },
-        highlight = { enable = true },
-        indent = { enable = true },
+    require("nvim-treesitter").install(languages)
+
+    -- Every filetype these parsers are registered for, e.g. sh/bash -> bash,
+    -- dosini -> ini, help -> vimdoc, gotmplyaml -> yaml (see autocmds.lua).
+    local filetypes = {}
+    for _, lang in ipairs(languages) do
+        vim.list_extend(filetypes, vim.treesitter.language.get_filetypes(lang))
+    end
+
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = filetypes,
+        callback = function()
+            -- syntax highlighting, provided by Neovim
+            vim.treesitter.start()
+            -- indentation, provided by nvim-treesitter
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
     })
 end
 
-function M.setup_textobjects_move()
-    local move = require("nvim-treesitter.textobjects.move")
-    local configs = require("nvim-treesitter.configs")
-    for name, fn in pairs(move) do
-        if name:find("goto") == 1 then
-            move[name] = function(q, ...)
-                if vim.wo.diff then
-                    local config = configs.get_module("textobjects.move")[name]
-                    for key, query in pairs(config or {}) do
-                        if q == query and key:find("[%]%[][cC]") then
-                            vim.cmd("normal! " .. key)
-                            return
-                        end
-                    end
-                end
-                return fn(q, ...)
-            end
+function M.setup_textobjects()
+    require("nvim-treesitter-textobjects").setup({
+        move = { set_jumps = true },
+    })
+
+    local move = require("nvim-treesitter-textobjects.move")
+    local maps = {
+        goto_next_start = { ["]f"] = { "@function.outer", "textobjects" }, ["]]"] = { "@class.outer", "textobjects" }, ["]s"] = { "@local.scope", "locals" }, ["]z"] = { "@fold", "folds" } },
+        goto_next_end = { ["]F"] = { "@function.outer", "textobjects" }, ["]["] = { "@class.outer", "textobjects" }, ["]S"] = { "@local.scope", "locals" }, ["]Z"] = { "@fold", "folds" } },
+        goto_previous_start = { ["[f"] = { "@function.outer", "textobjects" }, ["[["] = { "@class.outer", "textobjects" }, ["[s"] = { "@local.scope", "locals" }, ["[z"] = { "@fold", "folds" } },
+        goto_previous_end = { ["[F"] = { "@function.outer", "textobjects" }, ["[]"] = { "@class.outer", "textobjects" }, ["[S"] = { "@local.scope", "locals" }, ["[Z"] = { "@fold", "folds" } },
+    }
+
+    for fn, keys in pairs(maps) do
+        for lhs, spec in pairs(keys) do
+            local query, group = spec[1], spec[2]
+            vim.keymap.set({ "n", "x", "o" }, lhs, function()
+                move[fn](query, group)
+            end, { desc = fn:gsub("goto_", "Go to "):gsub("_", " ") .. " " .. query })
         end
     end
 end

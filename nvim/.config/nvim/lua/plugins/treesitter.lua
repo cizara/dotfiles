@@ -1,6 +1,8 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        lazy = false, -- `main` does not support lazy-loading
         build = ":TSUpdate",
         config = function()
             require("config.treesitter").setup()
@@ -8,10 +10,11 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        event = "VeryLazy",
-        enabled = true,
+        branch = "main",
+        lazy = false,
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
         config = function()
-            require("config.treesitter").setup_textobjects_move()
+            require("config.treesitter").setup_textobjects()
         end,
     }
 }
