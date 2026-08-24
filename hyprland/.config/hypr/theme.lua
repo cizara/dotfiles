@@ -47,6 +47,9 @@ hl.config({
 
     dwindle = {
         preserve_split = true,
+        -- Always split right/down instead of following the cursor half, so where a
+        -- new window lands depends only on the layout, not on where the mouse was.
+        force_split = 2,
     },
 
     master = {
@@ -57,6 +60,36 @@ hl.config({
         font_family             = "JetBrains Mono",
         force_default_wallpaper = 0,
         disable_hyprland_logo   = true,
+
+        -- Wake the displays on input. There is no idle daemon on this machine, but
+        -- DPMS still gets turned off by the lock bind, and without these the screen
+        -- stays black until the mouse is physically moved.
+        key_press_enables_dpms  = true,
+        mouse_move_enables_dpms = true,
+
+        -- Default is 1 ping, which pops the "app is not responding" dialog at every
+        -- brief stall (Zoom and Electron apps do this constantly).
+        anr_missed_pings        = 3,
+
+        focus_on_activate          = true,
+        disable_scale_notification = true,
+        on_focus_under_fullscreen  = 1,
+    },
+
+    cursor = {
+        hide_on_key_press        = true,
+        warp_on_change_workspace = 1,
+    },
+
+    -- eDP-1 runs at scale 1.333. Without this, XWayland clients render at 1x and
+    -- get upscaled by the compositor, which is what makes them look blurry on the
+    -- internal panel while native Wayland clients stay sharp.
+    xwayland = {
+        force_zero_scaling = true,
+    },
+
+    ecosystem = {
+        no_update_news = true,
     },
 
     group = {
