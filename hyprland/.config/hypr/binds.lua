@@ -128,6 +128,10 @@ hl.bind(mainModCtrl .. " + right", hl.dsp.workspace.move({ monitor = "r" }))
 -- (script checks window's current workspace and moves accordingly)
 hl.bind(mainMod      .. " + S", hl.dsp.exec_cmd(home .. "/.config/hypr/toggle_magic.sh"))
 hl.bind(mainModShift .. " + S", hl.dsp.window.move({ workspace = "special:magic", follow = false }))
+-- Show/hide special:magic as an overlay, mirroring Super+Ctrl+minus for obsidian.
+-- Also the escape hatch: a special workspace left open and empty covers the monitor
+-- and eats every click on every workspace, and this is the only way to close it.
+hl.bind(mainModCtrl  .. " + S", hl.dsp.workspace.toggle_special("magic"))
 
 -- Obsidian scratchpad
 hl.bind(mainModCtrl  .. " + minus", hl.dsp.workspace.toggle_special("obsidian"))
