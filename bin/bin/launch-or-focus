@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Focus a window if it exists, otherwise launch it.
+#
+#   launch-or-focus [--pid-child NAME] <pattern> [command...]
+#
+# <pattern> is matched case-insensitively, on word boundaries, against both the
+# window class and the title, so "btop" matches class "org.lucho.btop" and a
+# terminal titled "btop" alike.
+#
+# --pid-child NAME adds a fallback for terminal applications that do not set an
+# app-id: if no window matches <pattern>, look for a window whose direct child
+# process is NAME. That is how a TUI launched by hand inside an already-running
+# terminal is still found.
+#
+# With no command, the pattern is launched as-is.
+#
+# Examples:
+#   launch-or-focus obsidian
+#   launch-or-focus --pid-child herdr herdr foot --app-id=herdr --title=HerdR herdr
+
+set -uo pipefail
+
+pid_child=""
+if [[ ${1:-} == "--pid-child" ]]; then
+  pid_child=${2:-}
+  shift 2
+fi
+
+if (($# < 1)); then
+  echo "launch-or-focus: usage: launch-or-focus [--pid-child NAME] <pattern> [command...]" >&2
+  exit 1
+fi
+
+pattern=$1
+shift
+
+address=$(hyprctl clients -j | jq -r --arg p "$pattern" '
+  .[]
+  | select((.class | test("\\b" + $p + "\\b"; "i")) or (.title | test("\\b" + $p + "\\b"; "i")))
+  | .address' | head -n1)
+
+# Fallback: a window whose child process is the program we want. Used for TUIs
+# running in a terminal that carries no distinguishing app-id.
+if [[ -z $address && -n $pid_child ]]; then
+  while read -r candidate pid; do
+    [[ -n $pid && $pid != null ]] || continue
+    if pgrep -P "$pid" -x "$pid_child" >/dev/null 2>&1; then
+      address=$candidate
+      break
+    fi
+  done < <(hyprctl clients -j | jq -r '.[] | "\(.address) \(.pid)"')
+fi
+
+if [[ -n $address ]]; then
+  # Lua dispatch only. With a Lua config, hyprctl wraps the argument in
+  # `hl.dispatch(...)` and evaluates it as Lua, so the old `dispatch focuswindow
+  # address:0x...` form is a syntax error (exit 7), not a fallback.
+  hyprctl dispatch "hl.dsp.focus({ window = \"address:$address\" })" >/dev/null
+  exit 0
+fi
+
+if (($# > 0)); then
+  exec "$@"
+else
+  exec "$pattern"
+fi
