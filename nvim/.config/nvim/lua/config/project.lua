@@ -10,10 +10,10 @@ function M.setup()
         telescope = {
             mappings = {
                 i = {
-                    ["<CR>"] = "change_working_directory",
+                    ["<CR>"] = "change_cwd",
                 },
                 n = {
-                    ["<CR>"] = "change_working_directory",
+                    ["<CR>"] = "change_cwd",
                 },
             },
         },
