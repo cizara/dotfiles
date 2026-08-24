@@ -35,6 +35,26 @@ Scope {
         }
     }
 
+    // Declared here rather than inside the Indicators bar widget: the bar is
+    // instantiated per monitor, and an IPC target only routes to one handler, so a
+    // per-monitor registration would be dropped on the second screen. This scope
+    // exists exactly once.
+    IpcHandler {
+        target: "indicators"
+
+        function state(): string {
+            return JSON.stringify({
+                dnd: Notifications.doNotDisturb,
+                stayAwake: Inhibitor.active
+            })
+        }
+
+        function toggleStayAwake(): string {
+            Inhibitor.toggle()
+            return Inhibitor.active ? "on" : "off"
+        }
+    }
+
     NotificationPopupManager {}
 
     // Kept alive for the whole session rather than built on demand, so the very

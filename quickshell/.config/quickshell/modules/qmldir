@@ -1,8 +1,10 @@
+BarIndicator 1.0 BarIndicator.qml
 Battery 1.0 Battery.qml
 Cpu 1.0 Cpu.qml
 DateTime 1.0 DateTime.qml
 Disk 1.0 Disk.qml
 HyprlandWindow 1.0 HyprlandWindow.qml
+Indicators 1.0 Indicators.qml
 MediaPopup 1.0 MediaPopup.qml
 Mediaplayer 1.0 Mediaplayer.qml
 Memory 1.0 Memory.qml
