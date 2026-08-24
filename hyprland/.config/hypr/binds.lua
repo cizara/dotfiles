@@ -45,7 +45,9 @@ hl.bind(mainModCtrl  .. " + M",         function()
         notify("'Panel interno prendido'")
     end
 end)
-hl.bind(mainModShift .. " + W",         hl.dsp.exec_cmd("touch " .. home .. "/.cache/quickshell-reload-wallpaper"))
+-- Reroll the wallpaper. Talks to quickshell over IPC; -q so a press during a
+-- shell restart is a no-op instead of an error.
+hl.bind(mainModShift .. " + W",         hl.dsp.exec_cmd(home .. "/bin/qs-ipc -q wallpaper next"))
 
 -- Group (tabbed) window management
 hl.bind(mainMod      .. " + G",   hl.dsp.group.toggle())

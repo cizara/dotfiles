@@ -5,6 +5,8 @@ pragma Singleton
 
 // Wallpaper service using swaybg for better Hyprland compatibility
 Item {
+    id: root
+
     property string imagePath: ""
     property var swaybgProcess: null
     
@@ -19,38 +21,31 @@ Item {
         onTriggered: loadRandomWallpaper()
     }
     
-    // Watch for reload signal file
-    property string signalFile: Quickshell.env("HOME") + "/.cache/quickshell-reload-wallpaper"
-    property string lastModTime: ""
-    
-    Timer {
-        interval: 500  // Check every 500ms
-        running: true
-        repeat: true
-        onTriggered: checkSignalFile()
-    }
-    
-    Process {
-        id: statProc
-        command: ["stat", "-c", "%Y", signalFile]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const modTime = text.trim()
-                if (modTime.length > 0 && modTime !== lastModTime) {
-                    lastModTime = modTime
-                    if (lastModTime.length > 0) {  // Skip first check
-                        loadRandomWallpaper()
-                    }
-                }
-            }
+    // Reroll on request. This replaces polling `stat` on a ~/.cache signal file
+    // twice a second, which cost two subprocesses per second for the entire
+    // session just to notice a keypress.
+    //   qs ipc call wallpaper next
+    IpcHandler {
+        target: "wallpaper"
+
+        function next(): string {
+            root.loadRandomWallpaper()
+            return "ok"
+        }
+
+        function set(path: string): string {
+            if (path.length === 0)
+                return "no path given"
+            root.imagePath = path
+            root.setWallpaper()
+            return "ok"
+        }
+
+        function current(): string {
+            return root.imagePath
         }
     }
-    
-    function checkSignalFile() {
-        statProc.running = false
-        statProc.running = true
-    }
-    
+
     function loadRandomWallpaper() {
         wallpaperProc.running = true
     }
