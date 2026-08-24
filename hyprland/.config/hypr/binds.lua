@@ -30,10 +30,42 @@ hl.bind(mainModCtrl  .. " + M",         function()
     local function notify(args)
         hl.exec_cmd("notify-send -a hyprland " .. args)
     end
+    -- NUNCA llamar a hyprctl desde aca. Un bind de Lua corre *dentro* del
+    -- compositor, y hyprctl necesita hablar con el compositor por su socket, que
+    -- esta bloqueado justo ejecutando este codigo. El resultado es
+    -- "Hyprland IPC didn't respond in time / Couldn't read (6)" y jq recibe basura.
+    -- Solo se puede: la API nativa hl.*, y comandos que no toquen el compositor
+    -- (leer /sys esta bien).
+    --
+    -- Devuelve: hay_externo_activo, hay_cable_conectado
+    local function external_state()
+        -- external-monitors -v lista los conectores no-internos conectados leyendo
+        -- /sys (card1-DP-1, etc). Le preguntamos a Hyprland cual de esos tiene
+        -- realmente encendido: que haya cable no alcanza, una salida conectada pero
+        -- deshabilitada dejaria la pantalla en negro igual.
+        local pipe = io.popen(home .. "/bin/external-monitors -v 2>/dev/null")
+        if not pipe then return false, false end
+        local connectors = {}
+        for line in pipe:lines() do
+            local name = line:match("^card%d+%-(.+)$") or line
+            if name ~= "" then table.insert(connectors, name) end
+        end
+        pipe:close()
+
+        for _, name in ipairs(connectors) do
+            if hl.get_monitor(name) then
+                return true, true
+            end
+        end
+        return false, #connectors > 0
+    end
     if hl.get_monitor("eDP-1") then
-        if hl.get_monitor("DP-1") then
+        local active_external, cable_connected = external_state()
+        if active_external then
             hl.monitor({ output = "eDP-1", disabled = true })
             notify("'Panel interno apagado' 'SUPER+CTRL+M para prenderlo'")
+        elseif cable_connected then
+            notify("-u critical 'No apago el interno' 'Hay cable conectado pero la salida esta deshabilitada'")
         else
             notify("-u critical 'No apago el interno' 'Es la unica pantalla conectada'")
         end

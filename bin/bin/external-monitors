@@ -1,0 +1,39 @@
+#!/bin/bash
+# Exit 0 if any external display is physically connected, 1 otherwise.
+#
+# Reads sysfs rather than `hyprctl monitors`, and that is the whole point: once an
+# output has been disabled in Hyprland it disappears from hyprctl's list, so
+# hyprctl cannot answer "is the cable still plugged in?". sysfs reports the
+# connector state regardless of what the compositor is currently doing with it.
+#
+# On this machine the external display arrives on card1-DP-1 (the HDMI port goes
+# through an LSPCon, so it presents as DP), and the internal panel is card1-eDP-1.
+#
+#   external-monitors        quiet, exit code only
+#   external-monitors -v     also print the connected connector names
+
+set -uo pipefail
+
+VERBOSE=0
+[[ ${1:-} == "-v" ]] && VERBOSE=1
+
+found=1
+for status in /sys/class/drm/card*-*/status; do
+  [[ -r $status ]] || continue
+  # Skip the internal panel: eDP is always "connected" and would make this
+  # always succeed. DSI covers internal panels on tablets/handhelds.
+  case $status in
+    *-eDP-*/status | *-DSI-*/status) continue ;;
+  esac
+  if [[ $(<"$status") == connected ]]; then
+    found=0
+    if ((VERBOSE)); then
+      connector=${status%/status}
+      echo "${connector##*/}"
+    else
+      break
+    fi
+  fi
+done
+
+exit $found
