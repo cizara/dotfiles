@@ -13,9 +13,25 @@
 -- 2026-08-12 y el flicker empeoro muchisimo los dias siguientes. 297 MHz es la tasa que
 -- anduvo (mal pero tolerable) durante años.
 --
--- Para tener 4K@60 de verdad hay que salir por USB-C (DP-2, DP Alt Mode sobre el puerto
--- Thunderbolt 3): otro DDI, otro PHY, sin LSPCon. Necesita un dongle con Power Delivery
--- porque ese USB-C es tambien el cargador.
+-- DP-2 es el USB-C (DP Alt Mode sobre el puerto Thunderbolt 3): otro DDI, otro PHY, sin
+-- LSPCon. Ese es el camino bueno para el flicker.
+--
+-- 2026-08-19: probado con un hub Genesys Logic USB3.2 (05e3:0625). El flicker no aparece,
+-- pero el hub NO da 4K@60: negocia pin assignment D (2 lanes DP + USB 3.2 Gen2 a 10 Gbps),
+-- o sea solo 2 de los 4 pares quedan para video. Medido:
+--   /sys/kernel/debug/dri/1/DP-2/i915_dp_max_lane_count -> 2
+--   /sys/kernel/debug/dri/1/DP-2/i915_dp_max_link_rate  -> 540000 (HBR2)
+-- 2 lanes x 5.4 Gbps = 8.64 Gbps utiles; 3840x2160@60 (533 MHz) necesita ~12.5 => i915
+-- saca el modo del connector. El EDID del monitor por DP SI ofrece 4K@60 (DTD 1), el cuello
+-- de botella es el hub. Kaby Lake-R no tiene DSC, asi que no hay vuelta por software.
+-- Techo real con este hub: 3840x2160@30, o 2560x1440@60 (241 MHz) si se prefiere refresh.
+-- Para 4K@60 + USB3 + carga a la vez hace falta un dock Thunderbolt 3 (tunelea DP con los
+-- 4 lanes), no un hub USB-C.
+--
+-- El hub SI carga el laptop, pero la fuente tiene que ir en su puerto PD-IN dedicado: en un
+-- puerto de datos el video anda igual y AC0/online se queda en 0. Test: cat
+-- /sys/class/power_supply/AC0/online (1 = cargando). Este laptop no expone /sys/class/typec
+-- ni UCSI, asi que el contrato PD es invisible y AC0 es el unico dato real.
 --
 -- Apagar/prender el panel interno es MANUAL: SUPER + CTRL + M (ver binds.lua).
 -- Automatizarlo no funciono: al arrancar todavia no hay monitores enumerados
@@ -23,5 +39,9 @@
 -- monitor.added de DP-1 pasa antes de que se registre el handler. Probado 2026-08-13.
 --
 -- Si cambias mode/position/scale del interno, actualizar tambien el bind en binds.lua.
+-- DP-1 (HDMI) y DP-2 (USB-C) son el MISMO monitor por dos caminos distintos: nunca los dos
+-- a la vez, por eso comparten position 0x0. El externo va a la izquierda y el interno a su
+-- derecha (3840 = ancho logico del externo con scale 1).
 hl.monitor({ output = "DP-1",  mode = "3840x2160@30",    position = "0x0",    scale = 1     })
+hl.monitor({ output = "DP-2",  mode = "3840x2160@30",    position = "0x0",    scale = 1     })
 hl.monitor({ output = "eDP-1", mode = "3200x1800@59.98", position = "3840x0", scale = 1.333 })
