@@ -166,7 +166,17 @@ hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl -p '" .. players .. "' play
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl -p '" .. players .. "' previous"),    { locked = true })
 hl.bind(mainMod .. " + P",hl.dsp.exec_cmd("playerctl -p '" .. players .. "' play-pause"))
 
--- Screenshots
-hl.bind(mainMod      .. " + Print", hl.dsp.exec_cmd('grim -t jpeg -o "$(hyprctl monitors -j | jq -r \'.[] | select(.focused) | .name\')" ' .. home .. '/Pictures/Screenshots/$(date +\'%Y-%m-%d_%H-%M-%S.jpg\')'))
-hl.bind(mainMod      .. " + O",     hl.dsp.exec_cmd('grim -t jpeg -g "$(/usr/bin/slurp)" ' .. home .. '/Pictures/Screenshots/$(date +\'%Y-%m-%d_%H-%M-%S.jpg\')'))
-hl.bind(mainModShift .. " + I",     hl.dsp.exec_cmd("XDG_CURRENT_DESKTOP=sway flameshot gui"))
+-- Screen capture. All of these save to ~/Pictures/Screenshots *and* put the result
+-- on the clipboard, and all of them cancel if the same key is pressed again while
+-- the picker is up. See ~/bin/capture-screenshot.
+--
+-- Print alone stays an instant grab of the focused monitor, as before. O still
+-- drags a free-hand region as it always did, but freezes the screen first and
+-- outlines the windows and monitors, so a single click grabs whatever is under
+-- the cursor instead of needing a precise drag.
+hl.bind(mainMod      .. " + Print", hl.dsp.exec_cmd(home .. "/bin/capture-screenshot fullscreen"))
+hl.bind(mainMod      .. " + O",     hl.dsp.exec_cmd(home .. "/bin/capture-screenshot smart"))
+-- Replaces the flameshot bind: flameshot needed an XWayland hack to run at all,
+-- and annotation is now offered by clicking the screenshot notification (satty).
+hl.bind(mainModShift .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-text"))
+hl.bind(mainModCtrl  .. " + Print", hl.dsp.exec_cmd(home .. "/bin/capture-color"))
