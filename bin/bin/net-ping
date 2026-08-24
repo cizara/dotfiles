@@ -1,0 +1,17 @@
+#!/bin/bash
+# Print one round-trip time in milliseconds, or nothing if the probe failed.
+#
+#   net-ping [host]
+#
+# Silence is the signal for a lost packet — the caller counts empty results to
+# derive packet loss, so this must not print an error or a placeholder.
+#
+# LC_ALL=C because ping localises the "time=" field, and -W 1 keeps a dead
+# network from stalling the caller for the default timeout.
+
+set -uo pipefail
+
+host=${1:-1.1.1.1}
+
+LC_ALL=C ping -n -c 1 -W 1 "$host" 2>/dev/null |
+  awk -F'time[=<]' '/time[=<]/ { split($2, parts, " "); print parts[1]; exit }'
