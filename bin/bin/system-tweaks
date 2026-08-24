@@ -1,0 +1,117 @@
+#!/bin/bash
+# Apply system-level tweaks that live in root-owned /etc and therefore cannot be
+# stowed. Idempotent: safe to re-run, and it says what it changed.
+#
+#   system-tweaks           show what would change, change nothing
+#   system-tweaks --apply   actually write the files (asks for sudo)
+#
+# Deliberately NOT handled here, because this machine already configures them and
+# a generic version would fight the existing setup:
+#
+#   * DNS / systemd-resolved  - running iwd + networkd + resolved with strict DoT.
+#   * Hibernation / resume    - hibernates to /swapfile with a resume_offset that
+#                               goes stale if the swapfile is ever recreated.
+#   * Bootloader, mkinitcpio, firewall, display manager.
+
+set -uo pipefail
+
+APPLY=0
+[[ ${1:-} == "--apply" ]] && APPLY=1
+
+changes=0
+
+# Report intent, then either write via sudo or just say what would happen.
+# $1 = target path, $2 = description, stdin = desired content
+ensure_file() {
+  local path=$1 desc=$2 content
+  content=$(cat)
+
+  if [[ -f $path ]] && [[ $(cat "$path" 2>/dev/null) == "$content" ]]; then
+    printf '  ok      %-52s %s\n' "$path" "already set"
+    return
+  fi
+
+  changes=$((changes + 1))
+  if ((APPLY)); then
+    sudo mkdir -p "$(dirname "$path")"
+    printf '%s\n' "$content" | sudo tee "$path" >/dev/null
+    printf '  WROTE   %-52s %s\n' "$path" "$desc"
+  else
+    printf '  would   %-52s %s\n' "$path" "$desc"
+  fi
+}
+
+echo "System tweaks$( ((APPLY)) || echo " (dry run — pass --apply to write)")"
+echo
+
+# Dev tooling (editors, watchers, bundlers) exhausts the default 8192 quickly, and
+# the failure mode is a silent "file changes not detected" rather than an error.
+ensure_file /etc/sysctl.d/90-file-watchers.conf "raise inotify watch limit to 524288" <<'EOF'
+fs.inotify.max_user_watches=524288
+EOF
+
+# systemd's default soft limit is 1024, which editors, containers and dev servers
+# run into. Hard limit stays generous.
+ensure_file /etc/systemd/system.conf.d/99-nofile.conf "raise system soft NOFILE to 65536" <<'EOF'
+[Manager]
+DefaultLimitNOFILE=65536:524288
+EOF
+
+ensure_file /etc/systemd/user.conf.d/99-nofile.conf "raise user soft NOFILE to 65536" <<'EOF'
+[Manager]
+DefaultLimitNOFILE=65536:524288
+EOF
+
+# Without these, a single unit that ignores SIGTERM makes shutdown sit for the
+# default 90s twice over (once system-wide, once for the user manager).
+ensure_file /etc/systemd/system.conf.d/10-faster-shutdown.conf "cap unit stop timeout at 5s" <<'EOF'
+[Manager]
+DefaultTimeoutStopSec=5s
+EOF
+
+ensure_file /etc/systemd/system/user@.service.d/faster-shutdown.conf "cap user manager stop at 5s" <<'EOF'
+[Service]
+TimeoutStopSec=5s
+EOF
+
+# USB autosuspend drops keyboards, mice and DACs mid-use on some hubs; the power
+# saving is negligible on a machine that is usually docked.
+ensure_file /etc/modprobe.d/disable-usb-autosuspend.conf "disable USB autosuspend" <<'EOF'
+options usbcore autosuspend=-1
+EOF
+
+# Frees the power button so it can be bound to a menu instead of hard-stopping the
+# session. Pairs with the power actions in the quickshell control panel.
+ensure_file /etc/systemd/logind.conf.d/10-ignore-power-key.conf "stop the power key shutting down" <<'EOF'
+[Login]
+HandlePowerKey=ignore
+EOF
+
+# updatedb is heavy I/O; no reason to run it off AC.
+ensure_file /etc/systemd/system/plocate-updatedb.service.d/ac-only.conf "only index on AC power" <<'EOF'
+[Unit]
+ConditionACPower=true
+EOF
+
+echo
+if ((changes == 0)); then
+  echo "Nothing to do — everything already applied."
+  exit 0
+fi
+
+if ((APPLY)); then
+  echo "$changes file(s) written. Reloading systemd."
+  sudo sysctl --system >/dev/null 2>&1
+  sudo systemctl daemon-reload
+  cat <<'NOTE'
+
+Takes effect:
+  inotify limit      immediately
+  NOFILE limits      next login (check with: ulimit -Sn)
+  shutdown timeouts  immediately
+  USB autosuspend    next boot (it is a module parameter)
+  power key          immediately
+NOTE
+else
+  echo "$changes file(s) would change. Re-run with --apply to write them."
+fi
