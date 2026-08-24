@@ -10,8 +10,13 @@ hl.config({
         follow_mouse = 1,
         sensitivity  = 0,
 
+        numlock_by_default = true,
+
         touchpad = {
             natural_scroll = true,
+            -- Click anywhere with two fingers for right-click instead of aiming at
+            -- the bottom-right corner of the pad.
+            clickfinger_behavior = true,
         },
     },
 })
