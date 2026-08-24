@@ -5,11 +5,11 @@ DateTime 1.0 DateTime.qml
 Disk 1.0 Disk.qml
 HyprlandWindow 1.0 HyprlandWindow.qml
 Indicators 1.0 Indicators.qml
-MediaPopup 1.0 MediaPopup.qml
 Mediaplayer 1.0 Mediaplayer.qml
+MediaPopup 1.0 MediaPopup.qml
 Memory 1.0 Memory.qml
-NotificationPopupManager 1.0 NotificationPopupManager.qml
 NotificationPopup 1.0 NotificationPopup.qml
+NotificationPopupManager 1.0 NotificationPopupManager.qml
 NotificationsPanel 1.0 NotificationsPanel.qml
 Osd 1.0 Osd.qml
 singleton Panel 1.0 Panel.qml
