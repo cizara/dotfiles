@@ -73,10 +73,15 @@ hl.window_rule({
     float = true,
 })
 
+-- Chromium's "X is sharing your screen" indicator. Its own Hide button is broken
+-- under Wayland, so park the whole window on a hidden special workspace instead of
+-- floating it. Matched loosely on purpose: the wording varies between Brave, Chrome
+-- and Meet. (The previous pattern used the Lua escape "%." — these strings are
+-- handed to Hyprland as regex, where that means a literal "%", so it never matched.)
 hl.window_rule({
-    name  = "screen-share-float",
-    match = { title = ".* is sharing your screen%.$" },
-    float = true,
+    name      = "screen-share-indicator-hide",
+    match     = { title = ".*is sharing.*" },
+    workspace = "special silent",
 })
 
 hl.window_rule({
