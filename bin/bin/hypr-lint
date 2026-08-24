@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+# Load the Hyprland Lua config under plain `lua` with a stub `hl` API, to catch
+# syntax errors and duplicate keybindings WITHOUT reloading the compositor.
+#
+# Worth having because `hyprctl binds` is useless for a Lua config: every bind
+# reports dispatcher "__lua" with an opaque index, so the actual command is not
+# recoverable from a running Hyprland. This is the only place the bind table can
+# be inspected as data.
+#
+#   hypr-lint          report problems, exit 1 if any
+#   hypr-lint --list   print every parsed bind
+#
+# The stub answers any hl.* call so the config runs to completion, which means a
+# genuine Lua error (a typo, a bad concat) surfaces as a real traceback.
+
+set -uo pipefail
+
+CONFIG_DIR=${1:-$HOME/.config/hypr}
+[[ ${1:-} == "--list" ]] && CONFIG_DIR=$HOME/.config/hypr
+
+LIST=0
+for arg in "$@"; do [[ $arg == "--list" ]] && LIST=1; done
+
+command -v lua >/dev/null 2>&1 || {
+  echo "hypr-lint: needs the 'lua' interpreter (pacman -S lua)" >&2
+  exit 2
+}
+
+LUA_SCRIPT=$(mktemp --suffix=.lua)
+trap 'rm -f "$LUA_SCRIPT"' EXIT
+
+cat >"$LUA_SCRIPT" <<'LUA'
+local config_dir, want_list = ...
+package.path = config_dir .. "/?.lua;" .. package.path
+
+local binds = {}
+
+-- Any hl.* lookup returns something callable that also indexes further, so
+-- hl.dsp.window.move({...}) and friends all resolve without being enumerated.
+local function proxy()
+  return setmetatable({}, {
+    __index = function(self, _)
+      local v = proxy()
+      rawset(self, "_", v)
+      return v
+    end,
+    __call = function() return {} end,
+  })
+end
+
+local function normalize(keys)
+  local mods, key = {}, nil
+  -- Loop variables are const from Lua 5.5 on, so trim into a new local.
+  for raw in tostring(keys):gmatch("[^+]+") do
+    local part = raw:gsub("^%s+", ""):gsub("%s+$", "")
+    if part ~= "" then
+      local upper = part:upper()
+      if upper == "SUPER" or upper == "SHIFT" or upper == "CTRL" or upper == "ALT" then
+        table.insert(mods, upper)
+      else
+        key = part
+      end
+    end
+  end
+  table.sort(mods)
+  return table.concat(mods, "+") .. "|" .. tostring(key)
+end
+
+hl = setmetatable({
+  dsp = proxy(),
+  bind = function(keys, _, opts)
+    opts = opts or {}
+    table.insert(binds, {
+      keys = keys,
+      norm = normalize(keys),
+      release = opts.release == true,
+      locked = opts.locked == true,
+    })
+    return { unbind = function() end }
+  end,
+  unbind = function() end,
+  config = function() end,
+  env = function() end,
+  monitor = function() end,
+  get_monitor = function() return nil end,
+  get_config = function() return nil end,
+  get_active_window = function() return nil end,
+  window_rule = function() return { set_enabled = function() end } end,
+  layer_rule = function() return { set_enabled = function() end } end,
+  workspace_rule = function() end,
+  animation = function() end,
+  curve = function() end,
+  gesture = function() end,
+  permission = function() end,
+  exec_cmd = function() end,
+  dispatch = function() end,
+  timer = function() end,
+  on = function() end,
+}, { __index = function() return function() return {} end end })
+
+local ok, err = pcall(function() require("hyprland") end)
+if not ok then
+  io.stderr:write("LUA ERROR: " .. tostring(err) .. "\n")
+  os.exit(1)
+end
+
+if want_list == "1" then
+  for _, b in ipairs(binds) do
+    print(string.format("%-40s %s", b.keys, b.release and "(on release)" or ""))
+  end
+end
+
+-- Two binds on one key BOTH fire in Hyprland. That is used on purpose here for
+-- the arrow keys (focus + group navigation), so a duplicate is reported as
+-- information rather than an error, and press/release pairs are never flagged.
+local seen, dupes = {}, {}
+for _, b in ipairs(binds) do
+  local key = b.norm .. (b.release and "|release" or "|press")
+  if seen[key] then
+    table.insert(dupes, b.keys)
+  else
+    seen[key] = true
+  end
+end
+
+print(string.format("parsed %d binds", #binds))
+if #dupes > 0 then
+  print("\nkeys bound more than once on the same press/release phase (both will fire):")
+  for _, k in ipairs(dupes) do print("  " .. k) end
+end
+LUA
+
+lua "$LUA_SCRIPT" "$CONFIG_DIR" "$LIST"
