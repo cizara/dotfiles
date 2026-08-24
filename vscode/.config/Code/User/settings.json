@@ -93,9 +93,9 @@
     "github.copilot.chat.scopeSelection": true,
     "github.copilot.chat.startDebugging.enabled": true,
     "github.copilot.enable": {
-        "*": true,
+        "*": false,
         "plaintext": false,
-        "markdown": true,
+        "markdown": false,
         "scminput": false
     },
     // "github.copilot.nextEditSuggestions.enabled": false,
@@ -174,7 +174,7 @@
         "editor.defaultFormatter": "AndreOneti.qml-formatter"
     },
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": false,
     "chat.mcp.gallery.enabled": true,
     "chat.customAgentInSubagent.enabled": true,
     "chat.viewSessions.orientation": "stacked",
