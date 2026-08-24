@@ -1,0 +1,20 @@
+#!/bin/bash
+# Tiny persistent flag store for desktop state. "File exists" means "on".
+#
+#   state set <name>       turn a flag on
+#   state clear <name>     turn it off (name may be a glob)
+#   state on <name>        exit 0 if the flag is set  (use as a predicate)
+#   state list             print all set flags
+#
+# Predicate form is the point: `state on presenting && exit 0` reads clearly and
+# works from any language, with no parsing.
+set -uo pipefail
+DIR=${XDG_STATE_HOME:-$HOME/.local/state}/desktop-toggles
+case ${1:-} in
+  set)   mkdir -p "$DIR"; touch "$DIR/${2:?name required}" ;;
+  # find, not rm, so the name can be a glob: state clear 'osd-*'
+  clear) [[ -d $DIR ]] && find "$DIR" -maxdepth 1 -type f -name "${2:?name required}" -delete ;;
+  on)    [[ -f "$DIR/${2:?name required}" ]] ;;
+  list)  [[ -d $DIR ]] && find "$DIR" -maxdepth 1 -type f -printf '%f\n' | sort ;;
+  *)     echo "state: usage: state {set|clear|on|list} [name]" >&2; exit 1 ;;
+esac
