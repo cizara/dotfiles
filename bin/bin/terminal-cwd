@@ -1,0 +1,36 @@
+#!/bin/bash
+# Print the working directory of the shell running in the focused terminal, or
+# $HOME if the focused window is not a terminal.
+#
+# Use it to open a new terminal or a file manager where you already are:
+#   foot --working-directory="$(terminal-cwd)"
+#   thunar "$(terminal-cwd)"
+#
+# The /etc/shells check is what stops this returning the cwd of some random child
+# process (a running build, a pager) instead of an actual interactive shell.
+
+set -uo pipefail
+
+fallback=$HOME
+
+terminal_pid=$(hyprctl activewindow -j 2>/dev/null | jq -r '.pid // empty')
+[[ -n $terminal_pid && $terminal_pid != null ]] || {
+  echo "$fallback"
+  exit 0
+}
+
+# Last child, so a terminal with several panes/tabs gives the most recent one.
+shell_pid=$(pgrep -P "$terminal_pid" 2>/dev/null | tail -n1)
+[[ -n $shell_pid ]] || {
+  echo "$fallback"
+  exit 0
+}
+
+cwd=$(readlink -f "/proc/$shell_pid/cwd" 2>/dev/null)
+exe=$(readlink -f "/proc/$shell_pid/exe" 2>/dev/null)
+
+if [[ -n $exe && -n $cwd && -d $cwd ]] && grep -qxF "$exe" /etc/shells 2>/dev/null; then
+  echo "$cwd"
+else
+  echo "$fallback"
+fi

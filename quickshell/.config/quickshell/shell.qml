@@ -2,6 +2,7 @@
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import qs.bar
 import qs.bar.placeholders
 import qs.services
@@ -9,10 +10,56 @@ import qs.modules
 
 Scope {
     id: root
-    
+
     property var wallpaper: Wallpaper
 
+    // Liveness probe for scripts: `qs ipc call shell ping` answers "ok" only once
+    // the QML has actually loaded, which is the difference between "the shell is
+    // running" and "the shell is ready".
+    IpcHandler {
+        target: "shell"
+
+        function ping(): string {
+            return "ok"
+        }
+
+        // The structural tokens Theme reads back out of Hyprland. Exposed because
+        // otherwise there is no way to tell whether they actually resolved or are
+        // still sitting on their defaults.
+        function theme(): string {
+            return JSON.stringify({
+                cornerRadius: Theme.cornerRadius,
+                gapsOut: Theme.gapsOut,
+                fontFamily: Theme.fontFamily
+            })
+        }
+    }
+
+    // Declared here rather than inside the Indicators bar widget: the bar is
+    // instantiated per monitor, and an IPC target only routes to one handler, so a
+    // per-monitor registration would be dropped on the second screen. This scope
+    // exists exactly once.
+    IpcHandler {
+        target: "indicators"
+
+        function state(): string {
+            return JSON.stringify({
+                dnd: Notifications.doNotDisturb,
+                stayAwake: Inhibitor.active
+            })
+        }
+
+        function toggleStayAwake(): string {
+            Inhibitor.toggle()
+            return Inhibitor.active ? "on" : "off"
+        }
+    }
+
     NotificationPopupManager {}
+
+    // Kept alive for the whole session rather than built on demand, so the very
+    // first volume keypress has a surface to draw into.
+    Osd {}
 
     Loader {
         active: true

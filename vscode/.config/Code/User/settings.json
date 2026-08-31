@@ -93,9 +93,10 @@
     "github.copilot.chat.scopeSelection": true,
     "github.copilot.chat.startDebugging.enabled": true,
     "github.copilot.enable": {
-        "*": true,
-        "markdown": true,
-        "plaintext": true
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
     },
     // "github.copilot.nextEditSuggestions.enabled": false,
     "githubPullRequests.createOnPublishBranch": "never",
@@ -112,7 +113,6 @@
     "go.testTimeout": "300s",
     "go.toolsManagement.autoUpdate": true,
     "inlineChat.accessibleDiffView": "on",
-    "Prettier-SQL.denseOperators": true,
     "Prettier-SQL.keywordCase": "upper",
     "prettier.bracketSpacing": false,
     "prettier.ignorePath": "/home/lucho/.prettierignore",
@@ -174,11 +174,17 @@
         "editor.defaultFormatter": "AndreOneti.qml-formatter"
     },
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled": false,
     "chat.mcp.gallery.enabled": true,
     "chat.customAgentInSubagent.enabled": true,
     "chat.viewSessions.orientation": "stacked",
     "python.analysis.diagnosticsSource": "Pyright",
     "workbench.browser.enableChatTools": true,
-    "window.restoreWindows": "none"
+    "window.restoreWindows": "none",
+    "Prettier-SQL.expressionWidth": 100,
+    "Prettier-SQL.ignoreTabSettings": true,
+    "Prettier-SQL.SQLFlavourOverride": "mysql",
+    "Prettier-SQL.tabSizeOverride": 4,
+    "Prettier-SQL.denseOperators": true,
+    "Prettier-SQL.tabulateAlias": true
 }

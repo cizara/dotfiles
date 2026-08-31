@@ -18,7 +18,35 @@ Singleton {
     property bool doNotDisturb: false
     
     Process { id: soundProcess }
-    
+
+    // qs ipc call notifications toggleDnd
+    IpcHandler {
+        target: "notifications"
+
+        function toggleDnd(): string {
+            root.doNotDisturb = !root.doNotDisturb
+            return root.doNotDisturb ? "on" : "off"
+        }
+
+        function dndState(): string {
+            return root.doNotDisturb ? "on" : "off"
+        }
+
+        function setDnd(state: string): string {
+            root.doNotDisturb = (state === "on" || state === "true")
+            return root.doNotDisturb ? "on" : "off"
+        }
+
+        function dismissAll(): string {
+            root.clearAll()
+            return "ok"
+        }
+
+        function count(): string {
+            return String(root.data.length)
+        }
+    }
+
     function clearAll() {
         for (var i = data.length - 1; i >= 0; i--) {
             if (data[i] && data[i].notification) {

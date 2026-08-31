@@ -1,0 +1,47 @@
+#!/bin/bash
+# OCR a screen region straight to the clipboard.
+#
+#   capture-text [lang]
+#
+# Env: OCR_LANGS  tesseract language(s), default "eng".
+#      Installed here: eng, spa. Combine with "eng+spa".
+#
+# Press the hotkey again while the picker is up to cancel.
+
+set -uo pipefail
+
+if pkill -x slurp 2>/dev/null; then
+  pkill -x hyprpicker 2>/dev/null
+  exit 0
+fi
+
+LANGS=${1:-${OCR_LANGS:-eng}}
+
+FREEZE_PID=""
+cleanup() { [[ -n $FREEZE_PID ]] && kill "$FREEZE_PID" 2>/dev/null; }
+trap cleanup EXIT
+
+hyprpicker -r -z >/dev/null 2>&1 &
+FREEZE_PID=$!
+sleep 0.15
+
+SELECTION=$(slurp 2>/dev/null) || exit 0
+[[ -z $SELECTION ]] && exit 0
+
+# --psm 6 assumes a uniform block of text, which is what a dragged region almost
+# always is. --dpi 300 stops tesseract guessing badly on scaled displays.
+TEXT=$(grim -g "$SELECTION" - |
+  tesseract stdin stdout --oem 1 --psm 6 -l "$LANGS" --dpi 300 \
+    -c preserve_interword_spaces=1 2>/dev/null)
+
+# Trim trailing blank lines tesseract likes to append.
+TEXT=$(printf '%s' "$TEXT" | sed -e :a -e '/^[[:space:]]*$/{$d;N;ba' -e '}')
+
+if [[ -z ${TEXT//[[:space:]]/} ]]; then
+  notify-send -a screenshot -u low "No text found in selection"
+  exit 1
+fi
+
+printf '%s' "$TEXT" | wl-copy
+notify-send -a screenshot "Text copied to clipboard" \
+  "$(printf '%s' "$TEXT" | head -c 200)"

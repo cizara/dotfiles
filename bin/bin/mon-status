@@ -1,0 +1,55 @@
+#!/bin/bash
+# Resolution, refresh and scale of every Hyprland output.
+#
+# Sirve sobre todo para cazar el fallback silencioso del HDMI: cuando el link training
+# a HBR2 falla, i915 baja el max link rate a HBR (270000), saca del connector todos los
+# modos que necesitan mas banda, y 3840x2160@60 (594 MHz) se convierte en @30 sin avisar.
+# El sintoma que se nota es "la pantalla va rara", no un error.
+#
+#   -n   manda una notificacion en vez de imprimir (para un keybind)
+#
+# El motivo de fondo se ve con (necesita root):
+#   sudo cat /sys/kernel/debug/dri/0000:00:02.0/DP-1/i915_dp_max_link_rate
+#   540000 = HBR2 (4K@60 posible), 270000 = HBR (el techo real pasa a ser 4K@30)
+# Replug fisico del cable es lo unico que lo recupera.
+
+set -e
+
+LOW_HZ=50   # por debajo de esto asumimos que hubo fallback
+
+if ! command -v jq >/dev/null; then
+    echo "mon-status: jq required" >&2
+    exit 1
+fi
+
+json=$(hyprctl monitors -j)
+
+lines=$(echo "$json" | jq -r '
+  .[] |
+  "\(.name)\t\(.width)x\(.height)@\(.refreshRate | round)Hz\tscale=\(.scale)"
+')
+
+# outputs corriendo por debajo del umbral
+degraded=$(echo "$json" | jq -r --argjson low "$LOW_HZ" '
+  .[] | select(.refreshRate < $low) |
+  "\(.name) \(.width)x\(.height)@\(.refreshRate | round)Hz"
+')
+
+if [[ "$1" == "-n" ]]; then
+    body=$(echo "$lines" | column -t -s$'\t')
+    if [[ -n "$degraded" ]]; then
+        notify-send -a hyprland -u critical "Refresh degradado" "$body"$'\n'"Replug del HDMI para recuperar 4K@60"
+    else
+        notify-send -a hyprland "Monitores" "$body"
+    fi
+    exit 0
+fi
+
+echo "$lines" | column -t -s$'\t'
+
+if [[ -n "$degraded" ]]; then
+    echo
+    echo "AVISO: por debajo de ${LOW_HZ}Hz ->"
+    echo "$degraded" | sed 's/^/  /'
+    echo "  probablemente el link cayo a HBR. Desenchufar y reenchufar el HDMI."
+fi

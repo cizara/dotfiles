@@ -144,6 +144,12 @@ Singleton {
                                 }
 
                                 Item { Layout.fillWidth: true }
+
+                                // Session actions, top-right of the header next to
+                                // the uptime readout.
+                                Modules.PowerActions {
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
                             }
 
                             Rectangle {

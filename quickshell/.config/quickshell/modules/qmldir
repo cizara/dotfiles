@@ -1,17 +1,21 @@
+BarIndicator 1.0 BarIndicator.qml
 Battery 1.0 Battery.qml
 Cpu 1.0 Cpu.qml
 DateTime 1.0 DateTime.qml
 Disk 1.0 Disk.qml
 HyprlandWindow 1.0 HyprlandWindow.qml
-MediaPopup 1.0 MediaPopup.qml
+Indicators 1.0 Indicators.qml
 Mediaplayer 1.0 Mediaplayer.qml
+MediaPopup 1.0 MediaPopup.qml
 Memory 1.0 Memory.qml
-NotificationPopupManager 1.0 NotificationPopupManager.qml
 NotificationPopup 1.0 NotificationPopup.qml
+NotificationPopupManager 1.0 NotificationPopupManager.qml
 NotificationsPanel 1.0 NotificationsPanel.qml
+Osd 1.0 Osd.qml
 singleton Panel 1.0 Panel.qml
 Pfpanel 1.0 Pfpanel.qml
 SystemTray 1.0 SystemTray.qml
 Temperature 1.0 Temperature.qml
 WidgetPanel 1.0 WidgetPanel.qml
 Workspaces 1.0 Workspaces.qml
+PowerActions 1.0 PowerActions.qml

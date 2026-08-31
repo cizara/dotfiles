@@ -57,6 +57,8 @@ foreground = #cecece
 background = #0e1415
 
 clipboard-paste-protection = false
+clipboard-read = allow
+clipboard-write = allow
 confirm-close-surface = false
 
 # in bytes - default is 10000000 = 10MB

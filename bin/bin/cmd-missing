@@ -1,0 +1,7 @@
+#!/bin/bash
+# Exit 0 if ANY named command is absent. The inverse of cmd-present, which is not
+# the same as "not cmd-present" when more than one command is given.
+for cmd in "$@"; do
+  command -v "$cmd" >/dev/null 2>&1 || exit 0
+done
+exit 1

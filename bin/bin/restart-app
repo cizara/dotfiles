@@ -1,0 +1,12 @@
+#!/bin/bash
+# Restart a program: kill it by exact name, then relaunch it detached.
+#
+#   restart-app <name> [args...]
+#
+# -x (exact match) matters: without it, `restart-app foot` would also kill
+# footclient, and `restart-app waybar` would match a script with waybar in its path.
+set -uo pipefail
+(($# >= 1)) || { echo "restart-app: usage: restart-app <name> [args...]" >&2; exit 1; }
+pkill -x "$1" 2>/dev/null
+sleep 0.2
+setsid "$@" >/dev/null 2>&1 &

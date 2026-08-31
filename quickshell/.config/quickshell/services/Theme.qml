@@ -1,7 +1,10 @@
 pragma Singleton
 import QtQuick
+import Quickshell
+import Quickshell.Io
 
 QtObject {
+    id: theme
     // Typography
     readonly property string fontFamily: "Hack Nerd Font"
     readonly property string fontFamilyMono: "Hack Nerd Font"
@@ -149,4 +152,72 @@ QtObject {
     readonly property int tooltipGap: 3
     readonly property int tooltipHiddenOffset: 2
     readonly property int tooltipMinClosedWidth: 0
+
+    // ---------------------------------------------------------------- compositor
+    // Structural tokens read back out of Hyprland so the shell cannot drift away
+    // from the window manager. These are for CARD/PANEL surfaces; `moduleRadius`
+    // above is deliberately independent, because it is a pill radius (half of
+    // moduleHeight) and pinning it to window rounding would flatten the bar.
+    //
+    // gapsOut is HALF of Hyprland's general:gaps_out. Hyprland's value is tuned as
+    // a window-to-window gap, which reads as far too much space when reused as the
+    // distance from a panel to the screen edge.
+    property int cornerRadius: 10
+    property int gapsOut: 2
+
+    function applyRounding(raw) {
+        const n = Number(JSON.parse(raw || "{}").int);
+        if (isFinite(n) && n >= 0)
+            theme.cornerRadius = Math.round(n);
+    }
+
+    function applyGapsOut(raw) {
+        // Unlike decoration:rounding, this option answers with a CSS-style
+        // four-value string ("5 5 5 5") in a `css` field rather than an int.
+        const parsed = JSON.parse(raw || "{}");
+        const first = String(parsed.css !== undefined ? parsed.css : parsed.int ?? "")
+            .trim().split(/\s+/)[0];
+        const n = Number(first);
+        if (isFinite(n) && n >= 0)
+            theme.gapsOut = Math.max(0, Math.round(n / 2));
+    }
+
+    function refreshFromCompositor() {
+        roundingProc.running = false;
+        roundingProc.running = true;
+        gapsOutProc.running = false;
+        gapsOutProc.running = true;
+    }
+
+    property Process roundingProc: Process {
+        command: ["hyprctl", "-j", "getoption", "decoration:rounding"]
+        stdout: StdioCollector {
+            waitForEnd: true
+            onStreamFinished: theme.applyRounding(text)
+        }
+    }
+
+    property Process gapsOutProc: Process {
+        command: ["hyprctl", "-j", "getoption", "general:gaps_out"]
+        stdout: StdioCollector {
+            waitForEnd: true
+            onStreamFinished: theme.applyGapsOut(text)
+        }
+    }
+
+    // Hyprland's auto-reload is asynchronous: it notices the .lua change on its
+    // own schedule, so querying the moment the file changes returns the OLD value.
+    // Wait for it to settle first.
+    property Timer settleTimer: Timer {
+        interval: 200
+        onTriggered: theme.refreshFromCompositor()
+    }
+
+    property FileView hyprTheme: FileView {
+        path: Quickshell.env("HOME") + "/.config/hypr/theme.lua"
+        watchChanges: true
+        onFileChanged: theme.settleTimer.restart()
+    }
+
+    Component.onCompleted: refreshFromCompositor()
 }

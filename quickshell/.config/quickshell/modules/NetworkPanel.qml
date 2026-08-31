@@ -271,6 +271,178 @@ Item {
             color: Services.Theme.colorSurface1
         }
 
+        // ===== Active connection detail =====
+        // Everything here comes from `iw` + sysfs via the net-status helper, so it
+        // works on iwd without NetworkManager. Hidden entirely when disconnected
+        // rather than showing a row of dashes.
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: Services.Theme.spacingTiny
+            visible: Services.Network?.connected ?? false
+
+            // Signal and radio: dBm is the honest number, the percentage is a
+            // derived convenience.
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Services.Theme.spacingSmall
+
+                Text {
+                    text: "󰤨"
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.iconSizeNormal
+                    color: Services.Theme.colorAccent
+                }
+
+                Text {
+                    text: {
+                        const n = Services.Network
+                        if (!n) return ""
+                        let parts = []
+                        if (n.signalDbm !== null && n.signalDbm !== undefined)
+                            parts.push(n.signalDbm + " dBm (" + n.signalStrength + "%)")
+                        if (n.band !== "")
+                            parts.push(n.bandLabel())
+                        return parts.join("  ·  ")
+                    }
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.fontSizeMedium
+                    color: Services.Theme.colorSubtext1
+                    Layout.fillWidth: true
+                }
+            }
+
+            // Negotiated link rate, which is not the same thing as throughput.
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Services.Theme.spacingSmall
+                visible: (Services.Network?.rxBitrate ?? null) !== null
+
+                Text {
+                    text: "󱘖"
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.iconSizeNormal
+                    color: Services.Theme.colorSubtext0
+                }
+
+                Text {
+                    text: {
+                        const n = Services.Network
+                        if (!n || n.rxBitrate === null) return ""
+                        return "link " + n.rxBitrate + " / " + n.txBitrate + " Mbit/s"
+                    }
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.fontSizeMedium
+                    color: Services.Theme.colorSubtext0
+                    Layout.fillWidth: true
+                }
+            }
+
+            // Live throughput, from byte-counter deltas.
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Services.Theme.spacingSmall
+
+                Text {
+                    text: "󰇚"
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.iconSizeNormal
+                    color: Services.Theme.colorGreen
+                }
+                Text {
+                    text: Services.Network?.formatRate(Services.Network.rxRate) ?? ""
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.fontSizeMedium
+                    color: Services.Theme.colorSubtext1
+                }
+
+                Text {
+                    text: "󰕒"
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.iconSizeNormal
+                    color: Services.Theme.colorBlue
+                }
+                Text {
+                    text: Services.Network?.formatRate(Services.Network.txRate) ?? ""
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.fontSizeMedium
+                    color: Services.Theme.colorSubtext1
+                }
+
+                Item { Layout.fillWidth: true }
+            }
+
+            // Latency on its own row: at this text size, sharing a line with both
+            // throughput figures overflows the 360px panel.
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Services.Theme.spacingSmall
+
+                Text {
+                    text: "󱎫"
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.iconSizeNormal
+                    color: {
+                        const n = Services.Network
+                        if (!n) return Services.Theme.colorSubtext0
+                        if (n.packetLossPercent > 0) return Services.Theme.colorError
+                        if (n.pingAvgMs > 150) return Services.Theme.colorWarning
+                        return Services.Theme.colorSubtext0
+                    }
+                }
+
+                // Coloured by how bad it is. A lost packet shows as a gap rather
+                // than a zero, so a dead link is obvious instead of looking fast.
+                Text {
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                    text: {
+                        const n = Services.Network
+                        if (!n) return ""
+                        if (n.packetLossPercent >= 100) return "no reply"
+                        if (n.pingMs === null) return "—"
+                        let s = Math.round(n.pingMs) + " ms"
+                        if (n.pingAvgMs > 0) s += "  (avg " + (Math.round(n.pingAvgMs * 10) / 10) + ")"
+                        if (n.packetLossPercent > 0) s += "  " + n.packetLossPercent + "% loss"
+                        return s
+                    }
+                    font.family: Services.Theme.fontFamilyMono
+                    font.pixelSize: Services.Theme.fontSizeMedium
+                    color: {
+                        const n = Services.Network
+                        if (!n) return Services.Theme.colorSubtext0
+                        if (n.packetLossPercent > 0) return Services.Theme.colorError
+                        if (n.pingAvgMs > 150) return Services.Theme.colorWarning
+                        return Services.Theme.colorSubtext1
+                    }
+                }
+            }
+
+            // Only shown when traffic is NOT going out over the wireless card —
+            // with Tailscale up the default route is tailscale0, and silently
+            // reporting Wi-Fi stats would be misleading.
+            Text {
+                Layout.fillWidth: true
+                visible: {
+                    const n = Services.Network
+                    return !!n && n.device !== "" && n.device !== n.wifiDevice
+                }
+                text: {
+                    const n = Services.Network
+                    return n ? "routing via " + n.device : ""
+                }
+                font.family: Services.Theme.fontFamilyMono
+                font.pixelSize: Services.Theme.fontSizeMedium
+                color: Services.Theme.colorPeach
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: Services.Theme.colorSurface1
+            visible: Services.Network?.connected ?? false
+        }
+
         // List
         ScrollView {
             Layout.fillWidth: true

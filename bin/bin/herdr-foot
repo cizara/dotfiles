@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Focus the herdr window, or start one in foot.
+#
+# The --pid-child fallback matters: a herdr started by hand inside a foot window
+# that was not given --app-id=herdr has no matching class, but it is still the
+# child process of that window's shell.
+
+exec launch-or-focus --pid-child herdr herdr \
+  foot --app-id=herdr --title=HerdR herdr

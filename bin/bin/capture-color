@@ -1,0 +1,13 @@
+#!/bin/bash
+# Eyedropper: click anything on screen and get its colour on the clipboard.
+# Pressing the hotkey again backs out without picking.
+
+set -uo pipefail
+
+# The pkill-or-launch idiom: one key both opens and cancels the picker.
+pkill -x hyprpicker 2>/dev/null && exit 0
+
+COLOR=$(hyprpicker --autocopy 2>/dev/null) || exit 0
+[[ -z $COLOR ]] && exit 0
+
+notify-send -a screenshot -u low "Colour copied" "$COLOR"

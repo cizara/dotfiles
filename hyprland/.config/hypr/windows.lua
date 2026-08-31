@@ -1,0 +1,175 @@
+-- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
+-- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
+
+-- Rules stored as locals can be toggled with :set_enabled(false) for debugging
+local suppressMaximize = hl.window_rule({
+    name  = "suppress-maximize-events",
+    match = { class = ".*" },
+    suppress_event = "maximize",
+})
+-- suppressMaximize:set_enabled(false)
+
+hl.window_rule({
+    name  = "fix-xwayland-drags",
+    match = {
+        class      = "^$",
+        title      = "^$",
+        xwayland   = true,
+        float      = true,
+        fullscreen = false,
+        pin        = false,
+    },
+    no_focus = true,
+})
+
+hl.window_rule({
+    name  = "move-hyprland-run",
+    match = { class = "hyprland-run" },
+    move  = "20 monitor_h-120",
+    float = true,
+})
+
+
+-- Floating windows
+hl.window_rule({
+    name  = "obsidian-float",
+    match = { class = "^(md\\.obsidian\\.Obsidian)$" },
+    float = true,
+    size  = "1200 1500",
+})
+
+hl.window_rule({
+    name  = "btop-float",
+    match = { title = "^(btop)$" },
+    float = true,
+    size  = "1300 850",
+    move  = "40 70",
+})
+
+hl.window_rule({
+    name  = "misc-float",
+    match = { class = "^(Cssh|galculator|zoom)$" },
+    float = true,
+})
+
+hl.window_rule({
+    name  = "pavucontrol-float",
+    match = { class = "^(org.pulseaudio.pavucontrol)$" },
+    float = true,
+    size  = "1600 1000",
+    move  = "40 70",
+})
+
+hl.window_rule({
+    name  = "file-dialog-float",
+    match = { title = "^(Open|Save) (File|Folder|As|file|folder|as).*$" },
+    float = true,
+    size  = "1400 1000",
+})
+
+hl.window_rule({
+    name  = "file-dialog-float-2",
+    match = { title = ".* wants to (open|save)$" },
+    float = true,
+})
+
+-- Chromium's "X is sharing your screen" indicator. Its own Hide button is broken
+-- under Wayland, so park the whole window on a hidden special workspace instead of
+-- floating it. Matched loosely on purpose: the wording varies between Brave, Chrome
+-- and Meet. (The previous pattern used the Lua escape "%." — these strings are
+-- handed to Hyprland as regex, where that means a literal "%", so it never matched.)
+hl.window_rule({
+    name      = "screen-share-indicator-hide",
+    match     = { title = ".*is sharing.*" },
+    workspace = "special silent",
+})
+
+hl.window_rule({
+    name  = "google-signin-float",
+    match = { title = "^Sign in - Google Accounts.*" },
+    float = true,
+})
+
+hl.window_rule({
+    name    = "launcher-style",
+    match   = { class = "^(launcher)$" },
+    border_size = 0,
+    opacity = 0.8,
+})
+
+hl.window_rule({
+    name  = "mousepad-float",
+    match = { class = "^(org.xfce.mousepad)$" },
+    float = true,
+    size  = "1300 1000",
+})
+
+
+-- Picture-in-picture: pinned so it follows across workspaces, and positioned by
+-- arithmetic rather than fixed pixels so it lands in the top-right inset on both
+-- DP-1 (4K, scale 1) and eDP-1 (3200x1800, scale 1.333).
+hl.window_rule({
+    name              = "pip",
+    match             = { title = "(Picture.?in.?[Pp]icture)" },
+    float             = true,
+    pin               = true,
+    size              = { 600, 338 },
+    keep_aspect_ratio = true,
+    border_size       = 0,
+    move              = { "(monitor_w-window_w-40)", "(monitor_h*0.04)" },
+})
+
+
+-- Privacy: keep the password manager out of screen shares and recordings.
+hl.window_rule({
+    name             = "keepassxc-no-screen-share",
+    match            = { class = "^(org\\.keepassxc\\.KeePassXC)$" },
+    no_screen_share  = true,
+})
+
+
+-- Stop Slack yanking focus mid-typing every time a message arrives. The class is
+-- lowercase "slack" (the *title* is the capitalised one), so "^(Slack)$" matched
+-- nothing and the rule did nothing at all.
+--
+-- This also kills the tray icon as a way to reveal Slack: clicking it sends an
+-- activation request, which is exactly what this suppresses. Use Super+S (or
+-- Super+Ctrl+S for the overlay) to get it back out of the scratchpad.
+hl.window_rule({
+    name              = "slack-no-focus-steal",
+    match             = { class = "^(slack)$" },
+    focus_on_activate = false,
+})
+
+
+-- Idle inhibit
+hl.window_rule({
+    name         = "firefox-meet-idle",
+    match        = { class = "^(Firefox)$", title = "^(Meet - .*-.*-.*)$" },
+    idle_inhibit = "focus",
+})
+
+
+-- Zoom
+hl.window_rule({
+    name  = "zoom-audio-float",
+    match = { class = "^(zoom)$", title = "^(Choose ONE of the audio conference options|zoom)$" },
+    float = true,
+})
+
+hl.window_rule({
+    name = "zoom-meeting-tile",
+    match = { class = "^(zoom)$", title = "^(Zoom Meeting|Zoom - Free Account)$" },
+    tile  = true,
+})
+
+hl.window_rule({
+    name         = "zoom-inhibit-idle",
+    match        = { class = "^(zoom)$" },
+    idle_inhibit = "fullscreen",
+})
+
+
+-- Layer rules (uncomment to use, e.g. to add blur to wofi or waybar)
+-- hl.layer_rule({ name = "wofi-blur",   match = { namespace = "^wofi$"   }, blur = true })
+-- hl.layer_rule({ name = "waybar-blur", match = { namespace = "^waybar$" }, blur = true })

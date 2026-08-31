@@ -1,0 +1,104 @@
+#!/bin/bash
+# Print current network state as one JSON object.
+#
+# Replaces scraping `iwctl station show` for SSID + RSSI. Everything here is
+# backend-agnostic (iw / ip / sysfs), so it does not care that this machine runs
+# iwd + networkd rather than NetworkManager.
+#
+# Emits: dev wifiDev kind ssid signalDbm quality freqMhz band rxBitrate txBitrate
+#        rxBytes txBytes powered
+#
+# Byte counters are absolute, not rates: the caller diffs them over time, which
+# keeps this script stateless.
+
+set -uo pipefail
+
+json_escape() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
+
+# The wireless interface, found by capability rather than by name — the old code
+# hardcoded "wlan0".
+wifi_dev=""
+for w in /sys/class/net/*/wireless; do
+  [[ -e $w ]] || continue
+  wifi_dev=$(basename "$(dirname "$w")")
+  break
+done
+
+# The interface currently carrying traffic. Deliberately NOT used to pick the
+# wireless device: with Tailscale up, the route to a public IP can resolve to
+# tailscale0, which has no wireless directory and would otherwise be reported as
+# a wired connection.
+route_dev=$(ip route get 1.1.1.1 2>/dev/null |
+  awk '{ for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+
+kind="none"
+if [[ -n $route_dev ]]; then
+  if [[ -d /sys/class/net/$route_dev/wireless ]]; then
+    kind="wifi"
+  elif [[ $route_dev == "lo" ]]; then
+    kind="none"
+  else
+    # tailscale0, docker0, eth0 ... anything that is not the wireless card.
+    kind="other"
+  fi
+fi
+
+ssid="" signal_dbm="" quality=0 freq_mhz="" band="" rx_rate="" tx_rate=""
+rx_bytes=0 tx_bytes=0 powered=false
+
+if [[ -n $wifi_dev ]]; then
+  # iwd's "Powered off" takes the link down, so operstate answers this without
+  # shelling out to iwctl. "dormant" happens mid-association and is not "off".
+  state=$(cat "/sys/class/net/$wifi_dev/operstate" 2>/dev/null || echo down)
+  [[ $state != "down" ]] && powered=true
+
+  read -r rx_bytes < "/sys/class/net/$wifi_dev/statistics/rx_bytes" 2>/dev/null || rx_bytes=0
+  read -r tx_bytes < "/sys/class/net/$wifi_dev/statistics/tx_bytes" 2>/dev/null || tx_bytes=0
+
+  # One `iw link` call carries SSID, frequency, signal and both bitrates —
+  # `iwctl station show` only had SSID and RSSI.
+  link=$(iw dev "$wifi_dev" link 2>/dev/null)
+  if [[ -n $link && $link != *"Not connected"* ]]; then
+    ssid=$(awk -F': ' '/^\tSSID: /{ sub(/^\tSSID: /, ""); print; exit }' <<<"$link")
+    [[ -z $ssid ]] && ssid=$(sed -n 's/^\s*SSID: //p' <<<"$link" | head -n1)
+    signal_dbm=$(awk '/signal:/ { print $2; exit }' <<<"$link")
+    freq_mhz=$(awk '/freq:/ { print $2; exit }' <<<"$link")
+    rx_rate=$(awk '/rx bitrate:/ { print $3; exit }' <<<"$link")
+    tx_rate=$(awk '/tx bitrate:/ { print $3; exit }' <<<"$link")
+  fi
+fi
+
+# Same dBm -> percent curve the previous implementation used, so signalStrength
+# keeps meaning the same thing to everything already consuming it.
+if [[ -n $signal_dbm ]]; then
+  q=$(awk -v s="${signal_dbm%%.*}" 'BEGIN { q = 2 * (s + 100); if (q > 100) q = 100; if (q < 0) q = 0; printf "%d", q }')
+  quality=$q
+fi
+
+# Band boundaries match iw's reported centre frequency.
+if [[ -n $freq_mhz ]]; then
+  mhz=${freq_mhz%%.*}
+  if ((mhz >= 2400 && mhz < 2500)); then
+    band="2.4"
+  elif ((mhz >= 4900 && mhz < 5925)); then
+    band="5"
+  elif ((mhz >= 5925 && mhz < 7125)); then
+    band="6"
+  fi
+fi
+
+printf '{'
+printf '"dev":"%s",' "$(json_escape "${route_dev:-}")"
+printf '"wifiDev":"%s",' "$(json_escape "$wifi_dev")"
+printf '"kind":"%s",' "$kind"
+printf '"ssid":"%s",' "$(json_escape "$ssid")"
+printf '"signalDbm":%s,' "${signal_dbm:-null}"
+printf '"quality":%s,' "$quality"
+printf '"freqMhz":%s,' "${freq_mhz:-null}"
+printf '"band":"%s",' "$band"
+printf '"rxBitrate":%s,' "${rx_rate:-null}"
+printf '"txBitrate":%s,' "${tx_rate:-null}"
+printf '"rxBytes":%s,' "$rx_bytes"
+printf '"txBytes":%s,' "$tx_bytes"
+printf '"powered":%s' "$powered"
+printf '}\n'

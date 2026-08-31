@@ -57,6 +57,9 @@ Scope {
                 spacing: 6
 
                 HyprlandWindow {}
+
+                // Active modes only; hover to reveal the inactive ones.
+                Indicators {}
             }
 
             // RIGHT

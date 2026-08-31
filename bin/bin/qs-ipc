@@ -1,0 +1,85 @@
+#!/bin/bash
+# Send an IPC call to the running quickshell instance.
+#
+#   qs-ipc [-q] <target> <function> [args...]
+#
+# Why this exists rather than calling `qs ipc call` directly:
+#
+#   1. qs reports IPC-level failures on STDOUT WITH EXIT 0. Only a failure to
+#      connect to the instance is a nonzero exit. So an unknown target, a typo'd
+#      function name or a bad argument count all look like success unless the
+#      output is inspected. Verified directly:
+#        $ qs ipc call shell nosuchfn   -> "Function not found."  exit 0
+#        $ qs ipc call nope ping        -> "Target not found."    exit 0
+#
+#   2. Keybinds must never block. A wedged shell would otherwise hang the
+#      dispatcher, so every call is bounded by a timeout.
+#
+#   3. -q makes a call best-effort: no output, always exit 0. Use it from
+#      Hyprland binds so a call during a shell restart fails silently instead of
+#      surfacing an error.
+
+set -uo pipefail
+
+QUIET=0
+if [[ ${1:-} == "-q" ]]; then
+  QUIET=1
+  shift
+fi
+
+fail() {
+  ((QUIET)) && exit 0
+  echo "qs-ipc: $1" >&2
+  exit 1
+}
+
+if (($# < 2)) || [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
+  cat <<'USAGE'
+Usage: qs-ipc [-q] <target> <function> [args...]
+
+  -q   Best-effort: suppress output and exit 0 even on failure.
+
+Examples:
+  qs-ipc shell ping
+  qs-ipc wallpaper next
+  qs-ipc notifications toggleDnd
+  qs-ipc osd show '{"icon":"volume-high","value":"40"}'
+
+List available targets and their signatures with:
+  qs ipc show
+USAGE
+  exit 0
+fi
+
+# qs matches instances by Wayland display. A caller from a TTY, an ssh session or
+# a systemd unit has none, so recover it from the compositor socket.
+if [[ -z ${WAYLAND_DISPLAY:-} ]]; then
+  socket=$(ls -t "${XDG_RUNTIME_DIR:-/run/user/$UID}"/wayland-[0-9]* 2>/dev/null |
+    grep -v '\.lock$' | head -n1)
+  [[ -n $socket ]] && export WAYLAND_DISPLAY=${socket##*/}
+fi
+
+# The `--` matters: it forces everything after it to be treated as positional
+# arguments. Without it, a function named after a qs subcommand — `show` is the
+# one that bites — gets parsed as that subcommand instead of being passed
+# through, and the call fails with a misleading connection error.
+output=$(timeout --kill-after=1s "${QS_IPC_TIMEOUT:-2s}" qs ipc call -- "$@" 2>/dev/null)
+status=$?
+
+# 124 = timeout expired, 137 = SIGKILL after --kill-after.
+if ((status == 124 || status == 137)); then
+  fail "quickshell is not responding"
+elif ((status != 0)); then
+  fail "quickshell is not running"
+fi
+
+# The exit-0-on-stdout cases described above.
+case $output in
+  "Target not found."* | "Function not found."* | \
+    "Too few arguments provided"* | "Too many arguments provided"* | \
+    "Not ready to accept queries yet"*)
+    fail "$output"
+    ;;
+esac
+
+((QUIET)) || [[ -z $output ]] || echo "$output"

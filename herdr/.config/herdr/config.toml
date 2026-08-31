@@ -1,0 +1,38 @@
+onboarding = false
+
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[ui]
+# copy_on_select stays at its default true: mouse drag copies, click focuses a
+# pane, scroll works per pane, and selection respects split boundaries. Know the
+# trade: herdr hardcodes OSC 52 target `c`, so a drag lands in CLIPBOARD and
+# overwrites Ctrl+Insert. Shift+drag bypasses herdr and selects into PRIMARY.
+
+# These two live in [ui]; they were under [keys], where herdr ignored them
+# ("unknown config key keys.confirm_close" from `herdr config check`).
+confirm_close = false
+prompt_new_tab_name = false
+
+[keys]
+# Panes
+split_horizontal = ["prefix+h", "alt+enter"]
+split_vertical = ["prefix+v", "alt+shift+enter"]
+
+# Focus & Moving
+focus_pane_left = ["prefix+h", "alt+h"]
+focus_pane_down = ["prefix+j", "alt+j"]
+focus_pane_up = ["prefix+k", "alt+k"]
+focus_pane_right = ["prefix+l", "alt+l"]
+previous_tab = ["prefix+p", "alt+left"]
+next_tab = ["prefix+n", "alt+right"]
+new_tab = ["prefix+c", "alt+n"]
+previous_workspace = "alt+up"
+next_workspace = "alt+down"
+
+# Workspaces
+# Keeps herdr's default prefix+shift+n and adds alt+s, matching the alt+... form
+# every other action here has. alt+s is free: no herdr default uses it, and
+# Hyprland only binds ALT as part of SUPER+ALT, so nothing intercepts it first.
+new_workspace = ["prefix+shift+n", "alt+s"]

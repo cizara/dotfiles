@@ -1,0 +1,45 @@
+#!/bin/bash
+# Adjust display brightness and show the result on the OSD.
+#
+#   brightness up [step%]     raise (default 5%)
+#   brightness down [step%]
+#   brightness set <value>    e.g. 50%, or 100%/1% for max/min
+#
+# Replaces the previous bind, which scraped a percentage out of brightnessctl's
+# human-readable output with sed and piped it into a wob FIFO. brightnessctl can
+# report the value directly, so the sed goes away with the FIFO.
+
+set -uo pipefail
+
+action=${1:-}
+step=${2:-5%}
+
+icon_for() {
+  local level=$1
+  if ((level < 34)); then
+    echo brightness-low
+  elif ((level < 67)); then
+    echo brightness-medium
+  else
+    echo brightness-high
+  fi
+}
+
+case $action in
+  # -n1 keeps a minimum of 1 so the backlight can never be driven fully off,
+  # which on this panel is indistinguishable from the machine having died.
+  up) brightnessctl -q set "+${step}" ;;
+  down) brightnessctl -q -n1 set "${step}-" ;;
+  set) brightnessctl -q -n1 set "${2:-50%}" ;;
+  *)
+    echo "brightness: usage: brightness {up|down|set} [amount]" >&2
+    exit 1
+    ;;
+esac
+
+current=$(brightnessctl get 2>/dev/null || echo 0)
+max=$(brightnessctl max 2>/dev/null || echo 1)
+((max == 0)) && max=1
+level=$((current * 100 / max))
+
+osd -i "$(icon_for "$level")" -p "$level"
