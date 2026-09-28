@@ -58,6 +58,7 @@ Item {
     }
 
     Text {
+        textFormat: Text.PlainText
         anchors.centerIn: parent
         text: root.glyph
         color: root.active ? Services.Theme.colorAccent : Services.Theme.colorSubtext0

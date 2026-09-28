@@ -63,6 +63,7 @@ Rectangle {
             Repeater {
                 model: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
                 Text {
+                    textFormat: Text.PlainText
                     width: headerGrid.cellW
                     height: 18
                     text: modelData
@@ -124,6 +125,7 @@ Rectangle {
                         antialiasing: true
 
                         Text {
+                            textFormat: Text.PlainText
                             anchors.centerIn: parent
                             text: parent.parent.displayDay
                             font.family: "Adwaita Sans"

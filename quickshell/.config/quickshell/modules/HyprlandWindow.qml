@@ -33,6 +33,7 @@ Item {
             
             // Window icon
             Text {
+                textFormat: Text.PlainText
                 anchors.verticalCenter: parent.verticalCenter
                 text: "󰌯"
                 font.family: Services.Theme.fontFamilyMono
@@ -43,6 +44,7 @@ Item {
             
             // Window title
             Text {
+                textFormat: Text.PlainText
                 id: titleText
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.title || "Desktop"

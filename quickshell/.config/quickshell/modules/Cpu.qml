@@ -108,6 +108,7 @@ Item {
 
     // center icon
     Text {
+        textFormat: Text.PlainText
         anchors.centerIn: parent
         text: "󰻠"
         font.family: Services.Theme.fontFamilyMono
@@ -151,6 +152,7 @@ Item {
             anchors.leftMargin: 0
 
             Text {
+                textFormat: Text.PlainText
                 id: tipTextItem
                 anchors.centerIn: parent
                 text: "CPU: " + root.percent + "%"

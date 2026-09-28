@@ -181,6 +181,7 @@ Item {
                 color: backMouse.containsMouse ? Services.Theme.colorSurface1 : "transparent"
                 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "󰁮" // Back arrow icon
                     font.family: Services.Theme.fontFamilyMono
@@ -197,6 +198,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 text: "Wi-Fi Networks"
                 font.family: Services.Theme.fontFamilyMono
                 font.pixelSize: Services.Theme.fontSizeLarge
@@ -220,6 +222,7 @@ Item {
                 Behavior on opacity { NumberAnimation { duration: Services.Theme.animDurationNormal } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: Services.Network?.wifiEnabled ? "󰤨" : "󰤭"
                     font.family: Services.Theme.fontFamilyMono
@@ -246,6 +249,7 @@ Item {
                 color: refreshMouse.containsMouse ? Services.Theme.colorSurface1 : "transparent"
                 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "󰑐" // Refresh icon
                     font.family: Services.Theme.fontFamilyMono
@@ -287,6 +291,7 @@ Item {
                 spacing: Services.Theme.spacingSmall
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "󰤨"
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.iconSizeNormal
@@ -294,6 +299,7 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: {
                         const n = Services.Network
                         if (!n) return ""
@@ -318,6 +324,7 @@ Item {
                 visible: (Services.Network?.rxBitrate ?? null) !== null
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "󱘖"
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.iconSizeNormal
@@ -325,6 +332,7 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: {
                         const n = Services.Network
                         if (!n || n.rxBitrate === null) return ""
@@ -343,12 +351,14 @@ Item {
                 spacing: Services.Theme.spacingSmall
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "󰇚"
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.iconSizeNormal
                     color: Services.Theme.colorGreen
                 }
                 Text {
+                    textFormat: Text.PlainText
                     text: Services.Network?.formatRate(Services.Network.rxRate) ?? ""
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.fontSizeMedium
@@ -356,12 +366,14 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "󰕒"
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.iconSizeNormal
                     color: Services.Theme.colorBlue
                 }
                 Text {
+                    textFormat: Text.PlainText
                     text: Services.Network?.formatRate(Services.Network.txRate) ?? ""
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.fontSizeMedium
@@ -378,6 +390,7 @@ Item {
                 spacing: Services.Theme.spacingSmall
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "󱎫"
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.iconSizeNormal
@@ -393,6 +406,7 @@ Item {
                 // Coloured by how bad it is. A lost packet shows as a gap rather
                 // than a zero, so a dead link is obvious instead of looking fast.
                 Text {
+                    textFormat: Text.PlainText
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                     text: {
@@ -421,6 +435,7 @@ Item {
             // with Tailscale up the default route is tailscale0, and silently
             // reporting Wi-Fi stats would be misleading.
             Text {
+                textFormat: Text.PlainText
                 Layout.fillWidth: true
                 visible: {
                     const n = Services.Network
@@ -473,6 +488,7 @@ Item {
                         spacing: Services.Theme.spacingMedium
 
                         Text {
+                            textFormat: Text.PlainText
                             text: "󰤨" 
                             font.family: Services.Theme.fontFamilyMono
                             font.pixelSize: Services.Theme.iconSizeNormal
@@ -485,6 +501,7 @@ Item {
                             spacing: 2
                             
                             Text {
+                                textFormat: Text.PlainText
                                 text: model.ssid || "Unknown SSID"
                                 font.family: Services.Theme.fontFamilyMono
                                 font.pixelSize: Services.Theme.fontSizeNormal
@@ -496,6 +513,7 @@ Item {
                             }
                             
                             Text {
+                                textFormat: Text.PlainText
                                 text: (model.security || "") + " • " + (model.signal || "")
                                 font.family: Services.Theme.fontFamilyMono
                                 font.pixelSize: Services.Theme.fontSizeSmall
@@ -505,6 +523,7 @@ Item {
                         }
                         
                         Text {
+                            textFormat: Text.PlainText
                             visible: (model.isCurrent === true)
                             text: ""
                             font.family: Services.Theme.fontFamilyMono
@@ -575,6 +594,7 @@ Item {
                 spacing: Services.Theme.spacingMedium
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "Password for " + root.pendingSsid
                     font.family: Services.Theme.fontFamilyMono
                     font.pixelSize: Services.Theme.fontSizeLarge
@@ -619,6 +639,7 @@ Item {
                         border.color: Services.Theme.colorSurface1
 
                         Text {
+                            textFormat: Text.PlainText
                             anchors.centerIn: parent
                             text: "Cancel"
                             font.family: Services.Theme.fontFamilyMono
@@ -660,6 +681,7 @@ Item {
                         }
 
                         Text {
+                            textFormat: Text.PlainText
                             anchors.centerIn: parent
                             text: "Connect"
                             font.family: Services.Theme.fontFamilyMono

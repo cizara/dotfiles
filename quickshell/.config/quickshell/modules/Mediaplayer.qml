@@ -103,6 +103,7 @@ Item {
                 Behavior on color { ColorAnimation { duration: 120 } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: root.isPlaying ? "󰏤" : "󰐊"
                     font.family: "Hack Nerd Font"
@@ -135,6 +136,7 @@ Item {
 
             // Simple text with ellipsis (no animation)
             Text {
+                textFormat: Text.PlainText
                 id: mediaText
                 Layout.maximumWidth: 510 - 4 - 8 - 20 - 8 - 4  // maxWidth - margins - spacing - button - spacing - margins
                 Layout.alignment: Qt.AlignVCenter

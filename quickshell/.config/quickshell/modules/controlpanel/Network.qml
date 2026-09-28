@@ -76,6 +76,7 @@ Item {
             spacing: Services.Theme.spacingLarge
 
             Text {
+                textFormat: Text.PlainText
                 text: wifiIcon(root.wifiEnabled, root.isConnected, Services.Network?.signalStrength ?? 0)
                 color: iconColor
                 font.pixelSize: Services.Theme.iconSizeLarge
@@ -90,6 +91,7 @@ Item {
                 Layout.alignment: Qt.AlignVCenter
 
                 Text {
+                    textFormat: Text.PlainText
                     Layout.fillWidth: true
                     text: root.wifiEnabled
                           ? (Services.Network?.connectedSsid || "Wi-Fi")
@@ -101,6 +103,7 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     Layout.fillWidth: true
                     text: subtitleText()
                     color: subtitleColor

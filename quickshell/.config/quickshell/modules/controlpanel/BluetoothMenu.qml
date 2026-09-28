@@ -148,6 +148,7 @@ Popup {
             spacing: Services.Theme.spacingMedium
 
             Text {
+                textFormat: Text.PlainText
                 text: "Bluetooth"
                 color: menu.text
                 font.pixelSize: Services.Theme.fontSizeNormal
@@ -166,6 +167,7 @@ Popup {
                 Behavior on color { ColorAnimation { duration: Services.Theme.animDurationNormal } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "󰅓"
                     font.family: Services.Theme.fontFamilyMono
@@ -222,6 +224,7 @@ Popup {
                             spacing: Services.Theme.spacingLarge
 
                             Text {
+                                textFormat: Text.PlainText
                                 text: model.connected ? "󰂱" : "󰂯"
                                 font.family: Services.Theme.fontFamilyMono
                                 font.pixelSize: Services.Theme.iconSizeLarge
@@ -235,6 +238,7 @@ Popup {
                                 spacing: -Services.Theme.spacingTiny
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     text: model.name
                                     color: menu.text
                                     font.pixelSize: Services.Theme.fontSizeSmall
@@ -244,6 +248,7 @@ Popup {
                                 }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     text: model.connected ? "Connected" : (model.paired ? "Paired" : "Not paired")
                                     color: menu.subtext
                                     font.pixelSize: Services.Theme.fontSizeSmall
@@ -253,6 +258,7 @@ Popup {
                             }
 
                             Text {
+                                textFormat: Text.PlainText
                                 text: model.connected ? "Disconnect" : "Connect"
                                 color: menu.subtext
                                 font.pixelSize: Services.Theme.fontSizeSmall
@@ -275,6 +281,7 @@ Popup {
         }
 
         Text {
+            textFormat: Text.PlainText
             Layout.fillWidth: true
             text: menu.statusText
             color: menu.subtext

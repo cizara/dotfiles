@@ -141,6 +141,7 @@ Row {
             // Label doubles as the confirm prompt, so an armed button says what a
             // second click will do rather than relying on colour alone.
             Text {
+                textFormat: Text.PlainText
                 anchors.bottom: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: mouse.containsMouse || button.arming

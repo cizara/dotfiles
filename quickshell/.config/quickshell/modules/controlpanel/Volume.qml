@@ -131,6 +131,7 @@ Item {
             spacing: 10
 
             Text {
+                textFormat: Text.PlainText
                 text: "  Volume"
                 font.family: "Hack Nerd Font"
                 font.pixelSize: 14
@@ -142,6 +143,7 @@ Item {
             Item { Layout.fillWidth: true }
 
             Text {
+                textFormat: Text.PlainText
                 text: root.uiValue + "%"
                 font.pixelSize: 14
                 color: root.textColor
@@ -165,6 +167,7 @@ Item {
                 Behavior on color { ColorAnimation { duration: Services.Theme.animDurationNormal } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "󰅂"
                     font.family: Services.Theme.fontFamilyMono

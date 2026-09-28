@@ -78,6 +78,7 @@ Item {
             spacing: Services.Theme.spacingLarge
 
             Text {
+                textFormat: Text.PlainText
                 text: "󰃠  Brightness"
                 font.family: Services.Theme.fontFamilyMono
                 font.pixelSize: Services.Theme.fontSizeNormal
@@ -89,6 +90,7 @@ Item {
             Item { Layout.fillWidth: true }
 
             Text {
+                textFormat: Text.PlainText
                 text: root.uiValue + "%"
                 font.pixelSize: Services.Theme.fontSizeNormal
                 color: root.textColor

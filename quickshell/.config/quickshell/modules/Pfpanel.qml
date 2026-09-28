@@ -40,6 +40,7 @@ Rectangle {
         spacing: Services.Theme.spacingTiny
 
         Text {
+            textFormat: Text.PlainText
             text: wifiIcon(Services.Network?.connected ?? false, Services.Network?.signalStrength ?? 0)
             font.family: Services.Theme.fontFamilyMono
             font.pixelSize: Services.Theme.fontSizeNormal
@@ -49,6 +50,7 @@ Rectangle {
         }
 
         Text {
+            textFormat: Text.PlainText
             text: ""
             font.family: Services.Theme.fontFamilyMono
             font.pixelSize: Services.Theme.fontSizeNormal
@@ -58,6 +60,7 @@ Rectangle {
         }
 
         Text {
+            textFormat: Text.PlainText
             text: "󰃠 "
             font.family: Services.Theme.fontFamilyMono
             font.pixelSize: Services.Theme.fontSizeNormal
