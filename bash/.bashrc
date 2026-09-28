@@ -44,3 +44,8 @@ eval "$(starship init bash)"
 eval "$(fzf --bash)"
 # Try integration
 eval "$(try init ~/try-tmp/)"
+
+# herdr-automatic-rename: renombrado de tabs en vivo (fork local, commit auditado 11cbee3)
+# Ruta explícita a proposito: el glob del README adoptaria cualquier directorio que aparezca.
+# Debe cargarse DESPUES de starship para no pelearse por PROMPT_COMMAND / trap DEBUG.
+source /home/lucho/web/cizara/herdr-automatic-rename/shell/hook.bash
