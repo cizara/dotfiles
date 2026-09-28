@@ -180,3 +180,4 @@ hl.bind(mainMod      .. " + O",     hl.dsp.exec_cmd(home .. "/bin/capture-screen
 -- and annotation is now offered by clicking the screenshot notification (satty).
 hl.bind(mainModShift .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-text"))
 hl.bind(mainModCtrl  .. " + Print", hl.dsp.exec_cmd(home .. "/bin/capture-color"))
+hl.bind(mainModCtrl  .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-qr"))

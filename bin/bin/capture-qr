@@ -1,0 +1,34 @@
+#!/bin/bash
+# Select a QR code on screen and copy its value without retaining it in history.
+# Press the hotkey again while the picker is open to cancel.
+
+set -uo pipefail
+
+if pkill -x slurp 2>/dev/null; then
+  pkill -x hyprpicker 2>/dev/null
+  exit 0
+fi
+
+freeze_pid=""
+cleanup() { [[ -n $freeze_pid ]] && kill "$freeze_pid" 2>/dev/null; }
+trap cleanup EXIT
+
+hyprpicker -r -z >/dev/null 2>&1 &
+freeze_pid=$!
+sleep 0.15
+
+selection=$(slurp 2>/dev/null) || exit 0
+[[ -n $selection ]] || exit 0
+
+result=$(grim -g "$selection" - |
+  zbarimg -q --raw -Sdisable -Sqrcode.enable - 2>/dev/null)
+
+if [[ -z $result ]]; then
+  notify-send -a screenshot -u critical "No QR code found" \
+    "Select a region containing a QR code"
+  exit 1
+fi
+
+# QR codes can contain login or 2FA secrets. Do not print or display the value.
+printf '%s' "$result" | wl-copy --sensitive
+notify-send -a screenshot "QR code copied to clipboard"
