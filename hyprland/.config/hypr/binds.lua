@@ -181,3 +181,4 @@ hl.bind(mainMod      .. " + O",     hl.dsp.exec_cmd(home .. "/bin/capture-screen
 hl.bind(mainModShift .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-text"))
 hl.bind(mainModCtrl  .. " + Print", hl.dsp.exec_cmd(home .. "/bin/capture-color"))
 hl.bind(mainModCtrl  .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-qr"))
+hl.bind("ALT + Print",              hl.dsp.exec_cmd(home .. "/bin/capture-screenrecord"))

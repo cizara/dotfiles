@@ -1,0 +1,101 @@
+#!/bin/bash
+# Toggle a region screen recording. Pass "fullscreen" to record the focused monitor.
+# Add --audio to include desktop audio.
+
+set -uo pipefail
+
+mode=region
+desktop_audio=0
+for arg in "$@"; do
+  case $arg in
+    region | fullscreen) mode=$arg ;;
+    --audio) desktop_audio=1 ;;
+    *)
+      echo "capture-screenrecord: usage: capture-screenrecord [region|fullscreen] [--audio]" >&2
+      exit 1
+      ;;
+  esac
+done
+
+runtime_dir=${XDG_RUNTIME_DIR:-/run/user/$UID}
+state_dir=$runtime_dir/capture-screenrecord
+pid_file=$state_dir/pid
+recording_file=$state_dir/file
+
+mkdir -p "$state_dir"
+
+stop_recording() {
+  local pid file
+  read -r pid <"$pid_file"
+  [[ $pid =~ ^[0-9]+$ ]] || return 1
+  kill -0 "$pid" 2>/dev/null || return 1
+
+  file=$(<"$recording_file")
+  kill -INT "$pid"
+
+  for _ in {1..100}; do
+    kill -0 "$pid" 2>/dev/null || break
+    sleep 0.1
+  done
+
+  if kill -0 "$pid" 2>/dev/null; then
+    notify-send -a screenrecord -u critical "Screen recording did not stop cleanly"
+    return 1
+  fi
+
+  rm -f "$pid_file" "$recording_file"
+  notify-send -a screenrecord "Screen recording saved" "${file##*/}"
+}
+
+if [[ -r $pid_file && -r $recording_file ]]; then
+  if stop_recording; then
+    exit 0
+  fi
+  rm -f "$pid_file" "$recording_file"
+fi
+
+# A second press while selecting cancels the picker instead of starting another one.
+if pkill -x slurp 2>/dev/null; then
+  exit 0
+fi
+
+case $mode in
+  fullscreen)
+    target=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
+    capture_args=(-w "$target")
+    ;;
+  region)
+    selection=$(slurp 2>/dev/null) || exit 0
+    [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || exit 1
+    geometry="${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}"
+    capture_args=(-w region -region "$geometry")
+    ;;
+esac
+
+(( ${#capture_args[@]} )) || exit 1
+
+[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
+output_dir=${SCREENRECORD_DIR:-${XDG_VIDEOS_DIR:-$HOME/Videos}/Screencasts}
+mkdir -p "$output_dir" || exit 1
+file=$output_dir/$(date +'%Y-%m-%d_%H-%M-%S').mp4
+
+args=("${capture_args[@]}" -k auto -f 60 -fm cfr -fallback-cpu-encoding yes -o "$file")
+((desktop_audio)) && args+=(-a default_output -ac aac)
+
+setsid gpu-screen-recorder "${args[@]}" </dev/null \
+  >"$state_dir/log" 2>&1 &
+pid=$!
+
+printf '%s\n' "$pid" >"$pid_file"
+printf '%s\n' "$file" >"$recording_file"
+
+sleep 0.4
+if ! kill -0 "$pid" 2>/dev/null; then
+  rm -f "$pid_file" "$recording_file"
+  notify-send -a screenrecord -u critical "Screen recording failed to start" \
+    "See $state_dir/log"
+  exit 1
+fi
+
+notify-send -a screenrecord "Screen recording started" \
+  "Press Alt+Print again to stop"
