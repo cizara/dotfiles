@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Widgets
 import qs.services as Services
 
 Item {
@@ -23,6 +24,7 @@ Item {
             spacing: Services.Theme.spacingMedium
 
             Text {
+                textFormat: Text.PlainText
                 text: "󰂚  Notifications"
                 font.family: Services.Theme.fontFamilyMono
                 font.pixelSize: Services.Theme.fontSizeNormal
@@ -48,6 +50,7 @@ Item {
                 Behavior on opacity { NumberAnimation { duration: Services.Theme.animDurationNormal } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: Services.Notifications?.doNotDisturb ? "󰂛" : "󰂚"
                     font.family: Services.Theme.fontFamilyMono
@@ -80,6 +83,7 @@ Item {
                 Behavior on color { ColorAnimation { duration: Services.Theme.animDurationNormal } }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "󰆴"
                     font.family: Services.Theme.fontFamilyMono
@@ -164,21 +168,49 @@ Item {
                                 anchors.margins: Services.Theme.spacingMedium
                                 spacing: Services.Theme.spacingMedium
 
-                                // App icon or fallback
+                                // Notification image, then app icon, then a glyph —
+                                // same priority the popup uses.
                                 Rectangle {
                                     Layout.preferredWidth: 32
                                     Layout.preferredHeight: 32
                                     Layout.alignment: Qt.AlignTop
                                     radius: Services.Theme.spacingSmall
                                     color: Services.Theme.colorSurface0
+                                    clip: true
+
+                                    Image {
+                                        id: panelImage
+                                        anchors.fill: parent
+                                        source: notifItem.modelData?.image ?? ""
+                                        fillMode: Image.PreserveAspectCrop
+                                        visible: source.toString().length > 0 && status === Image.Ready
+                                        asynchronous: true
+                                        // Senders write the avatar to a per-notification
+                                        // temp file and delete it on close, so a retained
+                                        // row outlives its file. Caching the decode is
+                                        // what keeps the image after the file is gone.
+                                        cache: true
+                                        sourceSize.width: 64
+                                        sourceSize.height: 64
+                                    }
+
+                                    IconImage {
+                                        id: panelAppIcon
+                                        anchors.fill: parent
+                                        source: Services.Notifications.appIconSource(notifItem.modelData?.appIcon ?? "")
+                                        visible: !panelImage.visible && source.toString().length > 0
+                                        asynchronous: true
+                                    }
 
                                     Text {
+                                        textFormat: Text.PlainText
                                         anchors.centerIn: parent
                                         text: "󰂚"
                                         font.family: Services.Theme.fontFamilyMono
                                         font.pixelSize: 20
                                         color: Services.Theme.colorText
                                         opacity: Services.Theme.opacityMuted
+                                        visible: !panelImage.visible && !panelAppIcon.visible
                                     }
                                 }
 
@@ -189,6 +221,7 @@ Item {
                                     spacing: Services.Theme.spacingSmall
 
                                     Text {
+                                        textFormat: Text.PlainText
                                         Layout.fillWidth: true
                                         text: notifItem.modelData?.summary ?? "Notification"
                                         font.family: Services.Theme.fontFamilyMono
@@ -201,8 +234,9 @@ Item {
                                     }
 
                                     Text {
+                                        textFormat: Text.PlainText
                                         Layout.fillWidth: true
-                                        text: notifItem.modelData?.body ?? ""
+                                        text: Services.Notifications.plainBody(notifItem.modelData?.body ?? "")
                                         font.family: Services.Theme.fontFamilyMono
                                         font.pixelSize: Services.Theme.fontSizeSmall
                                         color: Services.Theme.colorSubtext0
@@ -214,6 +248,7 @@ Item {
 
                                     // Time ago
                                     Text {
+                                        textFormat: Text.PlainText
                                         text: notifItem.modelData?.timeStr ?? ""
                                         font.family: Services.Theme.fontFamilyMono
                                         font.pixelSize: Services.Theme.fontSizeSmall
@@ -235,6 +270,7 @@ Item {
                                     Behavior on opacity { NumberAnimation { duration: Services.Theme.animDurationFast } }
 
                                     Text {
+                                        textFormat: Text.PlainText
                                         anchors.centerIn: parent
                                         text: ""
                                         font.family: Services.Theme.fontFamilyMono
@@ -250,6 +286,7 @@ Item {
                                         onClicked: {
                                             if (notifItem.modelData?.notification)
                                                 notifItem.modelData.notification.dismiss()
+                                            Services.Notifications.remove(notifItem.modelData)
                                         }
                                     }
                                 }
@@ -261,6 +298,7 @@ Item {
 
             // Empty state
             Text {
+                textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: Services.Notifications?.doNotDisturb ? "Do Not Disturb enabled" : "No new notifications"
                 color: Services.Theme.colorSubtext0
