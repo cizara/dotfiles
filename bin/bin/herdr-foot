@@ -6,4 +6,4 @@
 # child process of that window's shell.
 
 exec launch-or-focus --pid-child herdr herdr \
-  foot --app-id=herdr --title=HerdR herdr
+  uwsm app -- foot --app-id=herdr --title=HerdR herdr
