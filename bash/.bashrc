@@ -12,6 +12,12 @@ export HISTCONTROL=ignoredups;
 # Make some commands not show up in history
 export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* --help";
 
+# bat as the pager. Single -p is style=plain only; -pp would also kill paging.
+# BAT_PAGER is set explicitly so bat does not read PAGER and find itself.
+export PAGER='bat -p'
+export BAT_PAGER='less -RF'
+export MANPAGER='bat -l man -p'
+
 # Load aliases
 [[ -f ~/.aliases ]] && . ~/.aliases
 # Load local configs
@@ -38,3 +44,8 @@ eval "$(starship init bash)"
 eval "$(fzf --bash)"
 # Try integration
 eval "$(try init ~/try-tmp/)"
+
+# herdr-automatic-rename: renombrado de tabs en vivo (fork local, commit auditado 11cbee3)
+# Ruta explícita a proposito: el glob del README adoptaria cualquier directorio que aparezca.
+# Debe cargarse DESPUES de starship para no pelearse por PROMPT_COMMAND / trap DEBUG.
+source /home/lucho/web/cizara/herdr-automatic-rename/shell/hook.bash

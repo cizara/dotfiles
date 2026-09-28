@@ -1,0 +1,11 @@
+# Replica exacta del tema "dark" de glamour, con el inline code en 210 (#ff8787)
+# en vez del 203 (#ff5f5f) original. Ruta absoluta a proposito: glow no expande ~.
+style: "/home/lucho/.config/glow/style.json"
+# mouse support (TUI-mode only)
+mouse: false
+# use pager to display markdown
+pager: true
+# word-wrap at width
+width: 160
+# show all files, including hidden and ignored.
+all: false

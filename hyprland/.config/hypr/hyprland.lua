@@ -7,9 +7,9 @@
 home    = os.getenv("HOME")
 local xdg_run = os.getenv("XDG_RUNTIME_DIR")
 
-terminal    = "ghostty"
+terminal    = "uwsm app -- ghostty"
 fileManager = "thunar"
-menu        = "wofi -c " .. home .. "/.config/wofi/config -s " .. home .. "/.config/wofi/style.css"
+menu        = "uwsm app -- wofi -c " .. home .. "/.config/wofi/config -s " .. home .. "/.config/wofi/style.css"
 
 
 -----------------------------

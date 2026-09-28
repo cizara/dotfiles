@@ -62,6 +62,7 @@ Item {
             spacing: Services.Theme.spacingLarge
 
             Text {
+                textFormat: Text.PlainText
                 text: dndIcon()
                 color: iconColor
                 font.pixelSize: Services.Theme.iconSizeLarge
@@ -75,6 +76,7 @@ Item {
                 spacing: Services.Theme.spacingTiny
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "Do Not Disturb"
                     font.pixelSize: Services.Theme.fontSizeLarge
                     font.weight: Services.Theme.fontWeightBold
@@ -86,6 +88,7 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: subtitleText()
                     font.pixelSize: Services.Theme.fontSizeSmall
                     color: subtitleColor

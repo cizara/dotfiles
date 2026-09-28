@@ -429,6 +429,7 @@ PopupWindow {
                                 x: 0
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     id: titleA
                                     text: (m && m.albumTitle) ? m.albumTitle : "No Media"
                                     color: "#f1f5ff"
@@ -438,6 +439,7 @@ PopupWindow {
                                 }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     id: titleB
                                     text: titleA.text
                                     color: "#f1f5ff"
@@ -561,6 +563,7 @@ PopupWindow {
                             Behavior on scale { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
 
                             Text {
+                                textFormat: Text.PlainText
                                 anchors.centerIn: parent
                                 font.family: "Hack Nerd Font"
                                 font.pixelSize: 15
@@ -579,6 +582,7 @@ PopupWindow {
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         text: (m && m.albumArtist) ? m.albumArtist : "No Artist"
                         color: "#cdd6f4"
                         opacity: 0.9
@@ -658,6 +662,7 @@ PopupWindow {
                             spacing: 10
 
                             Text {
+                                textFormat: Text.PlainText
                                 Layout.alignment: Qt.AlignVCenter
                                 text: {
                                     if (!pop.m) return "0:00"
@@ -680,6 +685,7 @@ PopupWindow {
                                     width: 18; height: 18
                                     Layout.alignment: Qt.AlignVCenter
                                     Text {
+                                        textFormat: Text.PlainText
                                         id: prevIcon
                                         anchors.centerIn: parent
                                         text: "󰒮"
@@ -701,6 +707,7 @@ PopupWindow {
                                     width: 20; height: 18
                                     Layout.alignment: Qt.AlignVCenter
                                     Text {
+                                        textFormat: Text.PlainText
                                         id: playIcon
                                         anchors.centerIn: parent
                                         text: pop.isPlaying ? "󰏤" : "󰐊"
@@ -724,6 +731,7 @@ PopupWindow {
                                     width: 18; height: 18
                                     Layout.alignment: Qt.AlignVCenter
                                     Text {
+                                        textFormat: Text.PlainText
                                         id: nextIcon
                                         anchors.centerIn: parent
                                         text: "󰒭"
@@ -745,6 +753,7 @@ PopupWindow {
                             Item { Layout.fillWidth: true }
 
                             Text {
+                                textFormat: Text.PlainText
                                 Layout.alignment: Qt.AlignVCenter
                                 text: {
                                     if (!pop.m) return "0:00"

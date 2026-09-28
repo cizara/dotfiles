@@ -111,6 +111,7 @@ Item {
 
     // center icon
     Text {
+        textFormat: Text.PlainText
         anchors.centerIn: parent
         text: "󰍛"
         font.family: Services.Theme.fontFamilyMono
@@ -145,6 +146,7 @@ Item {
         Behavior on width              { NumberAnimation { duration: Services.Theme.animDurationSlow; easing.type: Easing.OutCubic } }
 
         Text {
+            textFormat: Text.PlainText
             id: tipTextItem
             anchors.centerIn: parent
 

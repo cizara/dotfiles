@@ -53,6 +53,7 @@ Rectangle {
         spacing: Services.Theme.spacingLarge
         
         Text {
+            textFormat: Text.PlainText
             anchors.verticalCenter: parent.verticalCenter
             color: Services.Theme.colorBlue
             font.pixelSize: Services.Theme.fontSizeNormal
@@ -61,6 +62,7 @@ Rectangle {
         }
         
         Text {
+            textFormat: Text.PlainText
             id: timeText
             anchors.verticalCenter: parent.verticalCenter
             color: Services.Theme.colorTextBright

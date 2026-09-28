@@ -11,7 +11,7 @@ hl.bind(mainModShift .. " + H",         hl.dsp.exec_cmd(home .. "/bin/herdr-foot
 hl.bind(mainModShift .. " + Q",         hl.dsp.window.close())
 hl.bind(mainModShift .. " + E",         hl.dsp.exec_cmd("uwsm stop"))
 hl.bind(mainMod      .. " + E",         hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod      .. " + V",         hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"))
+hl.bind(mainMod      .. " + V",         hl.dsp.exec_cmd("cliphist list | uwsm app -- wofi --dmenu | cliphist decode | wl-copy"))
 hl.bind(mainMod      .. " + D",         hl.dsp.exec_cmd(menu))
 hl.bind(mainMod      .. " + K",         hl.dsp.window.pseudo())
 hl.bind(mainMod      .. " + J",         hl.dsp.layout("togglesplit"))
@@ -180,3 +180,5 @@ hl.bind(mainMod      .. " + O",     hl.dsp.exec_cmd(home .. "/bin/capture-screen
 -- and annotation is now offered by clicking the screenshot notification (satty).
 hl.bind(mainModShift .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-text"))
 hl.bind(mainModCtrl  .. " + Print", hl.dsp.exec_cmd(home .. "/bin/capture-color"))
+hl.bind(mainModCtrl  .. " + I",     hl.dsp.exec_cmd(home .. "/bin/capture-qr"))
+hl.bind("ALT + Print",              hl.dsp.exec_cmd(home .. "/bin/capture-screenrecord"))

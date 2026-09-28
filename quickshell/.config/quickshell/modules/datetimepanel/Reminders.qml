@@ -124,6 +124,7 @@ Rectangle {
             spacing: 8
 
             Text {
+                textFormat: Text.PlainText
                 text: "Reminders"
                 color: "#f1f5ff"
                 font.pixelSize: 13
@@ -134,6 +135,7 @@ Rectangle {
             Item { Layout.fillWidth: true }
 
             Text {
+                textFormat: Text.PlainText
                 id: savedHint
                 text: "Saved"
                 opacity: 0.0
@@ -155,6 +157,7 @@ Rectangle {
                 z: 100             // IMPORTANT: above any rim hitzones
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: "•"
                     color: "#cdd6f4"

@@ -173,6 +173,7 @@ Scope {
                 spacing: Services.Theme.spacingLarge
 
                 Text {
+                    textFormat: Text.PlainText
                     id: iconText
                     anchors.verticalCenter: parent.verticalCenter
                     width: root.state.hasProgress
@@ -215,6 +216,7 @@ Scope {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.verticalCenter: parent.verticalCenter
                     visible: root.state.hasProgress
                     width: visible ? Math.ceil(valueMetrics.advanceWidth) : 0
@@ -226,6 +228,7 @@ Scope {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.verticalCenter: parent.verticalCenter
                     visible: root.state.message !== ""
                     text: root.state.message

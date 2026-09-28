@@ -127,12 +127,14 @@ Singleton {
                                         spacing: Services.Theme.spacingMedium
 
                                         Text {
+                                            textFormat: Text.PlainText
                                             text: Services.SystemDetails?.osIcon ?? ""
                                             color: Services.Theme.colorText
                                             font.pixelSize: Services.Theme.iconSizeHuge
                                         }
 
                                         Text {
+                                            textFormat: Text.PlainText
                                             text: Services.SystemDetails?.uptime ?? "--"   // your service uses uptime -p already
                                             color: Services.Theme.colorText
                                             opacity: Services.Theme.opacitySubtle

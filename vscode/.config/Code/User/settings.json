@@ -93,7 +93,7 @@
     "github.copilot.chat.scopeSelection": true,
     "github.copilot.chat.startDebugging.enabled": true,
     "github.copilot.enable": {
-        "*": false,
+        "*": true,
         "plaintext": false,
         "markdown": false,
         "scminput": false

@@ -113,6 +113,7 @@ Item {
 
                     // Workspace ID text (shown when focused)
                     Text {
+                        textFormat: Text.PlainText
                         anchors.centerIn: parent
                         text: wsBox.wid
                         color: wsBox.isFocused ? "#1e1e2e" : "transparent"

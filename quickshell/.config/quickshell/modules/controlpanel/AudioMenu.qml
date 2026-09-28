@@ -129,6 +129,7 @@ Popup {
         spacing: Services.Theme.spacingMedium
 
         Text {
+            textFormat: Text.PlainText
             text: "Audio Output"
             color: pop.text
             opacity: Services.Theme.opacityNormal
@@ -182,6 +183,7 @@ Popup {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     id: labelText
                     text: row.label
                     color: pop.text
@@ -195,6 +197,7 @@ Popup {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     id: check
                     text: row.current ? "✓" : ""
                     color: pop.text
@@ -219,6 +222,7 @@ Popup {
         }
 
         Text {
+            textFormat: Text.PlainText
             visible: sinkModel.count === 0
             text: "No outputs found"
             color: pop.subtext

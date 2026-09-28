@@ -229,6 +229,7 @@ Rectangle {
                 spacing: 2
 
                 Text {
+                    textFormat: Text.PlainText
                     text: root.greeting
                     color: "#cdd6f4"
                     opacity: 0.9
@@ -238,6 +239,7 @@ Rectangle {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: isNaN(root.tempC) ? "--°C" : (Math.round(root.tempC) + "°C")
                     color: "#cdd6f4"
                     font.pixelSize: 24
@@ -246,6 +248,7 @@ Rectangle {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: root.cityLine
                     color: "#b4befe"
                     font.pixelSize: 12
@@ -299,6 +302,7 @@ Rectangle {
                 spacing: 6
 
                 Text {
+                    textFormat: Text.PlainText
                     text: "Weather for " + (root.cityOnly(root.cityLine) || "…")
                     color: "#f1f5ff"
                     font.pixelSize: 16
@@ -308,6 +312,7 @@ Rectangle {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: isNaN(root.tempC) ? "--°C" : (Math.round(root.tempC) + "°C")
                     color: "#cdd6f4"
                     font.pixelSize: 20
@@ -319,6 +324,7 @@ Rectangle {
                     spacing: 8
 
                     Text {
+                        textFormat: Text.PlainText
                         text: (isNaN(root.todayHiF) || isNaN(root.todayLoF))
                               ? "High --°  •  Low --°"
                               : ("High " + Math.round(root.todayHiF) + "°  •  Low " + Math.round(root.todayLoF) + "°")
@@ -329,6 +335,7 @@ Rectangle {
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         text: root.condition || ""
                         visible: text.length > 0
                         color: "#b4befe"
@@ -389,6 +396,7 @@ Rectangle {
                                 spacing: 10
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     Layout.preferredWidth: root.dayW
                                     Layout.fillHeight: true
                                     verticalAlignment: Text.AlignVCenter
@@ -418,6 +426,7 @@ Rectangle {
                                 Item { Layout.fillWidth: true }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     Layout.preferredWidth: root.tempW
                                     Layout.fillHeight: true
                                     horizontalAlignment: Text.AlignRight
@@ -430,6 +439,7 @@ Rectangle {
                                 }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     Layout.preferredWidth: root.tempW
                                     Layout.fillHeight: true
                                     horizontalAlignment: Text.AlignRight

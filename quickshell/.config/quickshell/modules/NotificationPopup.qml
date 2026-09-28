@@ -113,6 +113,7 @@ Rectangle {
         Behavior on color { ColorAnimation { duration: Services.Theme.animDurationFast } }
 
         Text {
+            textFormat: Text.PlainText
             anchors.centerIn: parent
             text: "󰈉"
             font.family: Services.Theme.fontFamilyMono
@@ -145,6 +146,7 @@ Rectangle {
         Behavior on color { ColorAnimation { duration: Services.Theme.animDurationFast } }
 
         Text {
+            textFormat: Text.PlainText
             anchors.centerIn: parent
             text: ""
             font.family: Services.Theme.fontFamilyMono
@@ -192,29 +194,24 @@ Rectangle {
                 fillMode: Image.PreserveAspectCrop
                 visible: source.toString().length > 0 && status === Image.Ready
                 asynchronous: true
-                cache: false
-                onStatusChanged: {
-                    if (status === Image.Error) {
-                        // Silently handle broken image paths (temp files may be deleted)
-                        visible = false
-                    }
-                }
+                // Popup delegates are rebuilt on every new notification, so an
+                // uncached image re-reads a temp file the sender may already have
+                // deleted. The `status === Image.Ready` check above covers failures.
+                cache: true
             }
 
             // App icon (medium priority)
             IconImage {
                 id: appIconImage
                 anchors.fill: parent
-                source: {
-                    const iconName = root.modelData?.appIcon ?? ""
-                    return iconName.length > 0 ? Quickshell.iconPath(iconName) : ""
-                }
+                source: Services.Notifications.appIconSource(root.modelData?.appIcon ?? "")
                 visible: !notifImage.visible && source.toString().length > 0
                 asynchronous: true
             }
 
             // Fallback icon (lowest priority)
             Text {
+                textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: "󰂚"
                 font.family: Services.Theme.fontFamilyMono
@@ -235,8 +232,11 @@ Rectangle {
             property int maxLength: 150
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: root.modelData?.summary ?? "Notification"
+                // Without this, Text.AutoText hands sender-controlled strings to Qt's
+                // rich text engine, which resolves <img src> over the network.
                 font.family: Services.Theme.fontFamilyMono
                 font.pixelSize: Services.Theme.fontSizeLarge
                 font.weight: Font.Medium
@@ -247,21 +247,10 @@ Rectangle {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: {
-                    let body = root.modelData?.body ?? ""
-                    
-                    // For Brave notifications: remove anchor tags but keep everything after them
-                    if (root.modelData?.appName === "Brave") {
-                        body = body.replace(/<a[^>]*>.*?<\/a>\s*/gi, "")
-                        body = body.replace(/<[^>]+>/g, "")
-                        body = body.trim()
-                    } else {
-                        // For other notifications, just strip HTML tags normally
-                        body = body.replace(/<a[^>]*>(.*?)<\/a>/gi, "$1")
-                        body = body.replace(/<[^>]+>/g, "")
-                    }
-                    
+                    const body = Services.Notifications.plainBody(root.modelData?.body ?? "")
                     if (!textColumn.collapsed || body.length <= textColumn.maxLength)
                         return body
                     return body.substring(0, textColumn.maxLength) + "..."

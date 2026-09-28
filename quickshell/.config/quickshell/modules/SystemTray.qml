@@ -97,6 +97,7 @@ Row {
                         border.color: Qt.rgba(1, 1, 1, 0.2)
 
                         Text {
+                            textFormat: Text.PlainText
                             id: tooltipText
                             anchors.centerIn: parent
                             text: component.modelData.tooltipTitle

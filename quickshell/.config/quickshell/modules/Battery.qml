@@ -103,6 +103,7 @@ Item {
             spacing: Services.Theme.spacingNormal
 
             Text {
+                textFormat: Text.PlainText
                 id: icon
                 text: batteryStatus === "Charging" ? "󰺥" : "󰁹"
                 font.family: Services.Theme.fontFamilyMono
@@ -111,6 +112,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 text: batteryPercent + "%"
                 font.family: Services.Theme.fontFamily
                 font.pixelSize: Services.Theme.fontSizeNormal

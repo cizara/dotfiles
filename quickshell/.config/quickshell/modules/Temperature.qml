@@ -115,6 +115,7 @@ Item {
         Behavior on swap { NumberAnimation { duration: Services.Theme.animDurationVerySlow; easing.type: Easing.OutCubic } }
 
         Text {
+            textFormat: Text.PlainText
             id: iconText
             anchors.centerIn: parent
             text: "󰔐"
@@ -135,6 +136,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             id: tempText
             anchors.centerIn: parent
             anchors.verticalCenterOffset: root.tempYOffset

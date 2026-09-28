@@ -11,7 +11,6 @@ Arch Linux dotfiles repository managed with GNU Stow. Each directory contains co
 - `environment.d/` - Environment variables
 
 **Terminal Emulators**
-- `kitty/` - Kitty terminal
 - `ghostty/` - Ghostty terminal
 
 **Editors**
@@ -21,20 +20,18 @@ Arch Linux dotfiles repository managed with GNU Stow. Each directory contains co
 - `zed/` - Zed editor
 
 **Window Managers (Wayland)**
-- `sway/` - Sway compositor
 - `hyprland/` - Hyprland compositor
 - `quickshell/` - QuickShell
 - `uwsm/` - Wayland session manager
 
 **Desktop Components**
-- `waybar/` - Status bar
 - `wofi/` - App launcher
-- `mako/` - Notifications
 - `swaylock/` - Screen locker
 - `imv/` - Image viewer
 
 **Utilities**
 - `bin/` - Custom scripts
+- `glow/` - Markdown renderer (config + custom glamour style)
 - `gitconfig/` - Git config
 - `cssh/` - ClusterSSH
 
