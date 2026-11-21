@@ -282,7 +282,7 @@ Rectangle {
 
                 Repeater {
                     id: actionRepeater
-                    model: root.modelData?.actions ?? []
+                    model: Array.from(root.modelData?.actions ?? []).filter(a => a.identifier !== "default")
 
                     Rectangle {
                         id: actionButton
