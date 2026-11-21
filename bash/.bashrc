@@ -49,3 +49,6 @@ eval "$(try init ~/try-tmp/)"
 # Ruta explícita a proposito: el glob del README adoptaria cualquier directorio que aparezca.
 # Debe cargarse DESPUES de starship para no pelearse por PROMPT_COMMAND / trap DEBUG.
 source /home/lucho/web/cizara/herdr-automatic-rename/shell/hook.bash
+
+# Added by the Hunk installer (https://hunk.dev)
+export PATH='/home/lucho/.hunk/bin':"$PATH"
