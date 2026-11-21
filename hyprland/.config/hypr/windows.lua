@@ -142,6 +142,13 @@ hl.window_rule({
 })
 
 
+hl.window_rule({
+    name              = "browsers-no-focus-steal",
+    match             = { class = "^(brave-browser|firefox)$" },
+    focus_on_activate = false,
+})
+
+
 -- Idle inhibit
 hl.window_rule({
     name         = "firefox-meet-idle",
