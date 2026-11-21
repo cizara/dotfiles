@@ -29,7 +29,7 @@ Rectangle {
     property int rowGap: 10
 
     // Week starts Monday like your screenshot
-    readonly property var now: new Date()
+    readonly property date now: Services.DateTime.now
     readonly property int yearValue: now.getFullYear()
     readonly property int monthValue: now.getMonth() // 0-11
 

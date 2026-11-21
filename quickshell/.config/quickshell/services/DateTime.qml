@@ -3,12 +3,14 @@ pragma Singleton
 
 Item {
     id: root
-    
+
+    property date now: new Date()
     property string currentTime: ""
     property string argTime: ""
 
     function updateDateTime() {
         const d = new Date()
+        now = d
         currentTime = Qt.formatDateTime(d, "ddd, MMM dd • HH:mm:ss")
         
         // Argentina is UTC-3

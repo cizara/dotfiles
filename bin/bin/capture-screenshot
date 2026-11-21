@@ -208,7 +208,7 @@ if command -v "$EDITOR_BIN" >/dev/null 2>&1; then
     action=$(notify-send -a screenshot -i "$FILE" -t 10000 \
       -A "edit=Edit" "Screenshot saved" "${FILE##*/}")
     if [[ $action == edit ]]; then
-      "$EDITOR_BIN" --filename "$FILE" --output-filename "$FILE" \
+      "$EDITOR_BIN" --filename "$FILE" --output-filename "${FILE%.*}-edited.png" \
         --early-exit --actions-on-enter save-to-clipboard --copy-command wl-copy
     fi
   ) >/dev/null 2>&1 &

@@ -4,6 +4,7 @@
 #
 #   system-tweaks           show what would change, change nothing
 #   system-tweaks --apply   actually write the files (asks for sudo)
+#   system-tweaks --apply-memory  apply only memory and preemption tuning
 #
 # Deliberately NOT handled here, because this machine already configures them and
 # a generic version would fight the existing setup:
@@ -11,20 +12,29 @@
 #   * DNS / systemd-resolved  - running iwd + networkd + resolved with strict DoT.
 #   * Hibernation / resume    - hibernates to /swapfile with a resume_offset that
 #                               goes stale if the swapfile is ever recreated.
-#   * Bootloader, mkinitcpio, firewall, display manager.
+#   * Hibernation boot arguments, mkinitcpio, firewall, display manager.
 
 set -uo pipefail
 
 APPLY=0
-[[ ${1:-} == "--apply" ]] && APPLY=1
+SCOPE=all
+case ${1:-} in
+  --apply) APPLY=1 ;;
+  --apply-memory) APPLY=1; SCOPE=memory ;;
+esac
 
 changes=0
+last_changed=0
+bootloader_changed=0
 
 # Report intent, then either write via sudo or just say what would happen.
-# $1 = target path, $2 = description, stdin = desired content
+# $1 = target path, $2 = description, $3 = scope, stdin = desired content
 ensure_file() {
-  local path=$1 desc=$2 content
+  local path=$1 desc=$2 scope=${3:-general} content
   content=$(cat)
+  last_changed=0
+
+  [[ $SCOPE == all || $SCOPE == "$scope" ]] || return
 
   if [[ -f $path ]] && [[ $(cat "$path" 2>/dev/null) == "$content" ]]; then
     printf '  ok      %-52s %s\n' "$path" "already set"
@@ -32,6 +42,7 @@ ensure_file() {
   fi
 
   changes=$((changes + 1))
+  last_changed=1
   if ((APPLY)); then
     sudo mkdir -p "$(dirname "$path")"
     printf '%s\n' "$content" | sudo tee "$path" >/dev/null
@@ -49,6 +60,33 @@ echo
 ensure_file /etc/sysctl.d/90-file-watchers.conf "raise inotify watch limit to 524288" <<'EOF'
 fs.inotify.max_user_watches=524288
 EOF
+
+ensure_file /etc/sysctl.d/99-desktop-memory.conf "tune reclaim and writeback for zram" memory <<'EOF'
+vm.swappiness=150
+vm.vfs_cache_pressure=50
+vm.page-cluster=0
+vm.watermark_boost_factor=0
+vm.watermark_scale_factor=125
+vm.dirty_background_bytes=67108864
+vm.dirty_bytes=268435456
+vm.dirty_writeback_centisecs=1500
+EOF
+
+ensure_file /etc/systemd/zram-generator.conf "use full-size high-priority zram" memory <<'EOF'
+[zram0]
+zram-size = ram
+compression-algorithm = zstd
+swap-priority = 1000
+EOF
+
+ensure_file /etc/tmpfiles.d/disable-zswap.conf "avoid double compression in front of zram" memory <<'EOF'
+w! /sys/module/zswap/parameters/enabled - - - - N
+EOF
+
+ensure_file /etc/default/grub.d/90-full-preemption.cfg "enable full dynamic kernel preemption" memory <<'EOF'
+GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT preempt=full"
+EOF
+((last_changed)) && bootloader_changed=1
 
 # systemd's default soft limit is 1024, which editors, containers and dev servers
 # run into. Hard limit stays generous.
@@ -80,6 +118,13 @@ ensure_file /etc/modprobe.d/disable-usb-autosuspend.conf "disable USB autosuspen
 options usbcore autosuspend=-1
 EOF
 
+# ath10k can transiently reject iwd's attempt to replace the driver's default
+# interface at boot, leaving iwd active but unable to connect.
+ensure_file /etc/iwd/main.conf "keep ath10k's default wireless interface" <<'EOF'
+[DriverQuirks]
+DefaultInterface=ath10k_pci
+EOF
+
 # Frees the power button so it can be bound to a menu instead of hard-stopping the
 # session. Pairs with the power actions in the quickshell control panel.
 ensure_file /etc/systemd/logind.conf.d/10-ignore-power-key.conf "stop the power key shutting down" <<'EOF'
@@ -103,15 +148,32 @@ if ((APPLY)); then
   echo "$changes file(s) written. Reloading systemd."
   sudo sysctl --system >/dev/null 2>&1
   sudo systemctl daemon-reload
-  cat <<'NOTE'
+  if ((bootloader_changed)); then
+    sudo grub-mkconfig -o /boot/grub/grub.cfg >/dev/null
+  fi
+  if [[ $SCOPE == memory ]]; then
+    cat <<'NOTE'
+
+Takes effect:
+  memory tuning      immediately
+  zram size/zswap    next boot
+  full preemption    next boot
+NOTE
+  else
+    cat <<'NOTE'
 
 Takes effect:
   inotify limit      immediately
+  memory tuning      immediately
+  zram size/zswap    next boot
+  full preemption    next boot
   NOFILE limits      next login (check with: ulimit -Sn)
   shutdown timeouts  immediately
   USB autosuspend    next boot (it is a module parameter)
+  iwd driver quirk   next iwd restart
   power key          immediately
 NOTE
+  fi
 else
   echo "$changes file(s) would change. Re-run with --apply to write them."
 fi

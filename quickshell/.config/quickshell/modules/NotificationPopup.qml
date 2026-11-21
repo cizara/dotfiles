@@ -275,6 +275,46 @@ Rectangle {
                     }
                 }
             }
+
+            Row {
+                spacing: Services.Theme.spacingSmall
+                visible: actionRepeater.count > 0
+
+                Repeater {
+                    id: actionRepeater
+                    model: Array.from(root.modelData?.actions ?? []).filter(a => a.identifier !== "default")
+
+                    Rectangle {
+                        id: actionButton
+                        required property var modelData
+                        implicitWidth: actionLabel.implicitWidth + 24
+                        implicitHeight: 28
+                        radius: Services.Theme.spacingSmall
+                        color: actionMouse.containsMouse ? Services.Theme.colorSurface1 : Services.Theme.colorSurface0
+
+                        Text {
+                            id: actionLabel
+                            textFormat: Text.PlainText
+                            anchors.centerIn: parent
+                            text: actionButton.modelData.text
+                            font.family: Services.Theme.fontFamilyMono
+                            font.pixelSize: Services.Theme.fontSizeNormal
+                            color: Services.Theme.colorText
+                        }
+
+                        MouseArea {
+                            id: actionMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                actionButton.modelData.invoke();
+                                root.hide();
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

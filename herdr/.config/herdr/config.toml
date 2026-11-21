@@ -1,7 +1,7 @@
 onboarding = false
 
 [theme]
-name = "catppuccin"
+name = "terminal"
 auto_switch = false
 
 [ui]
@@ -18,7 +18,7 @@ prompt_new_tab_name = false
 status_indicators = "dots"
 [keys]
 # Panes
-split_horizontal = ["prefix+h", "alt+enter"]
+split_horizontal = "alt+enter"
 split_vertical = ["prefix+v", "alt+shift+enter"]
 
 # Focus & Moving
