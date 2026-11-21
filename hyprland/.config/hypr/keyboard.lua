@@ -14,9 +14,14 @@ hl.config({
 
         touchpad = {
             natural_scroll = true,
-            -- Click anywhere with two fingers for right-click instead of aiming at
-            -- the bottom-right corner of the pad.
-            clickfinger_behavior = true,
+            -- Right-click by pressing the bottom-right corner of the pad.
+            clickfinger_behavior = false,
         },
     },
+})
+
+-- Disable touch input from the damaged laptop screen.
+hl.device({
+    name    = "elan-touchscreen",
+    enabled = false,
 })
